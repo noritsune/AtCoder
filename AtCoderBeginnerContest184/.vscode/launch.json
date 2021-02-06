@@ -1,0 +1,52 @@
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "A",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build A",
+            "program": "${workspaceFolder}/A/bin/Debug/netcoreapp3.1/A.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/A",
+            "console": "externalTerminal",
+            "stopAtEntry": false
+        },
+        {
+            "name": "B",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build B",
+            "program": "${workspaceFolder}/B/bin/Debug/netcoreapp3.1/B.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/B",
+            "console": "externalTerminal",
+            "stopAtEntry": false
+        },
+        {
+            "name": "C",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build C",
+            "program": "${workspaceFolder}/C/bin/Debug/netcoreapp3.1/C.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/C",
+            "console": "externalTerminal",
+            "stopAtEntry": false
+        },
+        {
+            "name": "D",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build D",
+            "program": "${workspaceFolder}/D/bin/Debug/netcoreapp3.1/D.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/D",
+            "console": "externalTerminal",
+            "stopAtEntry": false
+        }
+    ]
+}

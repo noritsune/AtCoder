@@ -1,0 +1,9 @@
+D:\Documents\AtCoder\AtCoderGrandContest046\A\bin\Debug\netcoreapp2.1\A.deps.json
+D:\Documents\AtCoder\AtCoderGrandContest046\A\bin\Debug\netcoreapp2.1\A.runtimeconfig.json
+D:\Documents\AtCoder\AtCoderGrandContest046\A\bin\Debug\netcoreapp2.1\A.runtimeconfig.dev.json
+D:\Documents\AtCoder\AtCoderGrandContest046\A\bin\Debug\netcoreapp2.1\A.dll
+D:\Documents\AtCoder\AtCoderGrandContest046\A\bin\Debug\netcoreapp2.1\A.pdb
+D:\Documents\AtCoder\AtCoderGrandContest046\A\obj\Debug\netcoreapp2.1\A.csprojAssemblyReference.cache
+D:\Documents\AtCoder\AtCoderGrandContest046\A\obj\Debug\netcoreapp2.1\A.csproj.CoreCompileInputs.cache
+D:\Documents\AtCoder\AtCoderGrandContest046\A\obj\Debug\netcoreapp2.1\A.dll
+D:\Documents\AtCoder\AtCoderGrandContest046\A\obj\Debug\netcoreapp2.1\A.pdb

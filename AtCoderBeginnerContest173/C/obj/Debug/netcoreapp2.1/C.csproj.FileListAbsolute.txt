@@ -1,0 +1,9 @@
+D:\Documents\AtCoder\AtCoderBeginnerContest173\C\obj\Debug\netcoreapp2.1\C.csprojAssemblyReference.cache
+D:\Documents\AtCoder\AtCoderBeginnerContest173\C\obj\Debug\netcoreapp2.1\C.csproj.CoreCompileInputs.cache
+D:\Documents\AtCoder\AtCoderBeginnerContest173\C\bin\Debug\netcoreapp2.1\C.deps.json
+D:\Documents\AtCoder\AtCoderBeginnerContest173\C\bin\Debug\netcoreapp2.1\C.runtimeconfig.json
+D:\Documents\AtCoder\AtCoderBeginnerContest173\C\bin\Debug\netcoreapp2.1\C.runtimeconfig.dev.json
+D:\Documents\AtCoder\AtCoderBeginnerContest173\C\bin\Debug\netcoreapp2.1\C.dll
+D:\Documents\AtCoder\AtCoderBeginnerContest173\C\bin\Debug\netcoreapp2.1\C.pdb
+D:\Documents\AtCoder\AtCoderBeginnerContest173\C\obj\Debug\netcoreapp2.1\C.dll
+D:\Documents\AtCoder\AtCoderBeginnerContest173\C\obj\Debug\netcoreapp2.1\C.pdb

@@ -1,0 +1,1307 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build AtCoderBeginnerContest182 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest182/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest182 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest182/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest182 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest182/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest182 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest182/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "dart run",
+            "type": "shell",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "command": "dart",
+            "args": ["${file}"],
+            "options": {
+                "env": {
+                    "PATH": "/usr/local/opt/flutter/bin/cache/dart-sdk/bin"
+                }
+            }
+        },
+        {
+            "label": "build AtCoderBeginnerContest181 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest181/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest181 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest181/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest181 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest181/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest181 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest181/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest165 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest165/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest165 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest165/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest166 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest166/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest166 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest166/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest166 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest166/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest167 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest167/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest167 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest167/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest167 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest167/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest167 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest167/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest169 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest169/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest169 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest169/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest169 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest169/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest169 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest169/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest170 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest170/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest170 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest170/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest170 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest170/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest170 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest170/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build 東京海上日動プログラミングコンテスト2020 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/東京海上日動プログラミングコンテスト2020/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build 東京海上日動プログラミングコンテスト2020 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/東京海上日動プログラミングコンテスト2020/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build 東京海上日動プログラミングコンテスト2020 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/東京海上日動プログラミングコンテスト2020/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderGrandContest046 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderGrandContest046/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderGrandContest046 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderGrandContest046/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest171 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest171/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest171 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest171/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest171 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest171/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest172 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest172/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest172 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest172/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest172 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest172/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest172 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest172/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest173 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest173/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest173 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest173/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest173 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest173/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest173 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest173/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build エイシング プログラミング コンテスト 2020 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/エイシング プログラミング コンテスト 2020/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build エイシング プログラミング コンテスト 2020 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/エイシング プログラミング コンテスト 2020/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build エイシング プログラミング コンテスト 2020 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/エイシング プログラミング コンテスト 2020/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build エイシング プログラミング コンテスト 2020 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/エイシング プログラミング コンテスト 2020/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build M-SOLUTIONS プロコンオープン 2020 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/M-SOLUTIONS プロコンオープン 2020/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build M-SOLUTIONS プロコンオープン 2020 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/M-SOLUTIONS プロコンオープン 2020/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build M-SOLUTIONS プロコンオープン 2020 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/M-SOLUTIONS プロコンオープン 2020/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build M-SOLUTIONS プロコンオープン 2020 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/M-SOLUTIONS プロコンオープン 2020/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest117 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest117/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest117 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest117/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest117 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest117/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest117 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest117/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest116 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest116/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest116 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest116/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest116 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest116/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest116 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest116/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest168 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest168/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest168 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest168/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest168 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest168/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest168 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest168/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest174 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest174/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest174 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest174/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest174 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest174/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest174 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest174/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderGrandContest047 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderGrandContest047/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest175 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest175/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest175 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest175/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest175 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest175/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest175 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest175/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest176 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest176/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest176 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest176/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest176 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest176/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest176 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest176/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest177 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest177/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest177 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest177/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest177 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest177/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest177 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest177/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest178 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest178/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest178 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest178/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest178 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest178/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest178 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest178/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest179 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest179/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest179 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest179/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest179 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest179/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest179 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest179/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build tmp",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/tmp/tmp.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderRegularContest104 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderRegularContest104/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderRegularContest104 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderRegularContest104/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderRegularContest104 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderRegularContest104/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderRegularContest104 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderRegularContest104/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build HHKBプログラミングコンテスト2020 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/HHKBプログラミングコンテスト2020/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build HHKBプログラミングコンテスト2020 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/HHKBプログラミングコンテスト2020/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build HHKBプログラミングコンテスト2020 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/HHKBプログラミングコンテスト2020/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build HHKBプログラミングコンテスト2020 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/HHKBプログラミングコンテスト2020/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest180 A",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest180/A/A.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest180 B",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest180/B/B.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest180 C",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest180/C/C.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build AtCoderBeginnerContest180 D",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/AtCoderBeginnerContest180/D/D.csproj",
+                "/property:GenerateFullPaths=true",
+                "/property:GenerateAssemblyInfo=false",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+    ]
+}

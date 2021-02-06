@@ -1,0 +1,11 @@
+D:\Documents\AtCoder\AtCoderBeginnerContest182\B\bin\Debug\netcoreapp3.1\B.exe
+D:\Documents\AtCoder\AtCoderBeginnerContest182\B\bin\Debug\netcoreapp3.1\B.deps.json
+D:\Documents\AtCoder\AtCoderBeginnerContest182\B\bin\Debug\netcoreapp3.1\B.runtimeconfig.json
+D:\Documents\AtCoder\AtCoderBeginnerContest182\B\bin\Debug\netcoreapp3.1\B.runtimeconfig.dev.json
+D:\Documents\AtCoder\AtCoderBeginnerContest182\B\bin\Debug\netcoreapp3.1\B.dll
+D:\Documents\AtCoder\AtCoderBeginnerContest182\B\bin\Debug\netcoreapp3.1\B.pdb
+D:\Documents\AtCoder\AtCoderBeginnerContest182\B\obj\Debug\netcoreapp3.1\B.csprojAssemblyReference.cache
+D:\Documents\AtCoder\AtCoderBeginnerContest182\B\obj\Debug\netcoreapp3.1\B.csproj.CoreCompileInputs.cache
+D:\Documents\AtCoder\AtCoderBeginnerContest182\B\obj\Debug\netcoreapp3.1\B.dll
+D:\Documents\AtCoder\AtCoderBeginnerContest182\B\obj\Debug\netcoreapp3.1\B.pdb
+D:\Documents\AtCoder\AtCoderBeginnerContest182\B\obj\Debug\netcoreapp3.1\B.genruntimeconfig.cache
