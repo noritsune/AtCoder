@@ -1,0 +1,13 @@
+D:\Documents\GitHub\AtCoder\AtCoderBeginnerContest191\B\obj\Debug\netcoreapp3.1\B.csprojAssemblyReference.cache
+D:\Documents\GitHub\AtCoder\AtCoderBeginnerContest191\B\obj\Debug\netcoreapp3.1\B.AssemblyInfoInputs.cache
+D:\Documents\GitHub\AtCoder\AtCoderBeginnerContest191\B\obj\Debug\netcoreapp3.1\B.AssemblyInfo.cs
+D:\Documents\GitHub\AtCoder\AtCoderBeginnerContest191\B\obj\Debug\netcoreapp3.1\B.csproj.CoreCompileInputs.cache
+D:\Documents\GitHub\AtCoder\AtCoderBeginnerContest191\B\bin\Debug\netcoreapp3.1\B.exe
+D:\Documents\GitHub\AtCoder\AtCoderBeginnerContest191\B\bin\Debug\netcoreapp3.1\B.deps.json
+D:\Documents\GitHub\AtCoder\AtCoderBeginnerContest191\B\bin\Debug\netcoreapp3.1\B.runtimeconfig.json
+D:\Documents\GitHub\AtCoder\AtCoderBeginnerContest191\B\bin\Debug\netcoreapp3.1\B.runtimeconfig.dev.json
+D:\Documents\GitHub\AtCoder\AtCoderBeginnerContest191\B\bin\Debug\netcoreapp3.1\B.dll
+D:\Documents\GitHub\AtCoder\AtCoderBeginnerContest191\B\bin\Debug\netcoreapp3.1\B.pdb
+D:\Documents\GitHub\AtCoder\AtCoderBeginnerContest191\B\obj\Debug\netcoreapp3.1\B.dll
+D:\Documents\GitHub\AtCoder\AtCoderBeginnerContest191\B\obj\Debug\netcoreapp3.1\B.pdb
+D:\Documents\GitHub\AtCoder\AtCoderBeginnerContest191\B\obj\Debug\netcoreapp3.1\B.genruntimeconfig.cache
