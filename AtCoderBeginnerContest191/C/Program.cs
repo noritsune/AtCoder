@@ -30,12 +30,17 @@ class Zahyo {
         Zahyo other = (Zahyo)obj;
         return other.x == this.x && other.y == this.y;
     }
+
+    //Equalsがtrueを返すときに同じ値を返す
+    public override int GetHashCode()
+    {
+        return this.x ^ this.y.GetHashCode();
+    }
 }
 
 class Sol{
 	const int _mod = 1000000007;
     List<char[]> _Shw = new List<char[]>();
-    Zahyo _startZahyo;
 	public void Solve(){
 		int[] HW = ria();
         int H = HW[0];
@@ -47,97 +52,32 @@ class Sol{
             _Shw.Add(chars);
         }
 
-        // 開始地点は一番左上の黒
-        for (int i = 0; i < H; i++)
+        int edgeCnt = 0;
+        for (int i = 1; i < H; i++)
         {
-            for (int j = 0; j < W; j++)
+            for (int j = 1; j < W; j++)
             {
-                Zahyo zahyo = new Zahyo(j, i);
-                if(IsWhiteSquare(zahyo)) continue;
-                
-                _startZahyo = zahyo;
-                break;
+                if(CountAdjacentBlack(j, i) % 2 == 1) edgeCnt ++;
             }
-            if(_startZahyo != null) break;
-        }
-
-        int edgeCnt = 1;
-        Queue<Zahyo> q = new Queue<Zahyo>();
-        q.Enqueue(_startZahyo);
-        Zahyo nextOffset = ExploreNextOffset(_startZahyo);
-        while(q.Count > 0) {
-            Zahyo nowZahyo = q.Dequeue();
-            _Shw[nowZahyo.y][nowZahyo.x] = '.';
-            Zahyo nextZahyo = nowZahyo + nextOffset;
-
-            // 探索終了
-            if(nextZahyo.Equals(_startZahyo)) break;
-            
-            //折れ曲がるパターン
-            if(IsWhiteSquare(nextZahyo)) {
-                nextOffset = ExploreNextOffset(nowZahyo);
-                edgeCnt++;
-            }
-
-            q.Enqueue(nowZahyo + nextOffset);
         }
 
 		Console.WriteLine(edgeCnt);
 		Console.ReadLine();
 	}
 
-    bool IsWhiteSquare(Zahyo zahyo) {
-        return _Shw[zahyo.y][zahyo.x] == '.';
-    }
-
-    bool isValiedZahyo(Zahyo zahyo) {
-        return  zahyo.x >= 0 && zahyo.x < _Shw[0].Length &&
-                zahyo.y >= 0 && zahyo.y < _Shw.Count;
-    }
-
-    int StepToNextBlack(Zahyo nowZahyo, Zahyo nowOffset, int edgeCnt) {
-        Zahyo nextZahyo = nowZahyo + nowOffset;
-
-        // 探索終了
-        if(nextZahyo == _startZahyo) return edgeCnt;
-        
-        //辺がそのまま伸びているパターン
-        if(!IsWhiteSquare(nextZahyo)) StepToNextBlack(nextZahyo, nowOffset, edgeCnt);
-
-        //折れ曲がるパターン
-        else {
-            Zahyo newOffset = ExploreNextOffset(nowZahyo);
-            StepToNextBlack(nowZahyo + newOffset, newOffset, ++edgeCnt);
-        }
-
-        return -1;
-    }
-
-    // 隣接する黒を探索する右回りで探索して初めに見つかったものを返す
-    Zahyo ExploreNextOffset(Zahyo nowZahyo) {
-        Zahyo[] offsets = new Zahyo[]{
-            new Zahyo(1, 0),
-            new Zahyo(1, 1),
-            new Zahyo(0, 1),
-            new Zahyo(-1, 1),
-            new Zahyo(-1, 0),
-            new Zahyo(-1, -1),
-            new Zahyo(0, -1),
-            new Zahyo(1, -1)
-        };
-
-        foreach (var offset in offsets)
+    int CountAdjacentBlack(int x_center, int y_center) {
+        int blackCcnt = 0;
+        for (int x = -1; x <=0; x++)
         {
-            Zahyo nextZahyo = nowZahyo + offset;
-            if(!isValiedZahyo(nextZahyo)) continue;
-            if(IsWhiteSquare(nextZahyo)) continue;
-
-            return offset;
+            for (int y = -1; y <= 0; y++)
+            {
+                if(_Shw[y_center + y][x_center + x] == '#') blackCcnt++;
+            }
         }
 
-        return null;
+        return blackCcnt;
     }
-    
+
 	static String rs(){return Console.ReadLine();}
 	static int ri(){return int.Parse(Console.ReadLine());}
 	static long rl(){return long.Parse(Console.ReadLine());}
