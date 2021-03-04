@@ -1,0 +1,12 @@
+/Users/tunenorimotomura/Documents/GitHub/AtCoder/AtCoderBeginnerContest192/B/bin/Debug/netcoreapp3.1/B.deps.json
+/Users/tunenorimotomura/Documents/GitHub/AtCoder/AtCoderBeginnerContest192/B/bin/Debug/netcoreapp3.1/B.runtimeconfig.json
+/Users/tunenorimotomura/Documents/GitHub/AtCoder/AtCoderBeginnerContest192/B/bin/Debug/netcoreapp3.1/B.runtimeconfig.dev.json
+/Users/tunenorimotomura/Documents/GitHub/AtCoder/AtCoderBeginnerContest192/B/bin/Debug/netcoreapp3.1/B.dll
+/Users/tunenorimotomura/Documents/GitHub/AtCoder/AtCoderBeginnerContest192/B/bin/Debug/netcoreapp3.1/B.pdb
+/Users/tunenorimotomura/Documents/GitHub/AtCoder/AtCoderBeginnerContest192/B/obj/Debug/netcoreapp3.1/B.csprojAssemblyReference.cache
+/Users/tunenorimotomura/Documents/GitHub/AtCoder/AtCoderBeginnerContest192/B/obj/Debug/netcoreapp3.1/B.AssemblyInfoInputs.cache
+/Users/tunenorimotomura/Documents/GitHub/AtCoder/AtCoderBeginnerContest192/B/obj/Debug/netcoreapp3.1/B.AssemblyInfo.cs
+/Users/tunenorimotomura/Documents/GitHub/AtCoder/AtCoderBeginnerContest192/B/obj/Debug/netcoreapp3.1/B.csproj.CoreCompileInputs.cache
+/Users/tunenorimotomura/Documents/GitHub/AtCoder/AtCoderBeginnerContest192/B/obj/Debug/netcoreapp3.1/B.dll
+/Users/tunenorimotomura/Documents/GitHub/AtCoder/AtCoderBeginnerContest192/B/obj/Debug/netcoreapp3.1/B.pdb
+/Users/tunenorimotomura/Documents/GitHub/AtCoder/AtCoderBeginnerContest192/B/obj/Debug/netcoreapp3.1/B.genruntimeconfig.cache
