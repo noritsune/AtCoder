@@ -8,7 +8,7 @@ using System.Numerics;
 class Util{
 	static void Main(){
 		Sol mySol =new Sol();
-		mySol.Solve();
+		mySol.Solve2();
 	}
 }
 
@@ -19,8 +19,32 @@ enum Dir {
     left,
 }
 
+class Zahyo {
+    public int _x = 0;
+    public int _y = 0;
+
+    public Zahyo(int x, int y) {
+        _x = x;
+        _y = y;
+    }
+}
+
 class Sol{
 	const int _mod = 1000000007;
+
+    public void Solve2() {
+		int[] HWAB = ria();
+        int H = HWAB[0];
+        int W = HWAB[1];
+        int A = HWAB[2];
+        int B = HWAB[3];
+
+        // 各マスの辺に畳の境目が無いか
+        bool[,] isAH = new bool[H    , W - 1];
+        bool[,] isAW = new bool[H - 1, W    ];
+        
+    }
+
 	public void Solve(){
 		int[] HWAB = ria();
         int H = HWAB[0];
@@ -49,37 +73,50 @@ class Sol{
             }
 
             // A畳を配置
-            HashSet<int[]> aPatternsSet = new HashSet<int[]>();
-            for (int h = 0; h < H; h++)
+            HashSet<HashSet<HashSet<Zahyo>>> aZahyoSetSetSet = new HashSet<HashSet<HashSet<Zahyo>>>();
+            for (int i = 0; i < 3; i++)
             {
-                for (int w = 0; w < W; w++)
+                Console.WriteLine("-----------------------");
+                Console.WriteLine(aZahyoSetSetSet.Count + "パターン目");
+
+                HashSet<HashSet<Zahyo>> aZahyoSetSet = new HashSet<HashSet<Zahyo>>();
+                int aTatamiCnt = 0;
+                for (int h = 0; h < H; h++)
                 {
-                    if (isTatami[h,w]) continue;
-
-                    foreach (Dir dir in Enum.GetValues(Dir))
+                    for (int w = 0; w < W; w++)
                     {
-                        int[] hwOffset = getOffset(dir);
-                        int hDir = h + hwOffset[0];
-                        int wDir = w + hwOffset[1];
+                        if (isTatami[h,w]) continue;
+                        foreach (Dir dir in Enum.GetValues(typeof(Dir)))
+                        {
+                            int[] hwOffset = getOffset(dir);
+                            int hDir = h + hwOffset[0];
+                            int wDir = w + hwOffset[1];
 
-                        if (    hDir < 0 || hDir >= H
-                            ||  wDir < 0 || wDir >= W
-                            ||  isTatami[hDir,wDir] ) continue;
+                            if (    hDir < 0 || hDir >= H
+                                ||  wDir < 0 || wDir >= W
+                                ||  isTatami[hDir,wDir] ) continue;
 
-                        isTatami[h, w] = true;
-                        isTatami[hDir,wDir] = true;
-                        aPatterns.Add(dir);
+                            isTatami[h, w] = true;
+                            isTatami[hDir,wDir] = true;
 
-                        // Console.WriteLine(aTatamiCnt + "枚目");
-                        // printTatamis(isTatami);
-                        
-                        break;
+                            
+                            HashSet<Zahyo> aZahyoSet = new HashSet<Zahyo>();
+                            aZahyoSet.Add(new Zahyo(h, w));
+                            aZahyoSet.Add(new Zahyo(hDir, wDir));
+                            aZahyoSetSet.Add(aZahyoSet);
+
+                            Console.WriteLine(++aTatamiCnt + "枚目");
+                            printTatamis(isTatami);
+                            
+                            break;
+                        }
                     }
                 }
-            }
 
-            ans += aPatternsSet.Count();
-            // Console.WriteLine("-----------------------");
+                aZahyoSetSetSet.Add(aZahyoSetSet);
+            }
+            
+            ans += aZahyoSetSetSet.Count();
         }
 		
 		Console.WriteLine(ans);
@@ -91,16 +128,12 @@ class Sol{
         {
             case Dir.top:
                 return new int[2] {-1,  0};
-                break;
             case Dir.right:
                 return new int[2] { 0,  1};
-                break;
             case Dir.bottom:
                 return new int[2] { 1,  0};
-                break;
             case Dir.left:
                 return new int[2] { 0, -1};
-                break;
             default:
                 return new int[2] { 0,  0};
         }
