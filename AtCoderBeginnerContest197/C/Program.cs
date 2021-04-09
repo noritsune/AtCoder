@@ -21,14 +21,26 @@ class Sol{
         List<int> As = ria().ToList();
         BitArray bit = new BitArray(As.Max());
 
-        for (int i = 30; i >= 0; i--)
+        int ans = int.MaxValue;
+        int limit = 1 << (N - 1);
+        for (int i = 0; i < limit; i++)
         {
-            for (int j = 0; j < As.Count(); j++)
+            int or = 0;
+            int xor = 0;
+            for (int j = 0; j <= N; j++)
             {
-                
+                if(j < N) or |= As[j];
+                if(j == N || ((i >> j) & 1) == 1) {
+                    xor ^= or;
+                    or = 0;
+                }
             }
-        }
 
+            ans = Math.Min(ans, xor);
+        }
+		
+		Console.WriteLine(ans);
+		Console.ReadLine();
     }
 
 	public void Solve2(){
