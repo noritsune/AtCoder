@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +15,18 @@ class Util{
 class Sol{
 	const int _mod = 1000000007;
 	public void Solve(){
+		int N = ri();
+        int[] As = ria();
+
+        long ans = 0;
+        foreach (int A in As)
+        {
+            if(A > 10) {
+                ans += A - 10;
+            }
+        }
 		
-		
-		Console.WriteLine("Hello World!");
+		Console.WriteLine(ans);
 		Console.ReadLine();
 	}
 
@@ -128,14 +137,3 @@ public static class Combination {
             yield return i;
     }
 }
-
-public class Vector2 {
-    public int _x = 0;
-    public int _y = 0;
-
-    public Vector2(int x, int y) {
-        _x = x;
-        _y = y;
-    }
-}
-

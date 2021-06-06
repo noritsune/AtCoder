@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +14,52 @@ class Util{
 
 class Sol{
 	const int _mod = 1000000007;
+    List<List<int>> _destinationss = new List<List<int>>();
+
 	public void Solve(){
+		int[] NM = ria();
+        int N = NM[0];
+        int M = NM[1];
+
+        List<int[]> ABs = new List<int[]>();
+        for (int i = 0; i < M; i++) ABs.Add(ria());
+
+        for (int i = 0; i < N; i++) _destinationss.Add(new List<int>());
+
+        foreach (int[] AB in ABs)
+        {
+            int from    = AB[0] - 1;
+            int to      = AB[1] - 1;
+
+            _destinationss[from].Add(to);
+        }
+
+        long ans = 0;
+        for (int start = 0; start < N; start++)
+        {
+            Stack<int> nextCitys = new Stack<int>();
+            nextCitys.Push(start);
+
+            HashSet<int> visitedCitySet = new HashSet<int>();
+            while(nextCitys.Count > 0) {
+                int nextCity = nextCitys.Pop();
+
+                if(visitedCitySet.Contains(nextCity)) continue;
+
+                ans++;
+                visitedCitySet.Add(nextCity);
+
+                List<int> destinations = _destinationss[nextCity];
+                foreach (int destination in destinations)
+                {
+                    if(!visitedCitySet.Contains(destination)) {
+                        nextCitys.Push(destination);
+                    }
+                }
+            }
+        }
 		
-		
-		Console.WriteLine("Hello World!");
+		Console.WriteLine(ans);
 		Console.ReadLine();
 	}
 
@@ -138,4 +180,3 @@ public class Vector2 {
         _y = y;
     }
 }
-

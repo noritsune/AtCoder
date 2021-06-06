@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +15,19 @@ class Util{
 class Sol{
 	const int _mod = 1000000007;
 	public void Solve(){
+        int[] xy = ria();
+        int x = xy[0];
+        int y = xy[1];
 		
-		
-		Console.WriteLine("Hello World!");
+        if(x == y) {
+            Console.WriteLine(x);
+        } else {
+            List<int> hands = generateSuretsu(3).ToList();
+            hands.Remove(x);
+            hands.Remove(y);
+		    Console.WriteLine(hands[0]);
+        }
+
 		Console.ReadLine();
 	}
 
@@ -128,14 +138,3 @@ public static class Combination {
             yield return i;
     }
 }
-
-public class Vector2 {
-    public int _x = 0;
-    public int _y = 0;
-
-    public Vector2(int x, int y) {
-        _x = x;
-        _y = y;
-    }
-}
-
