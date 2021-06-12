@@ -18,25 +18,32 @@ class Sol{
 		int N = ri();
         int[] Ts = ria();
 
-        long sumHalf = Ts.Sum() / 2;
+        int sum = Ts.Sum();
 
-        Array.Sort(Ts);
-        Array.Reverse(Ts);
-
-        long oven1Time = 0;
-        long oven2Time = 0;
-        foreach (int T in Ts)
+        // dp[i, j]: Tsのi要素までのいくつかを選んで和をjにできるか
+        bool[,] dp = new bool[N + 1, sum + 1];
+        dp[0, 0] = true;
+        for (int i = 0; i < dp.GetLength(0) - 1; i++)
         {
-            long oven1Delta = oven1Time + T - sumHalf;
-            long oven2Delta = oven2Time + T - sumHalf;
-            if(oven1Delta < oven2Delta) {
-                oven1Time += T;
-            } else {
-                oven2Time += T;
+            for (int j = 0; j < dp.GetLength(1); j++)
+            {
+                dp[i + 1, j] = dp[i, j];
+                if(j >= Ts[i]) dp[i + 1, j] |= dp[i, j - Ts[i]];
+            }
+        }
+
+        for (int j = sum / 2; j < dp.GetLength(1); j++)
+        {
+            if(dp[N, j]) {
+                int oven1 = j;
+                int oven2 = sum - j;
+                Console.WriteLine(Math.Max(oven1, oven2));
+                Console.ReadLine();
+                return;
             }
         }
 		
-		Console.WriteLine(Math.Max(oven1Time, oven2Time));
+		Console.WriteLine(sum);
 		Console.ReadLine();
 	}
 
