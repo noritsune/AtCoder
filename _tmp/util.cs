@@ -70,6 +70,28 @@ class Sol{
 
         return false;
     }
+    
+    // 2^nパターン分の全探索結果
+    static IEnumerable<bool[]> BitFullSearch(int n)
+    {
+        if (n <= 0)
+        {
+            yield return new bool[] { };
+            yield break;
+        }
+
+        for (int i = 0; i < Math.Pow(2, n); i++)
+        {
+            var array = new bool[n];
+            for (int j = 0; j < n; j++)
+            {
+                var targetBit = (i >> j) & 1;
+                if (targetBit == 1) array[j] = true;
+            }
+
+            yield return array;
+        }
+    }
 }
 
 public static class Combination {
