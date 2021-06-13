@@ -8,7 +8,7 @@ using System.Numerics;
 class Util{
 	static void Main(){
 		Sol mySol =new Sol();
-		mySol.Solve();
+		mySol.SolveTest(20);
 	}
 }
 
@@ -18,38 +18,35 @@ class Sol{
 		int N = ri();
         int[] As = ria();
 
-        IEnumerable<bool[]> fomulas = BitFullSearch(N - 1);
-
-        IEnumerable<bool[]> goodFomulas = fomulas.Where(fomula => {
-            bool last = fomula.First();
-            for (int i = 1; i < fomula.Count(); i++)
-            {
-                bool current = fomula[i];
-                if(last && current) return false;
-                last = current;
-            }
-            return true;
-        });
-
-        int[] plusCnt = new int[N];
-        plusCnt[0] = goodFomulas.Count();
-        foreach (bool[] goodFomula in goodFomulas)
+        // i個+-を並べて、-が連続しないようにして、最後が+(j=0のとき)または-(j=1のとき)であるような場合の数
+        int[,] dp = new int[N - 1, 2];
+        dp[1, 0] = 1;
+        dp[1, 1] = 1;
+        for (int i = 1; i < dp.GetLength(0) - 1; i++)
         {
-            for (int i = 0; i < goodFomula.Length; i++)
-            {
-                if(goodFomula[i])   plusCnt[i + 1]--;
-                else                plusCnt[i + 1]++;
-            }
+            dp[i + 1, 0] = (int)((dp[i, 0] + (long)dp[i, 1]) % _mod);
+            dp[i + 1, 1] = dp[i, 0];
         }
 
-        long ans = 0;
-        for (int i = 0; i < N; i++)
+        int[] plusCnts = new int[N - 1];
+        int[] minusCnts = new int[N - 1];
+        plusCnts[0] = dp[N - 2, 0] + dp[N - 2, 1];
+        for (int i = 1; i < (plusCnts.Count() + 1) / 2 + 1; i++)
         {
-            ans += As[i] * (long)plusCnt[i];
-            ans %= _mod;
+            int rI = N - i - 1;
+            if(i == 1) {
+                int plusCnt = dp[N - 2, 0];
+                plusCnts[i]  = plusCnt;
+                plusCnts[rI] = plusCnt;
+
+                int minusCnt = dp[N - 2, 1];
+                minusCnts[i]  = minusCnt;
+                minusCnts[rI] = minusCnt;
+            } else {
+            }
         }
 		
-		Console.WriteLine(ans);
+		Console.WriteLine();
 		Console.ReadLine();
 	}
 
@@ -162,6 +159,7 @@ class Sol{
         return false;
     }
 
+    // 2^nパターン分の全探索結果
     static IEnumerable<bool[]> BitFullSearch(int n)
     {
         if (n <= 0)
