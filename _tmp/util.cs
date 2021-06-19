@@ -92,6 +92,30 @@ class Sol{
             yield return array;
         }
     }
+
+    static int BinarySearch<T>(T[] array, T target) where T : IComparable<T>
+    {
+        // 探索範囲のインデックス
+        var min = 0;
+        var max = array.Length - 1;
+
+        while (min <= max) // 範囲内にある限り探し続ける
+        {
+            var mid = min + (max - min) / 2;
+            switch (target.CompareTo(array[mid]))
+            {
+                case 1:  // 中央値より大きい場合
+                    min = mid + 1;
+                    break;
+                case -1: // 中央値より小さい場合
+                    max = mid - 1;
+                    break;
+                case 0:
+                    return mid;
+            }
+        }
+        return -1; // 見つからなかった
+    }
 }
 
 public static class Combination {
