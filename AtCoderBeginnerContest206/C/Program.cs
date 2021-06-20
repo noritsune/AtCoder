@@ -8,7 +8,7 @@ using System.Numerics;
 class Util{
 	static void Main(){
 		Sol mySol =new Sol();
-		mySol.Solve();
+		mySol.Solve2();
 	}
 }
 
@@ -62,6 +62,30 @@ class Sol{
 		Console.WriteLine(ans);
 		Console.ReadLine();
 	}
+
+    public void Solve2(){
+        int N = ri();
+        int[] As = ria();
+        
+        Dictionary<int, int> numCnts = new Dictionary<int, int>();
+        long ans = 0;
+        for (int i = 0; i < N; i++)
+        {
+            int A = As[i];
+            int cnt = 0;
+            if(numCnts.ContainsKey(A)) {
+                cnt = numCnts[A];
+            } else {
+                numCnts.Add(A, 0);
+            }
+            ans += i - cnt;
+
+            numCnts[A]++;
+        }
+
+        Console.WriteLine(ans);
+        Console.ReadLine();
+    }
 
 	static String rs(){return Console.ReadLine();}
 	static int ri(){return int.Parse(Console.ReadLine());}
