@@ -24,39 +24,62 @@ class Sol{
             return;
         }
 
-        int[] As_bef = new int[N / 2];
-        Array.Copy(As, As_bef, N / 2);
-
-        int[] As_aft = new int[N / 2];
-        for (int i = 0; i < N / 2; i++)
-        {
-            As_aft[i] = As[N - 1 - i];
+        // 無向グラフを作る
+        var graph = new Graph<int>(Graph<int>.Type.UndirectedGraph);
+        foreach (int A in As.ToHashSet()) {
+            graph.AddVertex(A);
         }
 
-        int ans = 0;
-        for (int i = 0; i < N / 2; i++)
+        // 訪問フラグ
+        Dictionary<int, bool> hasSeen = new Dictionary<int, bool>();
+        int leftI = 0;
+        int rightI = N - 1;
+        while(leftI < rightI) {
+            int leftA  = As[leftI];
+            int rightA = As[rightI];
+
+            if(leftA != rightA) {
+                graph.AddEdge(leftA, rightA);
+            }
+
+            if(!hasSeen.ContainsKey(leftA)) {
+                hasSeen.Add(leftA, false);
+            }
+            if(!hasSeen.ContainsKey(rightA)) {
+                hasSeen.Add(rightA, false);
+            }
+
+            leftI++;
+            rightI--;
+        }
+
+        int[] keys = hasSeen.Keys.ToArray();
+        int ans = keys.Count();
+        for (int i = 0; i < keys.Length; i++)
         {
-            int bef = As_bef[i];
-            int aft = As_aft[i];
-            if(bef != aft) {
-                As_bef = ReplaceAllNums(As_bef, bef, aft);
-                As_aft = ReplaceAllNums(As_aft, bef, aft);
-                ans++;
+            int key = keys[i];
+            if(hasSeen[key]) continue;
+
+            ans--;
+
+            Stack<int> stack = new Stack<int>();
+            stack.Push(key);
+            while(stack.Count > 0) {
+                int node = stack.Pop();
+                if(hasSeen[node]) continue;
+
+                hasSeen[node] = true;
+
+                foreach (int nextNode in graph.Vertices[node])
+                {
+                    stack.Push(nextNode);
+                }
             }
         }
 		
 		Console.WriteLine(ans);
 		Console.ReadLine();
 	}
-
-    int[] ReplaceAllNums(int[] nums, int from, int to) {
-        for (int i = 0; i < nums.Length; i++)
-        {
-            if(nums[i] == from) nums[i] = to;
-        }
-
-        return nums;
-    }
 
 	static String rs(){return Console.ReadLine();}
 	static int ri(){return int.Parse(Console.ReadLine());}
@@ -222,3 +245,113 @@ public class Vector2 {
     }
 }
 
+/// <summary>
+/// グラフ
+/// </summary>
+/// <typeparam name="T">頂点のラベルの型</typeparam>
+public class Graph<T>
+{
+    public enum Type
+    {
+        DirectedGraph,      // 有向グラフ
+        UndirectedGraph,    // 無向グラフ
+    }
+
+    /// <summary>
+    /// グラフ上の全頂点 <ラベル，接続先の頂点集合>
+    /// </summary>
+    public IReadOnlyDictionary<T, HashSet<T>> Vertices => _vertices;
+    private readonly Dictionary<T, HashSet<T>> _vertices;
+
+    /// <summary>
+    /// グラフの種類(有向グラフ or 無向グラフ)
+    /// </summary>
+    public Type GraphType { get; }
+
+    public Graph(Type type)
+    {
+        _vertices = new Dictionary<T, HashSet<T>>();
+        GraphType = type;
+    }
+
+    public Graph(Type type, IEnumerable<(T, HashSet<T>)> vertices) : this(type)
+    {
+        foreach (var v in vertices)
+            _vertices[v.Item1] = v.Item2;
+    }
+
+    /// <summary>
+    /// 頂点を追加する
+    /// </summary>
+    public void AddVertex(T label)
+        => _vertices[label] = new HashSet<T>();
+
+    /// <summary>
+    /// 頂点を追加する
+    /// </summary>
+    public void AddVertex(T label, IEnumerable<T> to)
+    {
+        AddVertex(label);
+        foreach (var v in to)
+            _vertices[label].Add(v);
+    }
+
+    /// <summary>
+    /// 頂点数を取得する
+    /// </summary>
+    public int GetVertexCount()
+        => _vertices.Count;
+
+    /// <summary>
+    /// 辺を追加する
+    /// </summary>
+    /// <param name="from">接続元の頂点</param>
+    /// <param name="to">接続先の頂点</param>
+    /// <returns>追加できたか</returns>
+    public bool AddEdge(T from, T to)
+    {
+        if (!_vertices.ContainsKey(from) || !_vertices.ContainsKey(to)) return false;
+
+        _vertices[from].Add(to);
+        if (GraphType == Type.UndirectedGraph) _vertices[to].Add(from);
+        return true;
+    }
+
+    /// <summary>
+    /// 辺数を取得する
+    /// </summary>
+    /// <returns></returns>
+    public int GetEdgeCount()
+    {
+        var count = _vertices.Aggregate(0, (sum, v) => sum += v.Value.Count);
+        if (GraphType == Type.DirectedGraph) return count;
+        else return count / 2;
+    }
+
+    /// <summary>
+    /// グラフの辺集合を取得する
+    /// </summary>
+    /// <returns>辺のコレクション(<接続元のラベル, 接続先のラベル>)</returns>
+    public IEnumerable<(T, T)> GetEdges()
+    {
+        if (GraphType == Type.DirectedGraph)
+        {
+            foreach (var v in _vertices)
+                foreach (var to in v.Value)
+                    yield return (v.Key, to);
+        }
+        else if (GraphType == Type.UndirectedGraph)
+        {
+            var memo = new Dictionary<T, List<T>>();
+            foreach (var v in _vertices)
+                foreach (var to in v.Value)
+                {
+                    if (!memo.ContainsKey(to)) memo[to] = new List<T>();
+                    if (memo[to].Contains(v.Key)) continue;
+                    yield return (v.Key, to);
+                    if (!memo.ContainsKey(v.Key)) memo[v.Key] = new List<T>();
+                    memo[v.Key].Add(to);
+                }
+        }
+    }
+}
