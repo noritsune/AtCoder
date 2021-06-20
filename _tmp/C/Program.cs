@@ -227,7 +227,7 @@ namespace util {
             _y = y;
         }
     }
-    
+
     /// <summary>
     /// グラフ
     /// </summary>
@@ -243,8 +243,8 @@ namespace util {
         /// <summary>
         /// グラフ上の全頂点 <ラベル，接続先の頂点集合>
         /// </summary>
-        public IReadOnlyDictionary<T, List<T>> Vertices => _vertices;
-        private readonly Dictionary<T, List<T>> _vertices;
+        public IReadOnlyDictionary<T, HashSet<T>> Vertices => _vertices;
+        private readonly Dictionary<T, HashSet<T>> _vertices;
 
         /// <summary>
         /// グラフの種類(有向グラフ or 無向グラフ)
@@ -253,11 +253,11 @@ namespace util {
 
         public Graph(Type type)
         {
-            _vertices = new Dictionary<T, List<T>>();
+            _vertices = new Dictionary<T, HashSet<T>>();
             GraphType = type;
         }
 
-        public Graph(Type type, IEnumerable<(T, List<T>)> vertices) : this(type)
+        public Graph(Type type, IEnumerable<(T, HashSet<T>)> vertices) : this(type)
         {
             foreach (var v in vertices)
                 _vertices[v.Item1] = v.Item2;
@@ -267,7 +267,7 @@ namespace util {
         /// 頂点を追加する
         /// </summary>
         public void AddVertex(T label)
-            => _vertices[label] = new List<T>();
+            => _vertices[label] = new HashSet<T>();
 
         /// <summary>
         /// 頂点を追加する
