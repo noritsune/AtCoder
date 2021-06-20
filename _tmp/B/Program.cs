@@ -227,4 +227,115 @@ namespace util {
             _y = y;
         }
     }
+    
+    /// <summary>
+    /// グラフ
+    /// </summary>
+    /// <typeparam name="T">頂点のラベルの型</typeparam>
+    public class Graph<T>
+    {
+        public enum Type
+        {
+            DirectedGraph,      // 有向グラフ
+            UndirectedGraph,    // 無向グラフ
+        }
+
+        /// <summary>
+        /// グラフ上の全頂点 <ラベル，接続先の頂点集合>
+        /// </summary>
+        public IReadOnlyDictionary<T, List<T>> Vertices => _vertices;
+        private readonly Dictionary<T, List<T>> _vertices;
+
+        /// <summary>
+        /// グラフの種類(有向グラフ or 無向グラフ)
+        /// </summary>
+        public Type GraphType { get; }
+
+        public Graph(Type type)
+        {
+            _vertices = new Dictionary<T, List<T>>();
+            GraphType = type;
+        }
+
+        public Graph(Type type, IEnumerable<(T, List<T>)> vertices) : this(type)
+        {
+            foreach (var v in vertices)
+                _vertices[v.Item1] = v.Item2;
+        }
+
+        /// <summary>
+        /// 頂点を追加する
+        /// </summary>
+        public void AddVertex(T label)
+            => _vertices[label] = new List<T>();
+
+        /// <summary>
+        /// 頂点を追加する
+        /// </summary>
+        public void AddVertex(T label, IEnumerable<T> to)
+        {
+            AddVertex(label);
+            foreach (var v in to)
+                _vertices[label].Add(v);
+        }
+
+        /// <summary>
+        /// 頂点数を取得する
+        /// </summary>
+        public int GetVertexCount()
+            => _vertices.Count;
+
+        /// <summary>
+        /// 辺を追加する
+        /// </summary>
+        /// <param name="from">接続元の頂点</param>
+        /// <param name="to">接続先の頂点</param>
+        /// <returns>追加できたか</returns>
+        public bool AddEdge(T from, T to)
+        {
+            if (!_vertices.ContainsKey(from) || !_vertices.ContainsKey(to)) return false;
+
+            _vertices[from].Add(to);
+            if (GraphType == Type.UndirectedGraph) _vertices[to].Add(from);
+            return true;
+        }
+
+        /// <summary>
+        /// 辺数を取得する
+        /// </summary>
+        /// <returns></returns>
+        public int GetEdgeCount()
+        {
+            var count = _vertices.Aggregate(0, (sum, v) => sum += v.Value.Count);
+            if (GraphType == Type.DirectedGraph) return count;
+            else return count / 2;
+        }
+
+        /// <summary>
+        /// グラフの辺集合を取得する
+        /// </summary>
+        /// <returns>辺のコレクション(<接続元のラベル, 接続先のラベル>)</returns>
+        public IEnumerable<(T, T)> GetEdges()
+        {
+            if (GraphType == Type.DirectedGraph)
+            {
+                foreach (var v in _vertices)
+                    foreach (var to in v.Value)
+                        yield return (v.Key, to);
+            }
+            else if (GraphType == Type.UndirectedGraph)
+            {
+                var memo = new Dictionary<T, List<T>>();
+                foreach (var v in _vertices)
+                    foreach (var to in v.Value)
+                    {
+                        if (!memo.ContainsKey(to)) memo[to] = new List<T>();
+                        if (memo[to].Contains(v.Key)) continue;
+                        yield return (v.Key, to);
+                        if (!memo.ContainsKey(v.Key)) memo[v.Key] = new List<T>();
+                        memo[v.Key].Add(to);
+                    }
+            }
+        }
+    }
 }
