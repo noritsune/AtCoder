@@ -6,6 +6,9 @@ rem コンテストフォルダ作成
 mkdir AtCoderBeginnerContestXXX
 cd AtCoderBeginnerContestXXX
 
+rem .vscodeフォルダ以下をコピーしてくる
+xcopy ..\_tmp\.vscode\ .vscode\
+
 rem 問題名の定義
 set problemNames[0]=A
 set problemNames[1]=B
