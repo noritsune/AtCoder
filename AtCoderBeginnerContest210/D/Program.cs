@@ -15,7 +15,53 @@ namespace util {
 
     public class Sol{
         const int _mod = 1000000007;
+        
         public void Solve(){
+            long[] HWC = rla();
+            long H = HWC[0];
+            long W = HWC[1];
+            long C = HWC[2];
+            List<long[]> As = new List<long[]>();
+            for (int i = 0; i < H; i++) As.Add(rla());
+
+            long[,] dp = new long[H, W];
+            for (int h = 0; h < H; h++)
+            {
+                for (int w = 0; w < W; w++)
+                {
+                    long costStation = As[h][w];
+                    long costRailFromTop  = h > 0
+                        ? dp[h - 1, w] + C
+                        : long.MaxValue;
+                    long costRailFromLeft = w > 0
+                        ? dp[h, w - 1] + C
+                        : long.MaxValue;
+
+                    dp[h, w] = Math.Min(costStation, Math.Min(costRailFromTop, costRailFromLeft));
+                }
+            }
+
+            long ans = long.MaxValue;
+            for (int h = 0; h < H; h++)
+            {
+                for (int w = 0; w < W; w++)
+                {
+                    long costStation = As[h][w];
+                    long costRailFromTop = h > 0
+                        ? dp[h - 1, w] + C + costStation
+                        : long.MaxValue;
+                    long costRailFromLeft = w > 0
+                        ? dp[h, w - 1] + C + costStation
+                        : long.MaxValue;
+                    ans = Math.Min(Math.Min(costRailFromTop, costRailFromLeft), ans);
+                }
+            }
+
+            Console.WriteLine(ans);
+            Console.ReadLine();
+        }
+
+        public void SolveTest(){
             int[] HWC = ria();
             int H = HWC[0];
             int W = HWC[1];
