@@ -140,6 +140,28 @@ namespace util {
         }
 
         /// <summary>
+        /// array内でtarget以下となる要素が最初に出現する要素番号を返す
+        /// 存在しないなら-1
+        /// </summary>
+        /// <param name="array">昇順ソートされた配列</param>
+        /// <param name="target">検索対象</param>
+        public static int LowerBoundUnder<T>(T[] array, T target) where T : IComparable<T>
+        {
+            // 探索範囲のインデックス
+            var min = 0;
+            var max = array.Length - 1;
+
+            while (min <= max) // 範囲内にある限り探し続ける
+            {
+                var mid = min + (max - min) / 2;
+                int compareResult = target.CompareTo(array[mid]);
+                if(compareResult == -1) max = mid - 1;
+                else min = mid + 1;
+            }
+            return max;
+        }
+
+        /// <summary>
         /// array内でtargetより大きな要素が最初に出現する要素番号を返す
         /// </summary>
         /// <param name="array">昇順ソートされた配列</param>
