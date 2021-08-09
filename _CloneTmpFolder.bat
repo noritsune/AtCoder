@@ -31,7 +31,4 @@ for /l %%i in (0, 1, 3) do (
 	cd ..
 )
 
-rem VSCodeを開く
-code .
-
 endlocal
