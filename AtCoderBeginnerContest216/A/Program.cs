@@ -5,36 +5,42 @@ using System.Linq;
 using System.Text;
 using System.Numerics;
 
-namespace util {
+namespace A {
     class Util{
         static void Main(){
             Sol mySol =new Sol();
-            mySol.Solve();
+            mySol.InputAndSolve();
         }
     }
 
     public class Sol{
         const int _mod = 1000000007;
-        public void Solve()
+
+        public void InputAndSolve()
         {
             double XY = rd();
+            string ans = Solve(XY);
+            
+            Console.WriteLine(ans);
+            Console.ReadLine();
+        }
+        
+        public string Solve(double XY)
+        {
             int X = (int)XY;
             int Y = (int)((XY - (double)X) * 10);
-
+            
             if (0 <= Y && Y <= 2)
             {
-                Console.WriteLine(X + "-");
+                return X + "-";
             }
-            else if(3 <= Y && Y <= 6)
+
+            if(3 <= Y && Y <= 6)
             {
-                Console.WriteLine(X);
+                return X.ToString();
             }
-            else
-            {
-                Console.WriteLine(X + "+");
-            }
-            
-            Console.ReadLine();
+
+            return X + "+";
         }
 
         static String rs(){return Console.ReadLine();}
