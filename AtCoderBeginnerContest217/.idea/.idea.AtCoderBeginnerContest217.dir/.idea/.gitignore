@@ -1,0 +1,13 @@
+﻿# デフォルトの無視対象ファイル
+/shelf/
+/workspace.xml
+# Rider ignored files
+/modules.xml
+/contentModel.xml
+/.idea.AtCoderBeginnerContest217.iml
+/projectSettingsUpdater.xml
+# データソースのローカルストレージ用のため無視されるファイル
+/dataSources/
+/dataSources.local.xml
+# エディターベースの HTTP クライアントリクエスト
+/httpRequests/
