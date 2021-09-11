@@ -15,10 +15,14 @@ namespace util {
 
     public class Sol{
         const int _mod = 1000000007;
-        public void Solve(){
+        public void Solve()
+        {
+            int N = ri();
+            string S = rs();
+
+            string ans = S[N - 1] == 'o' ? "Yes" : "No";
             
-            
-            Console.WriteLine("Hello World!");
+            Console.WriteLine(ans);
             Console.ReadLine();
         }
 
@@ -158,7 +162,6 @@ namespace util {
             return min;
         }
     }
-
     public static class Combination {
         //使い方:int[][] Is = Combination.Enumerate(nums, k, withRepetition:false).ToArray();
         public static IEnumerable<T[]> Enumerate<T>(IEnumerable<T> items, int k, bool withRepetition) {

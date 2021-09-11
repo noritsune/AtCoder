@@ -158,6 +158,7 @@ namespace util {
             return min;
         }
     }
+    }
 
     public static class Combination {
         //使い方:int[][] Is = Combination.Enumerate(nums, k, withRepetition:false).ToArray();

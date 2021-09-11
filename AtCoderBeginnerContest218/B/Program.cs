@@ -15,10 +15,17 @@ namespace util {
 
     public class Sol{
         const int _mod = 1000000007;
-        public void Solve(){
+        public void Solve()
+        {
+            int[] Ps = ria();
+
+            string ans = "";
+            foreach (var P in Ps)
+            {
+                ans += (char) (96 + P);
+            }
             
-            
-            Console.WriteLine("Hello World!");
+            Console.WriteLine(ans);
             Console.ReadLine();
         }
 

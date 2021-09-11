@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Numerics;
+using System.Runtime.Intrinsics.X86;
 
 namespace util {
     class Util{
@@ -15,11 +16,169 @@ namespace util {
 
     public class Sol{
         const int _mod = 1000000007;
-        public void Solve(){
+
+        public void Solve()
+        {
+            int N = ri();
+            List<string> Ss = new List<string>();
+            for (int i = 0; i < N; i++) Ss.Add(rs());
+            List<string> Ts = new List<string>();
+            for (int i = 0; i < N; i++) Ts.Add(rs());
+
+            int[,] SSharpCounts = new int[2, 3 * N - 2];
+            for (int i = 0; i < N - 1; i++)
+            {
+                SSharpCounts[0, i] = 0;
+                SSharpCounts[1, i] = 0;
+            }
+            for (int i = 2 * N - 1; i < 3 * N - 2; i++)
+            {
+                SSharpCounts[0, i] = 0;
+                SSharpCounts[1, i] = 0;
+            }
+            for (int i = 0; i < N; i++) SSharpCounts[0, i + N - 1] = Ss[i].Count(c => c.Equals('#'));
+            for (int i = 0; i < N; i++)
+            {
+                for (int j = 0; j < N; j++) if (Ss[i][j] == '#') SSharpCounts[1, j + N - 1]++;
+            }
             
+            int[,] TSharpCounts = new int[2, N];
+            for (int i = 0; i < N; i++) TSharpCounts[0, i] = Ts[i].Count(c => c.Equals('#'));
+            for (int i = 0; i < N; i++)
+            {
+                for (int j = 0; j < N; j++) if (Ts[i][j] == '#') TSharpCounts[1, j]++;
+            }
+
+            List<int[,]> rotatedTSharpCountss = new List<int[,]> {TSharpCounts};
+            for (int i = 1; i < 4; i++)
+            {
+                int[,] rotatedTSharpCounts = new int[2, N];
+                for (int j = 0; j < N; j++) rotatedTSharpCounts[0, j] = rotatedTSharpCountss[i - 1][1, j];
+                for (int j = 0; j < N; j++) rotatedTSharpCounts[1, j] = rotatedTSharpCountss[i - 1][0, N - 1 - j];
+                rotatedTSharpCountss.Add(rotatedTSharpCounts);
+            }
             
-            Console.WriteLine("Hello World!");
+            foreach (var rotatedTSharpCounts in rotatedTSharpCountss)
+            {
+                for (int i = 0; i < 2 * N - 1; i++)
+                {
+                    for (int j = 0; j < 2 * N - 1; j++)
+                    {
+                        int[,] trimmedSSharpCounts = new int[2, N];
+                        for (int k = 0; k < N; k++) trimmedSSharpCounts[0, k] = SSharpCounts[0, i + k];
+                        for (int k = 0; k < N; k++) trimmedSSharpCounts[1, k] = SSharpCounts[1, j + k];
+                        if (!isSameArray(trimmedSSharpCounts, rotatedTSharpCounts)) continue;
+
+                        Console.WriteLine("Yes");
+                        Console.ReadLine();
+                        return;
+                    }
+                }
+            }
+            
+            Console.WriteLine("No");
             Console.ReadLine();
+        }
+
+        public void SolveTest()
+        {
+            int N = ri();
+            List<string> Ss = new List<string>();
+            for (int i = 0; i < N; i++) Ss.Add(rs());
+            List<string> Ts = new List<string>();
+            for (int i = 0; i < N; i++) Ts.Add(rs());
+
+            string extraVerticalArea   = new string(Enumerable.Repeat('.', 3 * N - 2).ToArray());
+            string extraHorizontalArea = new string(Enumerable.Repeat('.', N - 1).ToArray());
+            
+            List<string> expandedSs = new List<string>();
+            for (int i = 0; i < N - 1; i++) expandedSs.Add(extraVerticalArea); 
+            foreach (var S in Ss) expandedSs.Add(extraHorizontalArea + S + extraHorizontalArea);
+            for (int i = 0; i < N - 1; i++) expandedSs.Add(extraVerticalArea);
+            
+            // List<string> expandedTs = new List<string>();
+            // for (int i = 0; i < N - 1; i++) expandedTs.Add(extraVerticalArea);
+            // foreach (var T in Ts) expandedTs.Add(extraHorizontalArea + T + extraHorizontalArea);
+            // for (int i = 0; i < N - 1; i++) expandedTs.Add(extraVerticalArea);
+
+            List<List<string>> rotatedTss = new List<List<string>>();
+            rotatedTss.Add(Ts);
+            for (int i = 1; i < 4; i++)
+            {
+                char[,] intTs = new char[N, N];
+                for (int j = 0; j < N; j++)
+                {
+                    for (int k = 0; k < N; k++)
+                    {
+                        intTs[k, N - 1- j] = rotatedTss[i - 1][j][k];
+                    }
+                }
+
+                List<string> rotatedTs = new List<string>();
+                for (int j = 0; j < N; j++)
+                {
+                    string T = "";
+                    for (int k = 0; k < N; k++)
+                    {
+                        T += intTs[j, k];
+                    }
+                    rotatedTs.Add(T);
+                }
+                rotatedTss.Add(rotatedTs);
+            }
+            
+            foreach (var rotatedTs in rotatedTss)
+            {
+                for (int i = 0; i < 2 * N - 1; i++)
+                {
+                    for (int j = 0; j < 2 * N - 1; j++)
+                    {
+                        List<string> trimmedSs = new List<string>();
+                        for (int k = 0; k < N; k++)
+                        {
+                            trimmedSs.Add(expandedSs[i + k].Substring(j, N));
+                        }
+                        
+                        if (!isSameList<string>(N, trimmedSs, rotatedTs)) continue;
+                        
+                        Console.WriteLine("Yes");
+                        Console.ReadLine();
+                        return;
+                    }
+                }
+            }
+
+            Console.WriteLine("No");
+            Console.ReadLine();
+        }
+        
+        private bool isSameArray<T>(T[,] arrayA, T[,] arrayB)
+        {
+            for (int i = 0; i < arrayA.GetLength(0); i++)
+            {
+                for (int j = 0; j < arrayA.GetLength(1); j++)
+                {
+                    if (!arrayA[i, j].Equals(arrayB[i, j]))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+        
+        private bool isSameList<T>(int N, List<T> listA, List<T> listB)
+        {
+            for (int i = 0; i < N; i++)
+            {
+                if (!listA[i].Equals(listB[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         static String rs(){return Console.ReadLine();}
