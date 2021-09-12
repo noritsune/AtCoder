@@ -224,8 +224,24 @@ namespace util {
             _x = x;
             _y = y;
         }
-    }
+        
+        public override bool Equals(object obj)
+        {
+            //objがnullか、型が違うときは、等価でない
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            
+            Vector2 other = (Vector2)obj;
+            return _x == other._x && _y == other._y;
+        }
 
+        public override int GetHashCode()
+        {
+            return _x ^ _y;
+        }
+    }
     /// <summary>
     /// グラフ
     /// </summary>
