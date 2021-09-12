@@ -25,160 +25,70 @@ namespace util {
             List<string> Ts = new List<string>();
             for (int i = 0; i < N; i++) Ts.Add(rs());
 
-            int[,] SSharpCounts = new int[2, 3 * N - 2];
-            for (int i = 0; i < N - 1; i++)
-            {
-                SSharpCounts[0, i] = 0;
-                SSharpCounts[1, i] = 0;
-            }
-            for (int i = 2 * N - 1; i < 3 * N - 2; i++)
-            {
-                SSharpCounts[0, i] = 0;
-                SSharpCounts[1, i] = 0;
-            }
-            for (int i = 0; i < N; i++) SSharpCounts[0, i + N - 1] = Ss[i].Count(c => c.Equals('#'));
+            HashSet<Vector2> SSharpPosSet = new HashSet<Vector2>();
             for (int i = 0; i < N; i++)
             {
-                for (int j = 0; j < N; j++) if (Ss[i][j] == '#') SSharpCounts[1, j + N - 1]++;
+                for (int j = 0; j < N; j++)
+                {
+                    if (Ss[i][j] == '#') SSharpPosSet.Add(new Vector2(j, i));
+                }
             }
-            
-            int[,] TSharpCounts = new int[2, N];
-            for (int i = 0; i < N; i++) TSharpCounts[0, i] = Ts[i].Count(c => c.Equals('#'));
+            HashSet<Vector2> TSharpPosSet = new HashSet<Vector2>();
             for (int i = 0; i < N; i++)
             {
-                for (int j = 0; j < N; j++) if (Ts[i][j] == '#') TSharpCounts[1, j]++;
-            }
-
-            List<int[,]> rotatedTSharpCountss = new List<int[,]> {TSharpCounts};
-            for (int i = 1; i < 4; i++)
-            {
-                int[,] rotatedTSharpCounts = new int[2, N];
-                for (int j = 0; j < N; j++) rotatedTSharpCounts[0, j] = rotatedTSharpCountss[i - 1][1, j];
-                for (int j = 0; j < N; j++) rotatedTSharpCounts[1, j] = rotatedTSharpCountss[i - 1][0, N - 1 - j];
-                rotatedTSharpCountss.Add(rotatedTSharpCounts);
-            }
-            
-            foreach (var rotatedTSharpCounts in rotatedTSharpCountss)
-            {
-                for (int i = 0; i < 2 * N - 1; i++)
-                {
-                    for (int j = 0; j < 2 * N - 1; j++)
-                    {
-                        int[,] trimmedSSharpCounts = new int[2, N];
-                        for (int k = 0; k < N; k++) trimmedSSharpCounts[0, k] = SSharpCounts[0, i + k];
-                        for (int k = 0; k < N; k++) trimmedSSharpCounts[1, k] = SSharpCounts[1, j + k];
-                        if (!isSameArray(trimmedSSharpCounts, rotatedTSharpCounts)) continue;
-
-                        Console.WriteLine("Yes");
-                        Console.ReadLine();
-                        return;
-                    }
-                }
-            }
-            
-            Console.WriteLine("No");
-            Console.ReadLine();
-        }
-
-        public void SolveTest()
-        {
-            int N = ri();
-            List<string> Ss = new List<string>();
-            for (int i = 0; i < N; i++) Ss.Add(rs());
-            List<string> Ts = new List<string>();
-            for (int i = 0; i < N; i++) Ts.Add(rs());
-
-            string extraVerticalArea   = new string(Enumerable.Repeat('.', 3 * N - 2).ToArray());
-            string extraHorizontalArea = new string(Enumerable.Repeat('.', N - 1).ToArray());
-            
-            List<string> expandedSs = new List<string>();
-            for (int i = 0; i < N - 1; i++) expandedSs.Add(extraVerticalArea); 
-            foreach (var S in Ss) expandedSs.Add(extraHorizontalArea + S + extraHorizontalArea);
-            for (int i = 0; i < N - 1; i++) expandedSs.Add(extraVerticalArea);
-            
-            // List<string> expandedTs = new List<string>();
-            // for (int i = 0; i < N - 1; i++) expandedTs.Add(extraVerticalArea);
-            // foreach (var T in Ts) expandedTs.Add(extraHorizontalArea + T + extraHorizontalArea);
-            // for (int i = 0; i < N - 1; i++) expandedTs.Add(extraVerticalArea);
-
-            List<List<string>> rotatedTss = new List<List<string>>();
-            rotatedTss.Add(Ts);
-            for (int i = 1; i < 4; i++)
-            {
-                char[,] intTs = new char[N, N];
                 for (int j = 0; j < N; j++)
                 {
-                    for (int k = 0; k < N; k++)
-                    {
-                        intTs[k, N - 1- j] = rotatedTss[i - 1][j][k];
-                    }
+                    if (Ts[i][j] == '#') TSharpPosSet.Add(new Vector2(j, i));
                 }
-
-                List<string> rotatedTs = new List<string>();
-                for (int j = 0; j < N; j++)
-                {
-                    string T = "";
-                    for (int k = 0; k < N; k++)
-                    {
-                        T += intTs[j, k];
-                    }
-                    rotatedTs.Add(T);
-                }
-                rotatedTss.Add(rotatedTs);
             }
             
-            foreach (var rotatedTs in rotatedTss)
+            List<HashSet<Vector2>> rotatedTSharpPosSets = new List<HashSet<Vector2>>() {TSharpPosSet};
+            for (int i = 1; i < 4; i++)
             {
-                for (int i = 0; i < 2 * N - 1; i++)
+                HashSet<Vector2> rotatedTSharpPosSet = new HashSet<Vector2>();
+                foreach (var pos in rotatedTSharpPosSets[i - 1])
                 {
-                    for (int j = 0; j < 2 * N - 1; j++)
-                    {
-                        List<string> trimmedSs = new List<string>();
-                        for (int k = 0; k < N; k++)
-                        {
-                            trimmedSs.Add(expandedSs[i + k].Substring(j, N));
-                        }
-                        
-                        if (!isSameList<string>(N, trimmedSs, rotatedTs)) continue;
-                        
-                        Console.WriteLine("Yes");
-                        Console.ReadLine();
-                        return;
-                    }
+                    rotatedTSharpPosSet.Add(new Vector2(N - 1 - pos._y, pos._x));
                 }
+                
+                rotatedTSharpPosSets.Add(rotatedTSharpPosSet);
+            }
+            
+            foreach (var rotatedTSharpPosSet in rotatedTSharpPosSets)
+            {
+                Vector2 leftTopS = GetLeftTop(SSharpPosSet);
+                Vector2 leftTopT = GetLeftTop(rotatedTSharpPosSet);
+                int offsetX = leftTopS._x - leftTopT._x;
+                int offsetY = leftTopS._y - leftTopT._y;
+                
+                HashSet<Vector2> movedTSharpPosSet = new HashSet<Vector2>();
+                foreach (var pos in rotatedTSharpPosSet)
+                {
+                    movedTSharpPosSet.Add(new Vector2(pos._x + offsetX, pos._y + offsetY));
+                }
+                
+                if (!movedTSharpPosSet.SetEquals(SSharpPosSet)) continue;
+                
+                Console.WriteLine("Yes");
+                Console.ReadLine();
+                return;
             }
 
             Console.WriteLine("No");
             Console.ReadLine();
         }
-        
-        private bool isSameArray<T>(T[,] arrayA, T[,] arrayB)
+
+        private Vector2 GetLeftTop(IEnumerable<Vector2> vector2s)
         {
-            for (int i = 0; i < arrayA.GetLength(0); i++)
+            int minX = int.MaxValue;
+            int minY = int.MaxValue;
+            foreach (var vector2 in vector2s)
             {
-                for (int j = 0; j < arrayA.GetLength(1); j++)
-                {
-                    if (!arrayA[i, j].Equals(arrayB[i, j]))
-                    {
-                        return false;
-                    }
-                }
+                minX = Math.Min(vector2._x, minX);
+                minY = Math.Min(vector2._y, minY);
             }
 
-            return true;
-        }
-        
-        private bool isSameList<T>(int N, List<T> listA, List<T> listB)
-        {
-            for (int i = 0; i < N; i++)
-            {
-                if (!listA[i].Equals(listB[i]))
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return new Vector2(minX, minY);
         }
 
         static String rs(){return Console.ReadLine();}
@@ -382,6 +292,23 @@ namespace util {
         public Vector2(int x, int y) {
             _x = x;
             _y = y;
+        }
+        
+        public override bool Equals(object obj)
+        {
+            //objがnullか、型が違うときは、等価でない
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            
+            Vector2 other = (Vector2)obj;
+            return _x == other._x && _y == other._y;
+        }
+
+        public override int GetHashCode()
+        {
+            return _x ^ _y;
         }
     }
 
