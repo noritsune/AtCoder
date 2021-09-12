@@ -15,10 +15,39 @@ namespace util {
 
     public class Sol{
         const int _mod = 1000000007;
-        public void Solve(){
+        public void Solve()
+        {
+            int N = ri();
+            List<Vector2> xys = new List<Vector2>();
+            for (int i = 0; i < N; i++)
+            {
+                int[] xy = ria();
+                xys.Add(new Vector2(xy[0], xy[1]));
+            }
+
+            HashSet<Vector2> xySet = xys.ToHashSet();
+
+            int ans = 0;
+            for (int i = 0; i < N; i++)
+            {
+                for (int j = i + 1; j < N; j++)
+                {
+                    Vector2 posA = xys[i];
+                    Vector2 posD = xys[j];
+                    
+                    if(posA._x == posD._x || posA._y == posD._y) continue;
+
+                    Vector2 posB = new Vector2(posD._x, posA._y);
+                    Vector2 posC = new Vector2(posA._x, posD._y);
+                    
+                    if(!xySet.Contains(posB)) continue;
+                    if(!xySet.Contains(posC)) continue;
+
+                    ans++;
+                }
+            }
             
-            
-            Console.WriteLine("Hello World!");
+            Console.WriteLine(ans / 2);
             Console.ReadLine();
         }
 
@@ -158,7 +187,6 @@ namespace util {
             return min;
         }
     }
-    }
 
     public static class Combination {
         //使い方:int[][] Is = Combination.Enumerate(nums, k, withRepetition:false).ToArray();
@@ -224,6 +252,23 @@ namespace util {
         public Vector2(int x, int y) {
             _x = x;
             _y = y;
+        }
+        
+        public override bool Equals(object obj)
+        {
+            //objがnullか、型が違うときは、等価でない
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            
+            Vector2 other = (Vector2)obj;
+            return _x == other._x && _y == other._y;
+        }
+
+        public override int GetHashCode()
+        {
+            return _x ^ _y;
         }
     }
 
