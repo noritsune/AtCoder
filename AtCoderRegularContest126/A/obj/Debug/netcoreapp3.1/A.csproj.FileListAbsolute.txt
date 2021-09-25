@@ -1,0 +1,13 @@
+D:\Documents\GitHub\AtCoder\AtCoderRegularContest126\A\bin\Debug\netcoreapp3.1\A.exe
+D:\Documents\GitHub\AtCoder\AtCoderRegularContest126\A\bin\Debug\netcoreapp3.1\A.deps.json
+D:\Documents\GitHub\AtCoder\AtCoderRegularContest126\A\bin\Debug\netcoreapp3.1\A.runtimeconfig.json
+D:\Documents\GitHub\AtCoder\AtCoderRegularContest126\A\bin\Debug\netcoreapp3.1\A.runtimeconfig.dev.json
+D:\Documents\GitHub\AtCoder\AtCoderRegularContest126\A\bin\Debug\netcoreapp3.1\A.dll
+D:\Documents\GitHub\AtCoder\AtCoderRegularContest126\A\bin\Debug\netcoreapp3.1\A.pdb
+D:\Documents\GitHub\AtCoder\AtCoderRegularContest126\A\obj\Debug\netcoreapp3.1\A.csprojAssemblyReference.cache
+D:\Documents\GitHub\AtCoder\AtCoderRegularContest126\A\obj\Debug\netcoreapp3.1\A.AssemblyInfoInputs.cache
+D:\Documents\GitHub\AtCoder\AtCoderRegularContest126\A\obj\Debug\netcoreapp3.1\A.AssemblyInfo.cs
+D:\Documents\GitHub\AtCoder\AtCoderRegularContest126\A\obj\Debug\netcoreapp3.1\A.csproj.CoreCompileInputs.cache
+D:\Documents\GitHub\AtCoder\AtCoderRegularContest126\A\obj\Debug\netcoreapp3.1\A.dll
+D:\Documents\GitHub\AtCoder\AtCoderRegularContest126\A\obj\Debug\netcoreapp3.1\A.pdb
+D:\Documents\GitHub\AtCoder\AtCoderRegularContest126\A\obj\Debug\netcoreapp3.1\A.genruntimeconfig.cache
