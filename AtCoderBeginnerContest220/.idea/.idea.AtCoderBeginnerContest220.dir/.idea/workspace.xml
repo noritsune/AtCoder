@@ -7,56 +7,7 @@
     <projectFile>D/D.csproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="27847dc8-f674-4556-bf66-f7c3bb5ec42b" name="デフォルト変更リスト" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.AtCoderBeginnerContest220.dir/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.AtCoderBeginnerContest220.dir/.idea/indexLayout.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.AtCoderBeginnerContest220.dir/.idea/projectSettingsUpdater.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.AtCoderBeginnerContest220.dir/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.AtCoderBeginnerContest220.dir/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.vscode/launch.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.vscode/tasks.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/A/A.csproj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/A/Program.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/A/obj/A.csproj.nuget.dgspec.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/A/obj/A.csproj.nuget.g.props" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/A/obj/A.csproj.nuget.g.targets" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/A/obj/Debug/netcoreapp3.1/.NETCoreApp,Version=v3.1.AssemblyAttributes.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/A/obj/Debug/netcoreapp3.1/A.AssemblyInfo.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/A/obj/project.assets.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/A/obj/project.packagespec.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/A/obj/rider.project.restore.info" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/B/B.csproj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/B/Program.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/B/obj/B.csproj.nuget.dgspec.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/B/obj/B.csproj.nuget.g.props" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/B/obj/B.csproj.nuget.g.targets" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/B/obj/Debug/netcoreapp3.1/.NETCoreApp,Version=v3.1.AssemblyAttributes.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/B/obj/Debug/netcoreapp3.1/B.AssemblyInfo.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/B/obj/project.assets.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/B/obj/project.packagespec.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/B/obj/rider.project.restore.info" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/C/C.csproj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/C/Program.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/C/obj/C.csproj.nuget.dgspec.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/C/obj/C.csproj.nuget.g.props" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/C/obj/C.csproj.nuget.g.targets" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/C/obj/Debug/netcoreapp3.1/.NETCoreApp,Version=v3.1.AssemblyAttributes.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/C/obj/Debug/netcoreapp3.1/C.AssemblyInfo.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/C/obj/project.assets.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/C/obj/project.packagespec.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/C/obj/rider.project.restore.info" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/D/D.csproj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/D/Program.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/D/obj/D.csproj.nuget.dgspec.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/D/obj/D.csproj.nuget.g.props" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/D/obj/D.csproj.nuget.g.targets" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/D/obj/Debug/netcoreapp3.1/.NETCoreApp,Version=v3.1.AssemblyAttributes.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/D/obj/Debug/netcoreapp3.1/D.AssemblyInfo.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/D/obj/project.assets.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/D/obj/project.packagespec.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/D/obj/rider.project.restore.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AtCoderRegularContest127/.idea/.idea.AtCoderRegularContest127.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../AtCoderRegularContest127/.idea/.idea.AtCoderRegularContest127.dir/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="27847dc8-f674-4556-bf66-f7c3bb5ec42b" name="デフォルト変更リスト" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -178,8 +129,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1632657471115</updated>
-      <workItem from="1632657475380" duration="5561000" />
+      <workItem from="1632657475380" duration="5817000" />
     </task>
+    <task id="LOCAL-00001" summary="add: ABC220">
+      <created>1632664584903</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1632664584903</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -200,5 +159,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="add: ABC220" />
+    <option name="LAST_COMMIT_MESSAGE" value="add: ABC220" />
   </component>
 </project>
