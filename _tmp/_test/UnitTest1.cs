@@ -7,24 +7,6 @@ namespace _test
     public class UnitTest1
     {
         [TestMethod]
-        public void BinarySearchTest()
-        {
-            int[] array = new int[] {0, 5, 10};
-
-            int index0 = Sol.BinarySearch(array, 0);
-            Assert.AreEqual(0, index0);
-
-            int index1 = Sol.BinarySearch(array, 5);
-            Assert.AreEqual(1, index1);
-
-            int index2 = Sol.BinarySearch(array, 10);
-            Assert.AreEqual(2, index2);
-
-            int indexMinus = Sol.BinarySearch(array, 3);
-            Assert.AreEqual(-1, indexMinus);
-        }
-
-        [TestMethod]
         public void LowerBoundTest() {
             int[] array = new int[] {0, 5, 10};
 
