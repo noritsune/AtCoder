@@ -17,16 +17,25 @@ set problemNames[3]=D
 
 rem 問題ごとに処理を繰り返す
 for /l %%i in (0, 1, 3) do (
-	rem 問題名のフォルダを作って移動
-	set currentDir=!problemNames[%%i]!
-	mkdir !currentDir!
-	cd !currentDir!
-
-	rem プロジェクト初期化
+	set problemName=!problemNames[%%i]!
+	
+	rem 解答用プロジェクトを作成
+	mkdir !problemName!
+	cd !problemName!
 	dotnet new console
+	copy ..\..\_tmp\AtCoder\Program.cs
+	cd ..
 
-	rem util.csをコピー
-	copy ..\..\_tmp\util\util.cs Program.cs
+	rem テスト用プロジェクトを作成
+	mkdir !problemName!Test
+	cd !problemName!Test
+	dotnet new mstest
+	dotnet add reference ../!problemName!
+	copy ..\..\_tmp\Test\UnitTest1.cs
+
+	mkdir "SampleInOut/1"
+	type nul > SampleInOut/1/In.txt
+	type nul > SampleInOut/1/Out.txt
 
 	cd ..
 )
