@@ -6,8 +6,7 @@ rem コンテストフォルダ作成
 mkdir AtCoderBeginnerContestXXX
 cd AtCoderBeginnerContestXXX
 
-rem .vscodeフォルダ以下をコピーしてくる
-xcopy ..\_tmp\.vscode\ .vscode\
+dotnet new sln --name AtCoder
 
 rem 問題名の定義
 set problemNames[0]=A
@@ -25,6 +24,7 @@ for /l %%i in (0, 1, 3) do (
 	dotnet new console
 	copy ..\..\_tmp\AtCoder\Program.cs
 	cd ..
+	dotnet sln add !problemName!
 
 	rem テスト用プロジェクトを作成
 	mkdir !problemName!Test
@@ -36,8 +36,8 @@ for /l %%i in (0, 1, 3) do (
 	mkdir "SampleInOut/1"
 	type nul > SampleInOut/1/In.txt
 	type nul > SampleInOut/1/Out.txt
-
 	cd ..
+	dotnet sln add !problemName!Test
 )
 
 endlocal
