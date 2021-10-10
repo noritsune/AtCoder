@@ -26,14 +26,16 @@ namespace util {
             for (int i = 0; i < N; i++)
             {
                 var ruiseki = new long[3001];
+                ruiseki[0] = dp[i, 0];
                 for (int j = 1; j < ruiseki.Length; j++)
                 {
-                    ruiseki[j] = ruiseki[j - 1] + dp[i, j - 1];
+                    ruiseki[j] = ruiseki[j - 1] + dp[i, j];
+                    if(ruiseki[j] >= _mod) ruiseki[j] -= _mod;
                 }
                 
                 for (int j = aArray[i]; j <= bArray[i]; j++)
                 {
-                    dp[i + 1, j] = ruiseki[j + 1];
+                    dp[i + 1, j] = ruiseki[j];
                 }
             }
 
