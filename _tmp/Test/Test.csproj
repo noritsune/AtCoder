@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\util\util.csproj" />
     <ProjectReference Include="..\AtCoder\AtCoder.csproj" />
   </ItemGroup>
 

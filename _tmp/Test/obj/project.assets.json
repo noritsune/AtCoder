@@ -1644,16 +1644,6 @@
         "runtime": {
           "bin/placeholder/AtCoder.dll": {}
         }
-      },
-      "util/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v3.1",
-        "compile": {
-          "bin/placeholder/util.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/util.dll": {}
-        }
       }
     }
   },
@@ -5667,11 +5657,6 @@
       "type": "project",
       "path": "../AtCoder/AtCoder.csproj",
       "msbuildProject": "../AtCoder/AtCoder.csproj"
-    },
-    "util/1.0.0": {
-      "type": "project",
-      "path": "../util/util.csproj",
-      "msbuildProject": "../util/util.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -5680,8 +5665,7 @@
       "MSTest.TestAdapter >= 2.1.0",
       "MSTest.TestFramework >= 2.1.0",
       "Microsoft.NET.Test.Sdk >= 16.5.0",
-      "coverlet.collector >= 1.2.0",
-      "util >= 1.0.0"
+      "coverlet.collector >= 1.2.0"
     ]
   },
   "packageFolders": {
@@ -5716,9 +5700,6 @@
           "projectReferences": {
             "D:\\Documents\\GitHub\\AtCoder\\_tmp\\AtCoder\\AtCoder.csproj": {
               "projectPath": "D:\\Documents\\GitHub\\AtCoder\\_tmp\\AtCoder\\AtCoder.csproj"
-            },
-            "D:\\Documents\\GitHub\\AtCoder\\_tmp\\util\\util.csproj": {
-              "projectPath": "D:\\Documents\\GitHub\\AtCoder\\_tmp\\util\\util.csproj"
             }
           }
         }
