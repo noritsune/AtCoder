@@ -14,25 +14,16 @@ namespace Test
 			const string pathOffset = "../../../SampleInOut/1/";
 			TestInOut(pathOffset + "In.txt", pathOffset + "Out.txt");
 		}
-		
 		[TestMethod]
 		public void Test2()
 		{
 			const string pathOffset = "../../../SampleInOut/2/";
 			TestInOut(pathOffset + "In.txt", pathOffset + "Out.txt");
 		}
-		
 		[TestMethod]
 		public void Test3()
 		{
 			const string pathOffset = "../../../SampleInOut/3/";
-			TestInOut(pathOffset + "In.txt", pathOffset + "Out.txt");
-		}
-		
-		[TestMethod]
-		public void Test4()
-		{
-			const string pathOffset = "../../../SampleInOut/4/";
 			TestInOut(pathOffset + "In.txt", pathOffset + "Out.txt");
 		}
         
