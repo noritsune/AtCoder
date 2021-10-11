@@ -25,11 +25,11 @@ namespace DownloadTestCases
 					var inEle = samples_parent_lang_ja.FindElement(By.Id("pre-sample" + (i * 2)));
 					var outEle = samples_parent_lang_ja.FindElement(By.Id("pre-sample" + (i * 2 + 1)));
 
-					var path = $@"SampleInOut\{i}\";
+					var path = $@"SampleInOut\{i + 1}\";
 					Directory.CreateDirectory(path);
 					
-					File.WriteAllText(path + "In.txt", inEle.Text + "\n");
-					File.WriteAllText(path + "Out.txt", outEle.Text + "\n");
+					File.WriteAllText(path + "In.txt", inEle.Text + "\r\n");
+					File.WriteAllText(path + "Out.txt", outEle.Text + "\r\n");
 				}
 				catch
 				{
