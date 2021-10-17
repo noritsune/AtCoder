@@ -18,42 +18,62 @@ namespace AtCoder {
             int T = ri();
             var cases = new List<int[]>();
             for (int i = 0; i < T; i++) cases.Add(ria());
-            
-            var colors = generateSuretsu(3);
+
+            var patterns = Enumerable.Range(0, 3).Perm().Select(x => x.ToArray()).ToArray();
             foreach (var case_ in cases)
             {
-                Array.Sort(case_);
-
-                if (case_[1] == case_[0] || case_[1] == case_[2])
+                int ans = int.MaxValue;
+                bool canDoIt = false;
+                foreach (var pattern in patterns)
                 {
-                    Console.WriteLine(case_[1]);
-                    continue;
+                    var sortedCase = new int[]
+                    {
+                        case_[pattern[0]],
+                        case_[pattern[1]],
+                        case_[pattern[2]],
+                    };
+                    
+                    if (sortedCase[1] == sortedCase[0] || sortedCase[1] == sortedCase[2])
+                    {
+                        ans = Math.Min(ans, sortedCase[1]);
+                        continue;
+                    }
+
+                    if (sortedCase[2] < sortedCase[0])
+                    {
+                        continue;
+                    }
+                    
+                    double minusCntDouble = (sortedCase[2] - sortedCase[0]) / 3.0;
+                    int minusCnt = (int) minusCntDouble;
+                    if (minusCntDouble != minusCnt)
+                    {
+                        continue;
+                    }
+
+                    sortedCase[1] -= minusCnt;
+                    sortedCase[2] -= minusCnt;
+                    sortedCase[0] += minusCnt * 2;
+                    if (sortedCase[1] < 0 || sortedCase[2] < 0)
+                    {
+                        continue;
+                    }
+
+                    if (sortedCase[0] == sortedCase[1] || sortedCase[0] == sortedCase[2])
+                    {
+                        ans = Math.Min(ans, minusCnt + sortedCase[0]);
+                        canDoIt = true;
+                    } 
                 }
 
-                double minusCntDouble = (case_[2] - case_[0]) / 3.0;
-                int minusCnt = (int) minusCntDouble;
-                if (minusCntDouble != minusCnt)
+                if (canDoIt)
+                {
+                    Console.WriteLine(ans);
+                }
+                else
                 {
                     Console.WriteLine(-1);
-                    continue;
                 }
-
-                case_[1] -= minusCnt;
-                case_[2] -= minusCnt;
-                case_[0] += minusCnt * 2;
-                if (case_[1] < 0 || case_[2] < 0)
-                {
-                    Console.WriteLine(-1);
-                    continue;
-                }
-
-                if (case_[0] == case_[1] || case_[0] == case_[2])
-                {
-                    Console.WriteLine(minusCnt + case_[0]);
-                    continue;
-                }
-
-                Console.WriteLine(-1);
             }
         }
         
