@@ -1,4 +1,4 @@
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 3; i++) {
 	const inSampleEle = document.getElementById(`pre-sample${i * 2}`);
 	const outSampleEle = document.getElementById(`pre-sample${i * 2 + 1}`);
 	if(inSampleEle == null) break;
