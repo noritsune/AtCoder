@@ -21,30 +21,20 @@ namespace AtCoder {
             var ABs = new List<int[]>();
             for (int i = 0; i < M; i++) ABs.Add(ria());
 
-            var sortInfoBefores = Enumerable.Repeat(new HashSet<int>(), N + 1).ToArray();
-            var sortInfoAfters  = Enumerable.Repeat(new HashSet<int>(), N + 1).ToArray();
-            var ans = Enumerable.Range(1, N).ToList();
-            foreach (var AB in ABs)
-            {
-                int A = AB[0];
-                int B = AB[1];
-
-                if (sortInfoAfters[B].Contains(A) || sortInfoBefores[A].Contains(B))
-                {
-                    Console.WriteLine(-1);
-                    return;
-                }
-
-                sortInfoAfters[A].Add(B);
-                sortInfoBefores[B].Add(A);
-
-                if (A > B)
-                {
-                    ans.Remove(A);
-                    ans.Insert(B - 1, A);
-                }
-            }
+            var inNodes  = Enumerable.Repeat(new HashSet<int>(), N).ToArray();
+            var outNodes = Enumerable.Repeat(new HashSet<int>(), N).ToArray();
             
+            // for
+            
+            // var graph = new Graph<int>(Graph<int>.Type.DirectedGraph);
+            // for (int i = 1; i <= N; i++) graph.AddVertex(i);
+            // foreach (var AB in ABs) graph.AddEdge(AB[0], AB[1]);
+            
+            // graph.Vertices
+            
+            
+            
+            var ans = Enumerable.Range(1, N).ToList();
             Console.WriteLine(string.Join(' ', ans));
         }
 
@@ -337,6 +327,15 @@ namespace AtCoder {
 
             _vertices[from].Add(to);
             if (GraphType == Type.UndirectedGraph) _vertices[to].Add(from);
+            return true;
+        }
+
+        public bool DeleteVertex(T label)
+        {
+            if (_vertices.ContainsKey(label)) return false;
+
+            _vertices.Remove(label);
+            foreach (var key in _vertices.Keys) _vertices[key].Remove(label);
             return true;
         }
 
