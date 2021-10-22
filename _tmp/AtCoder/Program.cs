@@ -92,21 +92,48 @@ namespace AtCoder {
         }
 
         /// <summary>
-        /// array内でtarget以上となる要素が最初に出現する要素番号を返す
+        /// array内でtargetが最初に出現する要素番号を返す
         /// </summary>
         /// <param name="array">昇順ソートされた配列</param>
         /// <param name="target">検索対象</param>
-        public static int LowerBound<T>(IEnumerable<T> nums, T target) where T : IComparable<T>
+        public static int BinarySearch<T>(IEnumerable<T> array, T target, Comparer<T> comparer)
         {
             // 探索範囲のインデックス
             var min = 0;
-            var max = nums.Count() - 1;
+            var max = array.Count() - 1;
 
             while (min <= max) // 範囲内にある限り探し続ける
             {
                 var mid = min + (max - min) / 2;
-                int compareResult = target.CompareTo(nums.ElementAt(mid));
-                if(compareResult == 1) min = mid + 1;
+                int compareResult = comparer.Compare(target, array.ElementAt(mid));
+                if (compareResult > 0) {// 中央値より大きい場合
+                    min = mid + 1;
+                }
+                else if (compareResult < 0) {// 中央値より小さい場合
+                    max = mid - 1;
+                } else {
+                    return mid;
+                }
+            }
+            return -1; // 見つからなかった
+        }
+        
+        /// <summary>
+        /// array内でtarget以上となる要素が最初に出現する要素番号を返す
+        /// </summary>
+        /// <param name="array">昇順ソートされた配列</param>
+        /// <param name="target">検索対象</param>
+        public static int LowerBound<T>(IEnumerable<T> array, T target, Comparer<T> comparer)
+        {
+            // 探索範囲のインデックス
+            var min = 0;
+            var max = array.Count() - 1;
+
+            while (min <= max) // 範囲内にある限り探し続ける
+            {
+                var mid = min + (max - min) / 2;
+                int compareResult = comparer.Compare(target, array.ElementAt(mid));
+                if(compareResult > 0) min = mid + 1;
                 else max = mid - 1;
             }
             return min;
@@ -116,19 +143,19 @@ namespace AtCoder {
         /// array内でtarget以下となる要素が最初に出現する要素番号を返す
         /// 存在しないなら-1
         /// </summary>
-        /// <param name="nums">昇順ソートされた配列</param>
+        /// <param name="array">昇順ソートされた配列</param>
         /// <param name="target">検索対象</param>
-        public static int LowerBoundUnder<T>(IEnumerable<T> nums, T target) where T : IComparable<T>
+        public static int LowerBoundUnder<T>(IEnumerable<T> array, T target, Comparer<T> comparer)
         {
             // 探索範囲のインデックス
             var min = 0;
-            var max = nums.Count() - 1;
+            var max = array.Count() - 1;
 
             while (min <= max) // 範囲内にある限り探し続ける
             {
                 var mid = min + (max - min) / 2;
-                int compareResult = target.CompareTo(nums.ElementAt(mid));
-                if(compareResult == -1) max = mid - 1;
+                int compareResult = comparer.Compare(target, array.ElementAt(mid));
+                if(compareResult < 0) max = mid - 1;
                 else min = mid + 1;
             }
             return max;
@@ -137,19 +164,19 @@ namespace AtCoder {
         /// <summary>
         /// array内でtargetより大きな要素が最初に出現する要素番号を返す
         /// </summary>
-        /// <param name="nums">昇順ソートされた配列</param>
+        /// <param name="array">昇順ソートされた配列</param>
         /// <param name="target">検索対象</param>
-        public static int UpperBound<T>(IEnumerable<T> nums, T target) where T : IComparable<T>
+        public static int UpperBound<T>(IEnumerable<T> array, T target, Comparer<T> comparer)
         {
             // 探索範囲のインデックス
             var min = 0;
-            var max = nums.Count() - 1;
+            var max = array.Count() - 1;
 
             while (min <= max) // 範囲内にある限り探し続ける
             {
                 var mid = min + (max - min) / 2;
-                int compareResult = target.CompareTo(nums.ElementAt(mid));
-                if(compareResult == -1) max = mid - 1;
+                int compareResult = comparer.Compare(target, array.ElementAt(mid));
+                if(compareResult < 0) max = mid - 1;
                 else min = mid + 1;
             }
             return min;
