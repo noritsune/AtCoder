@@ -32,19 +32,13 @@ for /l %%i in (0, 1, 3) do (
 	dotnet new mstest
 	dotnet add reference ../!problemName!
 	copy ..\..\_tmp\Test\UnitTest1.cs
-
-	mkdir "SampleInOut/1"
-	type nul > SampleInOut/1/In.txt
-	type nul > SampleInOut/1/Out.txt
+	mkdir SampleInOut
 	cd ..
+
 	dotnet sln add !problemName!Test
 )
 
 rem Rider起動とソリューション読み込みまで済ませる。しかしcmdを閉じるとRiderが閉じる
-@REM rider AtCoder.sln
-
-rem Rider起動までを行う。ソリューション読み込みは手動でやる
-cd D:\Program Files\JetBrains\JetBrains Rider 2021.1.3\bin
-rider64.exe
+rider AtCoder.sln
 
 endlocal
