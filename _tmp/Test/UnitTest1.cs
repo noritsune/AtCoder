@@ -35,9 +35,11 @@ namespace Test
 			const string pathOffset = "../../../SampleInOut/4/";
 			TestInOut(pathOffset + "In.txt", pathOffset + "Out.txt");
 		}
-        
+
 		private static void TestInOut(string inputFileName, string outputFileName)
 		{
+			if (!File.Exists(inputFileName)) return;
+			
 			using var input = new StreamReader(inputFileName);
 			using var output = new StringWriter();
 			Console.SetOut(output);
