@@ -12,8 +12,7 @@
           "MSTest.TestAdapter": "2.1.0",
           "MSTest.TestFramework": "2.1.0",
           "Microsoft.NET.Test.Sdk": "16.5.0",
-          "coverlet.collector": "1.2.0",
-          "util": "1.0.0"
+          "coverlet.collector": "1.2.0"
         },
         "runtime": {
           "Test.dll": {}
@@ -1076,11 +1075,6 @@
         "runtime": {
           "AtCoder.dll": {}
         }
-      },
-      "util/1.0.0": {
-        "runtime": {
-          "util.dll": {}
-        }
       }
     }
   },
@@ -1700,11 +1694,6 @@
       "hashPath": "system.xml.xdocument.4.3.0.nupkg.sha512"
     },
     "AtCoder/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "util/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -1,4 +1,3 @@
-D:\Documents\GitHub\AtCoder\_tmp\Test\bin\Debug\netcoreapp3.1\util.exe
 D:\Documents\GitHub\AtCoder\_tmp\Test\bin\Debug\netcoreapp3.1\AtCoder.exe
 D:\Documents\GitHub\AtCoder\_tmp\Test\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
 D:\Documents\GitHub\AtCoder\_tmp\Test\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
@@ -87,8 +86,6 @@ D:\Documents\GitHub\AtCoder\_tmp\Test\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.
 D:\Documents\GitHub\AtCoder\_tmp\Test\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.TestPlatform.CrossPlatEngine.resources.dll
 D:\Documents\GitHub\AtCoder\_tmp\Test\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.VisualStudio.TestPlatform.Common.resources.dll
 D:\Documents\GitHub\AtCoder\_tmp\Test\bin\Debug\netcoreapp3.1\AtCoder.dll
-D:\Documents\GitHub\AtCoder\_tmp\Test\bin\Debug\netcoreapp3.1\util.dll
-D:\Documents\GitHub\AtCoder\_tmp\Test\bin\Debug\netcoreapp3.1\util.pdb
 D:\Documents\GitHub\AtCoder\_tmp\Test\bin\Debug\netcoreapp3.1\AtCoder.pdb
 D:\Documents\GitHub\AtCoder\_tmp\Test\obj\Debug\netcoreapp3.1\Test.csprojAssemblyReference.cache
 D:\Documents\GitHub\AtCoder\_tmp\Test\obj\Debug\netcoreapp3.1\Test.AssemblyInfoInputs.cache
