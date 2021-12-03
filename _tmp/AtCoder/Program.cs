@@ -17,7 +17,7 @@ namespace AtCoder {
         public void Solve() {
             
             
-            Console.WriteLine("Hello World!");
+            Console.WriteLine(ans);
         }
 
         static String rs(){return Console.ReadLine();}
