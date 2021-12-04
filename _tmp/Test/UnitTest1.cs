@@ -45,7 +45,14 @@ namespace Test
 
 			SolveExecuter.Main();
 
-			Assert.AreEqual(File.ReadAllText(outputFileName), output.ToString());
+			string expected = File.ReadAllText(outputFileName);
+			string actual = output.ToString();
+			
+			// 改行コードを揃える
+			expected = expected.Replace("\r\n", "\n");
+			actual = actual.Replace("\r\n", "\n");
+
+			Assert.AreEqual(expected, actual);
 		}
 	}
 }
