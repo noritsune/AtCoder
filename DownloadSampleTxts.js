@@ -8,9 +8,6 @@ for (let i = 0; i < 3; i++) {
 }
 
 function downloadTxtFile(filename, textContent) {
-	// テストに通る様に改行コードをWindows用にする
-	textContent.replaceAll("\n", "\r\n");
-
 	const blob = new Blob([textContent],{type:"text/plain"});
 	const link = document.createElement('a');
 	link.href = URL.createObjectURL(blob);
