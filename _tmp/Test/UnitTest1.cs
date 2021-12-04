@@ -8,37 +8,35 @@ namespace Test
 	[TestClass]
 	public class UnitTest1
 	{
+		const string testCaseDirPath = "../../../SampleInOut/";
+		
 		[TestMethod]
 		public void Test1()
 		{
-			const string pathOffset = "../../../SampleInOut/1/";
-			TestInOut(pathOffset + "In.txt", pathOffset + "Out.txt");
+			TestInOut(testCaseDirPath + "1In.txt", testCaseDirPath + "1Out.txt");
 		}
 		
 		[TestMethod]
 		public void Test2()
 		{
-			const string pathOffset = "../../../SampleInOut/2/";
-			TestInOut(pathOffset + "In.txt", pathOffset + "Out.txt");
+			TestInOut(testCaseDirPath + "2In.txt", testCaseDirPath + "2Out.txt");
 		}
 		
 		[TestMethod]
 		public void Test3()
 		{
-			const string pathOffset = "../../../SampleInOut/3/";
-			TestInOut(pathOffset + "In.txt", pathOffset + "Out.txt");
+			TestInOut(testCaseDirPath + "3In.txt", testCaseDirPath + "3Out.txt");
 		}
 		
 		[TestMethod]
 		public void Test4()
 		{
-			const string pathOffset = "../../../SampleInOut/4/";
-			TestInOut(pathOffset + "In.txt", pathOffset + "Out.txt");
+			TestInOut(testCaseDirPath + "4In.txt", testCaseDirPath + "4Out.txt");
 		}
-
+		
 		private static void TestInOut(string inputFileName, string outputFileName)
 		{
-			if (!File.Exists(inputFileName)) return;
+			// if (!File.Exists(inputFileName)) return;
 			
 			using var input = new StreamReader(inputFileName);
 			using var output = new StringWriter();

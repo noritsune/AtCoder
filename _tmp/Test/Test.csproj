@@ -17,4 +17,8 @@
     <ProjectReference Include="..\AtCoder\AtCoder.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="SampleInOut" />
+  </ItemGroup>
+
 </Project>
