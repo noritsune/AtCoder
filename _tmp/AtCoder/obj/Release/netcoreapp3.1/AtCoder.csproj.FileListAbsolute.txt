@@ -1,0 +1,4 @@
+D:\Documents\GitHub\AtCoder\_tmp\AtCoder\obj\Release\netcoreapp3.1\AtCoder.csprojAssemblyReference.cache
+D:\Documents\GitHub\AtCoder\_tmp\AtCoder\obj\Release\netcoreapp3.1\AtCoder.AssemblyInfoInputs.cache
+D:\Documents\GitHub\AtCoder\_tmp\AtCoder\obj\Release\netcoreapp3.1\AtCoder.AssemblyInfo.cs
+D:\Documents\GitHub\AtCoder\_tmp\AtCoder\obj\Release\netcoreapp3.1\AtCoder.csproj.CoreCompileInputs.cache
