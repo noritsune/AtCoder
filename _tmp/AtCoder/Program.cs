@@ -16,8 +16,6 @@ namespace AtCoder {
     public class Solver {
         public void Solve() {
             
-            
-            Console.WriteLine(ans);
         }
 
         static String rs(){return Console.ReadLine();}
