@@ -1,0 +1,13 @@
+D:\Documents\GitHub\AtCoder\典型90問\tmp\bin\Debug\netcoreapp3.1\tmp.exe
+D:\Documents\GitHub\AtCoder\典型90問\tmp\bin\Debug\netcoreapp3.1\tmp.deps.json
+D:\Documents\GitHub\AtCoder\典型90問\tmp\bin\Debug\netcoreapp3.1\tmp.runtimeconfig.json
+D:\Documents\GitHub\AtCoder\典型90問\tmp\bin\Debug\netcoreapp3.1\tmp.runtimeconfig.dev.json
+D:\Documents\GitHub\AtCoder\典型90問\tmp\bin\Debug\netcoreapp3.1\tmp.dll
+D:\Documents\GitHub\AtCoder\典型90問\tmp\bin\Debug\netcoreapp3.1\tmp.pdb
+D:\Documents\GitHub\AtCoder\典型90問\tmp\obj\Debug\netcoreapp3.1\tmp.csprojAssemblyReference.cache
+D:\Documents\GitHub\AtCoder\典型90問\tmp\obj\Debug\netcoreapp3.1\tmp.AssemblyInfoInputs.cache
+D:\Documents\GitHub\AtCoder\典型90問\tmp\obj\Debug\netcoreapp3.1\tmp.AssemblyInfo.cs
+D:\Documents\GitHub\AtCoder\典型90問\tmp\obj\Debug\netcoreapp3.1\tmp.csproj.CoreCompileInputs.cache
+D:\Documents\GitHub\AtCoder\典型90問\tmp\obj\Debug\netcoreapp3.1\tmp.dll
+D:\Documents\GitHub\AtCoder\典型90問\tmp\obj\Debug\netcoreapp3.1\tmp.pdb
+D:\Documents\GitHub\AtCoder\典型90問\tmp\obj\Debug\netcoreapp3.1\tmp.genruntimeconfig.cache
