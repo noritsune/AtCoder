@@ -14,8 +14,59 @@ namespace AtCoder {
     }
 
     public class Solver {
-        public void Solve() {
-            
+        public void Solve()
+        {
+            var NL = ria();
+            var N = NL[0];
+            var L = NL[1];
+            int K = ri();
+            int[] As = ria();
+
+            var yokans = new List<int>();
+            int lastLeft = 0;
+            for (int i = 0; i < N; i++)
+            {
+                yokans.Add(As[i] - lastLeft);
+                lastLeft = As[i];
+            }
+            yokans.Add(L - lastLeft);
+
+            // 答えで2分探索
+            var left = 0;
+            var right = L;
+            while (left <= right)
+            {
+                var mid = (left + right) / 2;
+                
+                // mid以上の長さの区間を最大幾つ作れるか
+                int yokanCnt = 0;
+                int currentYokanLength = 0;
+                for (int i = 0; i < yokans.Count - 1; i++)
+                {
+                    currentYokanLength += yokans[i];
+                    if(currentYokanLength < mid) continue;
+
+                    yokanCnt++;
+                    currentYokanLength = 0;
+                }
+
+                currentYokanLength += yokans.Last();
+                if (currentYokanLength >= mid)
+                {
+                    yokanCnt++;
+                }
+                
+                if (yokanCnt - 1 < K)
+                {
+                    right = mid - 1;
+                }
+                else
+                {
+                    left = mid + 1;
+                }
+            }
+
+            Console.WriteLine(right);
         }
 
         static String rs(){return Console.ReadLine();}
