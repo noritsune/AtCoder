@@ -1,0 +1,13 @@
+D:\Documents\GitHub\AtCoder\典型90問\002\bin\Debug\netcoreapp3.1\002.exe
+D:\Documents\GitHub\AtCoder\典型90問\002\bin\Debug\netcoreapp3.1\002.deps.json
+D:\Documents\GitHub\AtCoder\典型90問\002\bin\Debug\netcoreapp3.1\002.runtimeconfig.json
+D:\Documents\GitHub\AtCoder\典型90問\002\bin\Debug\netcoreapp3.1\002.runtimeconfig.dev.json
+D:\Documents\GitHub\AtCoder\典型90問\002\bin\Debug\netcoreapp3.1\002.dll
+D:\Documents\GitHub\AtCoder\典型90問\002\bin\Debug\netcoreapp3.1\002.pdb
+D:\Documents\GitHub\AtCoder\典型90問\002\obj\Debug\netcoreapp3.1\002.csprojAssemblyReference.cache
+D:\Documents\GitHub\AtCoder\典型90問\002\obj\Debug\netcoreapp3.1\002.AssemblyInfoInputs.cache
+D:\Documents\GitHub\AtCoder\典型90問\002\obj\Debug\netcoreapp3.1\002.AssemblyInfo.cs
+D:\Documents\GitHub\AtCoder\典型90問\002\obj\Debug\netcoreapp3.1\002.csproj.CoreCompileInputs.cache
+D:\Documents\GitHub\AtCoder\典型90問\002\obj\Debug\netcoreapp3.1\002.dll
+D:\Documents\GitHub\AtCoder\典型90問\002\obj\Debug\netcoreapp3.1\002.pdb
+D:\Documents\GitHub\AtCoder\典型90問\002\obj\Debug\netcoreapp3.1\002.genruntimeconfig.cache

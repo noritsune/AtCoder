@@ -14,8 +14,46 @@ namespace AtCoder {
     }
 
     public class Solver {
-        public void Solve() {
+        public void Solve()
+        {
+            int N = ri();
+
+            var patterns = BitFullSearch(N);
+            var bracketStrs = new List<string>();
+            foreach (var pattern in patterns)
+            {
+                bool isInValidBrackets = false;
+                int leftBracketCount = 0;
+                int rightBracketCount = 0;
+                foreach (var isLeft in pattern)
+                {
+                    if (isLeft)
+                    {
+                        leftBracketCount++;
+                    }
+                    else
+                    {
+                        rightBracketCount++;
+                    }
+                    
+                    if (leftBracketCount < rightBracketCount)
+                    {
+                        isInValidBrackets = true;
+                        break;
+                    }
+                }
+                isInValidBrackets = leftBracketCount != rightBracketCount;
+                
+                if(isInValidBrackets) continue;
+                
+                bracketStrs.Add(string.Join("", pattern.Select(isLeft => isLeft ? "(" : ")")));
+            }
             
+            bracketStrs.Sort();
+            foreach (var bracketStr in bracketStrs)
+            {
+                Console.WriteLine(bracketStr);
+            }
         }
 
         static String rs(){return Console.ReadLine();}
