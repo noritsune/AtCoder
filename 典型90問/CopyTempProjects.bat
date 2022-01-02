@@ -16,5 +16,3 @@ mkdir SampleInOut
 cd ..
 
 dotnet sln add %1Test
-
-dotnet build
