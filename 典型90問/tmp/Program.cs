@@ -240,12 +240,12 @@ namespace AtCoder {
     }
 
     public class Vector2 {
-        public int x = 0;
-        public int y = 0;
+        public int X = 0;
+        public int Y = 0;
 
         public Vector2(int x, int y) {
-            this.x = x;
-            this.y = y;
+            this.X = x;
+            this.Y = y;
         }
         
         public override bool Equals(object obj)
@@ -257,12 +257,12 @@ namespace AtCoder {
             }
             
             Vector2 other = (Vector2)obj;
-            return x == other.x && y == other.y;
+            return X == other.X && Y == other.Y;
         }
 
         public override int GetHashCode()
         {
-            return x ^ y;
+            return X ^ Y;
         }
     }
     /// <summary>
