@@ -9,81 +9,97 @@ namespace AtCoder {
     public static class SolveExecuter {
         public static void Main() {
             var solver = new Solver();
-            solver.Solve();
+            solver.Solve2();
         }
     }
 
     public class Solver {
-        public void Solve()
+        public void Solve2()
         {
             var HW = ria();
             var H = HW[0];
             var W = HW[1];
             var rscs = ria();
-            var start = new Vector2(rscs[0] - 1, rscs[1]- 1);
+            var start = new Vector2(rscs[1] - 1, rscs[0] - 1);
             var rtct = ria();
-            var goal = new Vector2(rtct[0] - 1, rtct[1] - 1);
+            var goal = new Vector2(rtct[1] - 1, rtct[0] - 1);
+            var maze = new List<string>();
+            for (int i = 0; i < H; i++) maze.Add(rs());
+
+            var dijkstra = new Dijkstra();
+        }
+
+        public void Solve1()
+        {
+            var HW = ria();
+            var H = HW[0];
+            var W = HW[1];
+            var rscs = ria();
+            var start = new Vector2(rscs[1] - 1, rscs[0]- 1);
+            var rtct = ria();
+            var goal = new Vector2(rtct[1] - 1, rtct[0] - 1);
             var maze = new List<string>();
             for (int i = 0; i < H; i++) maze.Add(rs());
             
-            var costss = new int[H, W][];
+            var eachDirCosts = new int[H, W][];
             for (int i = 0; i < H; i++)
             {
                 for (int j = 0; j < W; j++)
                 {
-                    costss[i, j] = new int[4];
+                    eachDirCosts[i, j] = new int[4];
                     for (int k = 0; k < 4; k++)
                     {
-                        costss[i, j][k] = int.MaxValue;
+                        eachDirCosts[i, j][k] = int.MaxValue;
                     }
                 }
             }
-            for (int k = 0; k < 4; k++)
+            for (int dir = 0; dir < 4; dir++)
             {
-                costss[start.X, start.Y][k] = 0;
+                eachDirCosts[start.Y, start.X][dir] = 0;
             }
             
-            var q = new Queue<Vector2>();
-            q.Enqueue(start);
+            var q = new Queue<Vector3>();
+            for (int dir = 0; dir < 4; dir++)
+            {
+                q.Enqueue(new Vector3(start.X, start.Y, dir));
+            }
             while (q.Count > 0)
             {
-                var pos = q.Dequeue();
+                var posWithDir = q.Dequeue();
+                var pos = new Vector2((int)posWithDir.X, (int)posWithDir.Y);
+                var dir = (int)posWithDir.Z;
+                var cost = eachDirCosts[pos.Y, pos.X][dir];
                 
-                var nextPoss = new []
+                var nextPoses = new List<Vector2>
                 {
-                    new Vector2(pos.X - 1, pos.Y),
                     new Vector2(pos.X + 1, pos.Y),
-                    new Vector2(pos.X, pos.Y - 1),
-                    new Vector2(pos.X, pos.Y + 1)
+                    new Vector2(pos.X - 1, pos.Y),
+                    new Vector2(pos.X, pos.Y + 1),
+                    new Vector2(pos.X, pos.Y - 1)
                 };
-                foreach (var nextPos in nextPoss)
+                foreach (var nextPos in nextPoses)
                 {
-                    if(nextPos.X < 0 || nextPos.X >= H || nextPos.Y < 0 || nextPos.Y >= W) continue;
-                    if(maze[nextPos.X][nextPos.Y] == '#') continue;
+                    if(nextPos.Y < 0 || nextPos.Y >= H || nextPos.X < 0 || nextPos.X >= W) continue;
+                    if(maze[nextPos.Y][nextPos.X] == '#') continue;
                     
                     var nextDir = new Vector2(nextPos.X - pos.X, nextPos.Y - pos.Y);
                     int dirIndex = 0;
-                    if(nextDir.Equals(new Vector2( 0, -1))) dirIndex = 0;
-                    if(nextDir.Equals(new Vector2( 1,  0))) dirIndex = 1;
-                    if(nextDir.Equals(new Vector2( 0,  1))) dirIndex = 2;
-                    if(nextDir.Equals(new Vector2(-1,  0))) dirIndex = 3;
+                         if(nextDir.Equals(new Vector2( 0, -1))) dirIndex = 0;
+                    else if(nextDir.Equals(new Vector2( 1,  0))) dirIndex = 1;
+                    else if(nextDir.Equals(new Vector2( 0,  1))) dirIndex = 2;
+                    else if(nextDir.Equals(new Vector2(-1,  0))) dirIndex = 3;
                     
-                    var costs = costss[pos.X, pos.Y];
-                    for (int k = 0; k < 4; k++)
-                    {
-                        if(dirIndex == k) continue;
-                        if(costss[nextPos.X, nextPos.Y][dirIndex] <= costs[dirIndex]) continue;
-                        
-                        costs[k]++;
-                    }
-                    
+                    int nextCostNew = cost;
+                    if(dirIndex != dir) nextCostNew++;
 
-                    costss[nextPos.X, nextPos.Y] = costs;
-                    q.Enqueue(nextPos);
+                    if (nextCostNew >= eachDirCosts[nextPos.Y, nextPos.X][dirIndex]) continue;
+                    
+                    eachDirCosts[nextPos.Y, nextPos.X][dirIndex] = nextCostNew;
+                    q.Enqueue(new Vector3(nextPos.X, nextPos.Y, dirIndex));
                 }
             }
 
-            Console.WriteLine(costss[goal.X, goal.Y].Min());
+            Console.WriteLine(eachDirCosts[goal.Y, goal.X].Min());
         }
 
         private static string rs(){return Console.ReadLine();}
