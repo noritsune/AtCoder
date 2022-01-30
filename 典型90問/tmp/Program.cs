@@ -47,25 +47,26 @@ namespace AtCoder {
             if(tmp != 1) yield return tmp;//最後の素数も返す
         }
         
-        //深さ優先探索を行う
-        //listから重複無しで任意の個数選んだものがjudge関数によって判定される条件に合致するかを調べる
-        //※listの長さはn以上である必要がある
-        //n: 深さの終わり
-        //list: 探索対象の配列
-        //i: 現在選んだ個数
-        //num: 現在の値
-        //judge: 条件判定
-        //toNext(i, num, next): 次のもの(next)を選ぶ時にnumに加える操作
-        public static bool DepthFirstSearch(int n, List<int> list, int i, int num, Func<int, bool> judge, Func<int, int, int, int> toNext) {
-            if(i == n) {
-                return judge(num);
+        // 最大公約数をユークリッドの互除法で求める 
+        private static long Gcd(long a, long b)
+        {
+            while (true)
+            {
+                if (a < b)
+                {
+                    (a, b) = (b, a);
+                    continue;
+                }
+
+                while (b != 0)
+                {
+                    var remainder = a % b;
+                    a = b;
+                    b = remainder;
+                }
+
+                return a;
             }
-
-            if(DepthFirstSearch(n, list, i + 1, num, judge, toNext)) return true;
-
-            if(DepthFirstSearch(n, list, i + 1, toNext(i, num, list[i]), judge, toNext)) return true;
-
-            return false;
         }
         
         // 2^nパターン分の全探索結果
