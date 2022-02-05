@@ -9,12 +9,55 @@ namespace AtCoder {
     public class SolveExecuter {
         public static void Main() {
             var solver = new Solver();
-            solver.Solve();
+            solver.Solve2();
         }
     }
 
     public class Solver {
-        public void Solve() {
+        public void Solve2() {
+            var NM = ria();
+            var N = NM[0];
+            var M = NM[1];
+            var Hs = ria();
+            var UVs = new List<(int U, int V)>();
+            for (int i = 0; i < M; i++)
+            {
+                var UV = ria();
+                UVs.Add((UV[0], UV[1]));
+            }
+            
+            var dijkstra = new Dijkstra(N + 1);
+            foreach (var (U, V) in UVs)
+            {
+                int HU = Hs[U - 1];
+                int HV = Hs[V - 1];
+                
+                int higherIndex = HU > HV ? U : V;
+                int lowerIndex  = HU > HV ? V : U;
+                int higherH = Hs[higherIndex - 1];
+                int lowerH  = Hs[lowerIndex  - 1];
+                
+                int diff = higherH - lowerH;
+                dijkstra.Add(higherIndex, lowerIndex, 0);
+                dijkstra.Add(lowerIndex, higherIndex, diff);
+            }
+
+            var result = dijkstra.GetMinCost(1);
+
+            int maxCostIndex = 1;
+            var costs = result["cost"];
+            for (int i = 1; i < costs.Length; i++)
+            {
+                if(costs[i] > costs[maxCostIndex]) {
+                    maxCostIndex = i;
+                }
+                
+            }
+            
+            Console.WriteLine(costs[maxCostIndex] + Hs[maxCostIndex - 1]);
+        }
+        
+        public void Solve1() {
             var NM = ria();
             var N = NM[0];
             var M = NM[1];
@@ -47,32 +90,9 @@ namespace AtCoder {
                 dijkstra.Add(lowerIndex, higherIndex, -2 * diff + costOffset);
             }
 
-            var result = dijkstra.GetMinCost(1, costOffset);
-            var costs = result["cost"];
-            Console.WriteLine(costs.Skip(1).Max());
-            
-            // var prevs= result["prev"];
-            
-            // int maxCostIndex = 0;
-            // long maxCost = long.MinValue;
-            // for (int i = 1; i <= N; i++)
-            // {
-            //     var cost = costs[i];
-            //     if (cost <= maxCost) continue;
-            //     
-            //     maxCost = cost;
-            //     maxCostIndex = i;
-            // }
-            //
-            // long ans = costs[maxCostIndex];
-            // var prev = prevs[maxCostIndex];
-            // while (prev != 0)
-            // {
-            //     prev = prevs[prev];
-            //     ans -= costOffset;
-            // }
-            //
-            // Console.WriteLine(ans);
+            // var result = dijkstra.GetMinCost(1, costOffset);
+            // var costs = result["cost"];
+            // Console.WriteLine(costs.Skip(1).Max());
         }
 
         static String rs(){return Console.ReadLine();}
@@ -550,7 +570,7 @@ namespace AtCoder {
         /// 最短経路のコストを取得
         /// </summary>
         /// <param name="start">開始頂点</param>
-        public Dictionary<string, long[]> GetMinCost(int start, int costOffset)
+        public Dictionary<string, long[]> GetMinCost(int start)
         {
             // コストをスタート頂点以外を無限大に
             var cost = new long[N];
@@ -576,7 +596,7 @@ namespace AtCoder {
                     if (cost[e.to] > v.cost + e.cost)
                     {
                         // 既に記録されているコストより小さければコストを更新
-                        cost[e.to] = v.cost + e.cost - costOffset;
+                        cost[e.to] = v.cost + e.cost;
                         prev[e.to] = v.index;
                         q.Enqueue(new Vertex(e.to, cost[e.to]));
                     }
