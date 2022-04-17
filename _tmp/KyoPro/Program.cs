@@ -3,10 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using AtCoder;
 
-namespace AtCoder {
-    public class SolveExecuter {
+namespace KyoPro {
+    public static class EntryPoint {
         public static void Main() {
             var solver = new Solver();
             solver.Solve();
@@ -18,18 +17,22 @@ namespace AtCoder {
             
         }
 
-        static String rs(){return Console.ReadLine();}
-        static int ri(){return int.Parse(Console.ReadLine());}
-        static long rl(){return long.Parse(Console.ReadLine());}
-        static double rd(){return double.Parse(Console.ReadLine());}
-        static BigInteger rb(){return BigInteger.Parse(Console.ReadLine());}
-        static String[] rsa(char sep=' '){return Console.ReadLine().Split(sep);}
-        static int[] ria(char sep=' '){return Array.ConvertAll(Console.ReadLine().Split(sep),e=>int.Parse(e));}
-        static long[] rla(char sep=' '){return Array.ConvertAll(Console.ReadLine().Split(sep),e=>long.Parse(e));}
-        static double[] rda(char sep=' '){return Array.ConvertAll(Console.ReadLine().Split(sep),e=>double.Parse(e));}
-        static BigInteger[] rba(char sep=' '){return Array.ConvertAll(Console.ReadLine().Split(sep),e=>BigInteger.Parse(e));}
-        static int[] generateNums(int num, int N){return Enumerable.Repeat(num, N).ToArray();}
-        static int[] generateSuretsu(int N){return Enumerable.Range(0, N).ToArray();}
+        static string Rs(){return Console.ReadLine();}
+        static int Ri(){return int.Parse(Console.ReadLine() ?? string.Empty);}
+        static long Rl(){return long.Parse(Console.ReadLine() ?? string.Empty);}
+        static double Rd(){return double.Parse(Console.ReadLine() ?? string.Empty);}
+        static BigInteger Rb(){return BigInteger.Parse(Console.ReadLine() ?? string.Empty);}
+        static string[] Rsa(char sep=' '){return Console.ReadLine().Split(sep);}
+        static int[] Ria(char sep=' '){return Array.ConvertAll(Console.ReadLine().Split(sep),int.Parse);}
+        static long[] Rla(char sep=' '){return Array.ConvertAll(Console.ReadLine().Split(sep),long.Parse);}
+        static double[] Rda(char sep=' '){return Array.ConvertAll(Console.ReadLine().Split(sep),double.Parse);}
+        static BigInteger[] Rba(char sep=' '){return Array.ConvertAll(Console.ReadLine().Split(sep),BigInteger.Parse);}
+        static int[] GenerateNums(int num, int N){return Enumerable.Repeat(num, N).ToArray();}
+        static int[] GenerateSuretsu(int N){return Enumerable.Range(0, N).ToArray();}
+        
+        /// <summary>
+        /// 素因数分解する
+        /// </summary>
         public static IEnumerable<int> PrimeFactors(int n)
         {
             int i = 2;
@@ -47,8 +50,10 @@ namespace AtCoder {
             if(tmp != 1) yield return tmp;//最後の素数も返す
         }
         
-        // 最大公約数をユークリッドの互除法で求める 
-        private static long Gcd(long a, long b)
+        /// <summary>
+        /// 最大公約数をユークリッドの互除法で求める 
+        /// </summary>
+        static long Gcd(long a, long b)
         {
             while (true)
             {
@@ -69,7 +74,9 @@ namespace AtCoder {
             }
         }
         
-        // 2^nパターン分の全探索結果
+        /// <summary>
+        /// 2^nパターン分の全探索結果を返す
+        /// </summary>
         static IEnumerable<bool[]> BitFullSearch(int n)
         {
             if (n <= 0)
@@ -94,10 +101,13 @@ namespace AtCoder {
         /// <summary>
         /// array内でtargetが最初に出現する要素番号を返す
         /// </summary>
-        /// <param name="array">昇順ソートされた配列</param>
+        /// <param name="enumerable">昇順ソートされた配列</param>
         /// <param name="target">検索対象</param>
-        public static int BinarySearch<T>(IEnumerable<T> array, T target, Comparer<T> comparer)
+        /// <param name="comparer"></param>
+        public static int BinarySearch<T>(IEnumerable<T> enumerable, T target, Comparer<T> comparer)
         {
+            var array = enumerable as T[] ?? enumerable.ToArray();
+            
             // 探索範囲のインデックス
             var min = 0;
             var max = array.Count() - 1;
@@ -117,14 +127,17 @@ namespace AtCoder {
             }
             return -1; // 見つからなかった
         }
-        
+
         /// <summary>
         /// array内でtarget以上となる要素が最初に出現する要素番号を返す
         /// </summary>
-        /// <param name="array">昇順ソートされた配列</param>
+        /// <param name="enumerable">昇順ソートされた配列</param>
         /// <param name="target">検索対象</param>
-        public static int LowerBound<T>(IEnumerable<T> array, T target, Comparer<T> comparer)
+        /// <param name="comparer"></param>
+        public static int LowerBound<T>(IEnumerable<T> enumerable, T target, Comparer<T> comparer)
         {
+            var array = enumerable as T[] ?? enumerable.ToArray();
+            
             // 探索範囲のインデックス
             var min = 0;
             var max = array.Count() - 1;
@@ -143,10 +156,13 @@ namespace AtCoder {
         /// array内でtarget以下となる要素が最初に出現する要素番号を返す
         /// 存在しないなら-1
         /// </summary>
-        /// <param name="array">昇順ソートされた配列</param>
+        /// <param name="enumerable"></param>
         /// <param name="target">検索対象</param>
-        public static int LowerBoundUnder<T>(IEnumerable<T> array, T target, Comparer<T> comparer)
+        /// <param name="comparer"></param>
+        public static int LowerBoundUnder<T>(IEnumerable<T> enumerable, T target, Comparer<T> comparer)
         {
+            var array = enumerable as T[] ?? enumerable.ToArray();
+            
             // 探索範囲のインデックス
             var min = 0;
             var max = array.Count() - 1;
@@ -164,13 +180,16 @@ namespace AtCoder {
         /// <summary>
         /// array内でtargetより大きな要素が最初に出現する要素番号を返す
         /// </summary>
-        /// <param name="array">昇順ソートされた配列</param>
+        /// <param name="enumerable">昇順ソートされた配列</param>
         /// <param name="target">検索対象</param>
-        public static int UpperBound<T>(IEnumerable<T> array, T target, Comparer<T> comparer)
+        /// <param name="comparer"></param>
+        public static int UpperBound<T>(IEnumerable<T> enumerable, T target, Comparer<T> comparer)
         {
+            var array = enumerable as T[] ?? enumerable.ToArray();
+            
             // 探索範囲のインデックス
             var min = 0;
-            var max = array.Count() - 1;
+            var max = array.Length - 1;
 
             while (min <= max) // 範囲内にある限り探し続ける
             {
@@ -192,14 +211,14 @@ namespace AtCoder {
                 yield break;
             }
             foreach (var item in items) {
-                var leftside = new T[] { item };
+                var leftSide = new T[] { item };
 
                 // item よりも前のものを除く （順列と組み合わせの違い)
                 // 重複を許さないので、unusedから item そのものも取り除く
                 var unused = withRepetition ? items : items.SkipWhile(e => !e.Equals(item)).Skip(1).ToList();
 
-                foreach (var rightside in Enumerate(unused, k - 1, withRepetition)) {
-                    yield return leftside.Concat(rightside).ToArray();
+                foreach (var rightSide in Enumerate(unused, k - 1, withRepetition)) {
+                    yield return leftSide.Concat(rightSide).ToArray();
                 }
             }
         }
@@ -209,8 +228,8 @@ namespace AtCoder {
         //使い方 var patterns = Enumerable.Range(1, N - 1).Perm().Select(x => x.ToArray()).ToArray();
         public static IEnumerable<IEnumerable<T>> Perm<T>(this IEnumerable<T> items, int? k = null)
         {
-            if (k == null)
-                k = items.Count();
+            var enumerable = items.ToList();
+            k ??= enumerable.Count();
 
             if (k == 0)
             {
@@ -219,9 +238,9 @@ namespace AtCoder {
             else
             {
                 var i = 0;
-                foreach (var x in items)
+                foreach (var x in enumerable)
                 {
-                    var xs = items.Where((_, index) => i != index);
+                    var xs = enumerable.Where((_, index) => i != index);
                     foreach (var c in Perm(xs, k - 1))
                         yield return c.Before(x);
 
@@ -231,7 +250,7 @@ namespace AtCoder {
         }
 
         // 要素をシーケンスに追加するユーティリティ
-        public static IEnumerable<T> Before<T>(this IEnumerable<T> items, T first)
+        static IEnumerable<T> Before<T>(this IEnumerable<T> items, T first)
         {
             yield return first;
 
@@ -261,10 +280,15 @@ namespace AtCoder {
             return X == other.X && Y == other.Y;
         }
 
-        public override int GetHashCode()
-        {
-            return X ^ Y;
-        }
+        public override int GetHashCode() => X ^ Y;
+        
+        public static Vector2 operator +(Vector2 a, Vector2 b) => new Vector2(a.X + b.X, a.Y + b.Y);
+        public static Vector2 operator -(Vector2 a, Vector2 b) => new Vector2(a.X - b.X, a.Y - b.Y);
+        public static Vector2 operator *(Vector2 a, int b) => new Vector2(a.X * b, a.Y * b);
+        
+        public double DistanceTo(Vector2 other) => Math.Sqrt(Math.Pow(X - other.X, 2) + Math.Pow(Y - other.Y, 2));
+        
+        public double Length => Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
     }
     
     /// <summary>
@@ -280,7 +304,7 @@ namespace AtCoder {
         }
 
         /// <summary>
-        /// グラフ上の全頂点 <ラベル，接続先の頂点集合>
+        /// グラフ上の全頂点 (ラベル，接続先の頂点集合)
         /// </summary>
         public IReadOnlyDictionary<T, HashSet<T>> Vertices => _vertices;
         private readonly Dictionary<T, HashSet<T>> _vertices;
@@ -353,7 +377,7 @@ namespace AtCoder {
         /// <summary>
         /// グラフの辺集合を取得する
         /// </summary>
-        /// <returns>辺のコレクション(<接続元のラベル, 接続先のラベル>)</returns>
+        /// <returns>辺のコレクション(接続元のラベル, 接続先のラベル)</returns>
         public IEnumerable<(T, T)> GetEdges()
         {
             if (GraphType == Type.DirectedGraph)
@@ -380,9 +404,9 @@ namespace AtCoder {
     
     public class PriorityQueue<T> : IEnumerable<T>
     {
-        private readonly List<T> _data = new List<T>();
-        private readonly IComparer<T> _comparer;
-        private readonly bool _isDescending;
+        readonly List<T> _data = new List<T>();
+        readonly IComparer<T> _comparer;
+        readonly bool _isDescending;
 
         public PriorityQueue(IComparer<T> comparer, bool isDescending = true)
         {
@@ -444,9 +468,7 @@ namespace AtCoder {
 
         private void Swap(int a, int b)
         {
-            var tmp = _data[a];
-            _data[a] = _data[b];
-            _data[b] = tmp;
+            (_data[a], _data[b]) = (_data[b], _data[a]);
         }
 
         private int Compare(T a, T b)
@@ -466,8 +488,8 @@ namespace AtCoder {
     
     public class Dijkstra
     {
-        public int N { get; }               // 頂点の数
-        private List<Edge>[] _graph;        // グラフの辺のデータ
+        int N { get; }               // 頂点の数
+        private readonly List<Edge>[] _graph;        // グラフの辺のデータ
 
         /// <summary>
         /// 初期化
@@ -527,10 +549,10 @@ namespace AtCoder {
             return cost;
         }
 
-        public struct Edge
+        struct Edge
         {
-            public int to;                      // 接続先の頂点
-            public long cost;                   // 辺のコスト
+            public readonly int to;                      // 接続先の頂点
+            public readonly long cost;                   // 辺のコスト
 
             public Edge(int to, long cost)
             {
@@ -541,8 +563,8 @@ namespace AtCoder {
 
         public struct Vertex : IComparable<Vertex>
         {
-            public int index;                   // 頂点の番号
-            public long cost;                   // 記録したコスト
+            public readonly int index;                   // 頂点の番号
+            public readonly long cost;                   // 記録したコスト
 
             public Vertex(int index, long cost)
             {
@@ -555,19 +577,19 @@ namespace AtCoder {
         }
     }
 
-    class UnionFind
+    internal class UnionFind
     {
         // 親要素のインデックスを保持する
         // 親要素が存在しない(自身がルートである)とき、マイナスでグループの要素数を持つ
-        public int[] Parents { get; set; }
+        int[] Parents { get; }
         public UnionFind(int n)
         {
-            this.Parents = new int[n];
+            Parents = new int[n];
             for (int i = 0; i < n; i++)
             {
                 // 初期状態ではそれぞれが別のグループ(ルートは自分自身)
                 // ルートなのでマイナスで要素数(1個)を保持する
-                this.Parents[i] = -1;
+                Parents[i] = -1;
             }
         }
 
@@ -575,53 +597,51 @@ namespace AtCoder {
         public int Find(int x)
         {
             // 親がマイナスの場合は自分自身がルート
-            if (this.Parents[x] < 0) return x;
+            if (Parents[x] < 0) return x;
             // ルートが見つかるまで再帰的に探す
             // 見つかったルートにつなぎかえる
-            this.Parents[x] = Find(this.Parents[x]);
-            return this.Parents[x];
+            Parents[x] = Find(Parents[x]);
+            return Parents[x];
         }
 
         // 要素xの属するグループの要素数を取得する
         public int Size(int x)
         {
             // ルート要素を取得して、サイズを取得して返す
-            return -this.Parents[this.Find(x)];
+            return -Parents[Find(x)];
         }
 
         // 要素x, yが同じグループかどうか判定する
         public bool Same(int x, int y)
         {
-            return this.Find(x) == this.Find(y);
+            return Find(x) == Find(y);
         }
 
         // 要素x, yが属するグループを同じグループにまとめる
         public bool Union(int x, int y)
         {
             // x, y のルート
-            x = this.Find(x);
-            y = this.Find(y);
+            x = Find(x);
+            y = Find(y);
             // すでに同じグループの場合処理しない
             if (x == y) return false;
 
             // 要素数が少ないグループを多いほうに書き換えたい
-            if (this.Size(x) < this.Size(y))
+            if (Size(x) < Size(y))
             {
-                var tmp = x;
-                x = y;
-                y = tmp;
+                (x, y) = (y, x);
             }
             // まとめる先のグループの要素数を更新
-            this.Parents[x] += this.Parents[y];
+            Parents[x] += Parents[y];
             // まとめられるグループのルートの親を書き換え
-            this.Parents[y] = x;
+            Parents[y] = x;
             return true;
         }
     }
     
     /// <summary>
     /// Self-Balancing Binary Search Tree
-    /// (using Randamized BST)
+    /// (using Randomized BST)
     /// </summary>
     public class SB_BinarySearchTree<T> where T : IComparable
     {
@@ -639,11 +659,11 @@ namespace AtCoder {
             }
         }
 
-        static Random _rnd = new Random();
+        static readonly Random _rnd = new Random();
 
         public static int Count(Node t)
         {
-            return t == null ? 0 : t.Count;
+            return t?.Count ?? 0;
         }
 
         static Node Update(Node t)
@@ -654,7 +674,7 @@ namespace AtCoder {
 
         public static Node Merge(Node l, Node r)
         {
-            if (l == null || r == null) return l == null ? r : l;
+            if (l == null || r == null) return l ?? r;
 
             if ((double)Count(l) / (double)(Count(l) + Count(r)) > _rnd.NextDouble())
             {
@@ -729,12 +749,12 @@ namespace AtCoder {
                 if (currentIdx > idx)
                 {
                     t = t.LChild;
-                    currentIdx -= (Count(t == null ? null : t.RChild) + 1);
+                    currentIdx -= (Count(t?.RChild) + 1);
                 }
                 else
                 {
                     t = t.RChild;
-                    currentIdx += (Count(t == null ? null : t.LChild) + 1);
+                    currentIdx += (Count(t?.LChild) + 1);
                 }
             }
 
@@ -746,7 +766,7 @@ namespace AtCoder {
             var torg = t;
             if (t == null) return -1;
 
-            var ret = Int32.MaxValue;
+            var ret = int.MaxValue;
             var idx = Count(t) - Count(t.RChild) - 1;
             while (t != null)
             {
@@ -756,15 +776,15 @@ namespace AtCoder {
                 {
                     ret = Math.Min(ret, idx);
                     t = t.LChild;
-                    idx -= (Count(t == null ? null : t.RChild) + 1);
+                    idx -= (Count(t?.RChild) + 1);
                 }
-                else if (cmp <= 0)
+                else
                 {
                     t = t.RChild;
-                    idx += (Count(t == null ? null : t.LChild) + 1);
+                    idx += (Count(t?.LChild) + 1);
                 }
             }
-            return ret == Int32.MaxValue ? Count(torg) : ret;
+            return ret == int.MaxValue ? Count(torg) : ret;
         }
 
         public static int LowerBound(Node t, T v)
@@ -784,14 +804,14 @@ namespace AtCoder {
                     if (t == null) ret = Math.Min(ret, idx);
                     idx -= t == null ? 0 : (Count(t.RChild) + 1);
                 }
-                else if (cmp < 0)
+                else
                 {
                     t = t.RChild;
-                    idx += (Count(t == null ? null : t.LChild) + 1);
+                    idx += (Count(t?.LChild) + 1);
                     if (t == null) return idx;
                 }
             }
-            return ret == Int32.MaxValue ? Count(torg) : ret;
+            return ret == int.MaxValue ? Count(torg) : ret;
         }
 
         public static Node Insert(Node t, T v)
@@ -829,7 +849,7 @@ namespace AtCoder {
     {
         protected SB_BinarySearchTree<T>.Node _root;
 
-        public T this[int idx]{ get { return ElementAt(idx); } }
+        public T this[int idx] => ElementAt(idx);
 
         public int Count()
         {
@@ -902,8 +922,9 @@ namespace AtCoder {
     {
         public override void Insert(T v)
         {
-            if (_root == null) _root = new SB_BinarySearchTree<T>.Node(v);
-            else _root = SB_BinarySearchTree<T>.Insert(_root, v);
+            _root = _root == null 
+                ? new SB_BinarySearchTree<T>.Node(v)
+                : SB_BinarySearchTree<T>.Insert(_root, v);
         }
     }
 }

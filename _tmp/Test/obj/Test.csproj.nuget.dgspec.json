@@ -4,14 +4,14 @@
     "D:\\Documents\\GitHub\\AtCoder\\_tmp\\Test\\Test.csproj": {}
   },
   "projects": {
-    "D:\\Documents\\GitHub\\AtCoder\\_tmp\\AtCoder\\AtCoder.csproj": {
+    "D:\\Documents\\GitHub\\AtCoder\\_tmp\\KyoPro\\KyoPro.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Documents\\GitHub\\AtCoder\\_tmp\\AtCoder\\AtCoder.csproj",
-        "projectName": "AtCoder",
-        "projectPath": "D:\\Documents\\GitHub\\AtCoder\\_tmp\\AtCoder\\AtCoder.csproj",
+        "projectUniqueName": "D:\\Documents\\GitHub\\AtCoder\\_tmp\\KyoPro\\KyoPro.csproj",
+        "projectName": "KyoPro",
+        "projectPath": "D:\\Documents\\GitHub\\AtCoder\\_tmp\\KyoPro\\KyoPro.csproj",
         "packagesPath": "C:\\Users\\owner\\.nuget\\packages\\",
-        "outputPath": "D:\\Documents\\GitHub\\AtCoder\\_tmp\\AtCoder\\obj\\",
+        "outputPath": "D:\\Documents\\GitHub\\AtCoder\\_tmp\\KyoPro\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -85,8 +85,8 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "D:\\Documents\\GitHub\\AtCoder\\_tmp\\AtCoder\\AtCoder.csproj": {
-                "projectPath": "D:\\Documents\\GitHub\\AtCoder\\_tmp\\AtCoder\\AtCoder.csproj"
+              "D:\\Documents\\GitHub\\AtCoder\\_tmp\\KyoPro\\KyoPro.csproj": {
+                "projectPath": "D:\\Documents\\GitHub\\AtCoder\\_tmp\\KyoPro\\KyoPro.csproj"
               }
             }
           }

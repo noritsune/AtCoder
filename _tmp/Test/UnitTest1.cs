@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AtCoder;
+using KyoPro;
 
 namespace Test
 {
@@ -36,14 +36,12 @@ namespace Test
 		
 		private static void TestInOut(string inputFileName, string outputFileName)
 		{
-			// if (!File.Exists(inputFileName)) return;
-			
 			using var input = new StreamReader(inputFileName);
 			using var output = new StringWriter();
 			Console.SetOut(output);
 			Console.SetIn(input);
 
-			SolveExecuter.Main();
+			EntryPoint.Main();
 
 			string expected = File.ReadAllText(outputFileName);
 			string actual = output.ToString();

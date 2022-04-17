@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AtCoder\AtCoder.csproj" />
+    <ProjectReference Include="..\KyoPro\KyoPro.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtCoder", "AtCoder\AtCoder.csproj", "{DB17565E-9B0E-43EA-B798-EC79F20B60DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KyoPro", "KyoPro\KyoPro.csproj", "{DB17565E-9B0E-43EA-B798-EC79F20B60DA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{5DAEF89C-7F0C-4DDB-9E8F-9C56ADCD78AC}"
 EndProject

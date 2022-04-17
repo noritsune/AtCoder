@@ -8,7 +8,7 @@
     ".NETCoreApp,Version=v3.1": {
       "Test/1.0.0": {
         "dependencies": {
-          "AtCoder": "1.0.0",
+          "KyoPro": "1.0.0",
           "MSTest.TestAdapter": "2.1.0",
           "MSTest.TestFramework": "2.1.0",
           "Microsoft.NET.Test.Sdk": "16.5.0",
@@ -1071,9 +1071,9 @@
           "System.Xml.ReaderWriter": "4.3.0"
         }
       },
-      "AtCoder/1.0.0": {
+      "KyoPro/1.0.0": {
         "runtime": {
-          "AtCoder.dll": {}
+          "KyoPro.dll": {}
         }
       }
     }
@@ -1693,7 +1693,7 @@
       "path": "system.xml.xdocument/4.3.0",
       "hashPath": "system.xml.xdocument.4.3.0.nupkg.sha512"
     },
-    "AtCoder/1.0.0": {
+    "KyoPro/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
