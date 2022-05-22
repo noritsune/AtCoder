@@ -8,11 +8,33 @@ namespace KyoPro {
     public static class EntryPoint {
         public static void Main() {
             var solver = new Solver();
-            solver.Solve();
+            solver.Solve2();
         }
     }
 
     public class Solver {
+        public void Solve2()
+        {
+            var N = Ri();
+            var As = Ria();
+
+            var smallerACounts = new int[200001];
+            foreach (var A in As) smallerACounts[A + 1]++;
+
+            for (int i = 1; i < smallerACounts.Length; i++)
+            {
+                smallerACounts[i] += smallerACounts[i - 1];
+            }
+
+            long ans = 0;
+            foreach (var A in As)
+            {
+                ans += smallerACounts[A] * (N - smallerACounts[A + 1]);
+            }
+            
+            Console.WriteLine(ans);
+        }
+
         public void Solve()
         {
             var N = Ri();
