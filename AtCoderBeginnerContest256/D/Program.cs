@@ -8,7 +8,7 @@ namespace KyoPro {
     public static class EntryPoint {
         public static void Main() {
             var solver = new Solver();
-            solver.Solve();
+            solver.SolveTest();
         }
     }
 
@@ -64,25 +64,28 @@ namespace KyoPro {
             
             LRs.Sort((a, b) => a.L.CompareTo(b.L));
             
-            var XYs = new List<(long X, long Y)>();
-            foreach ((long L, long R) in LRs)
+            var XYs = new List<(long X, long Y)>
             {
-                bool isSeparateSection = true;
-                for (int i = 0; i < XYs.Count; i++)
-                {
-                    var (X, Y) = XYs[i];
-                    // 既存の区間に含まれていないのでスルー
-                    if(Y < L) continue;
+                (LRs.First().L, LRs.First().R)
+            };
 
-                    isSeparateSection = false;
-                    var newY = Math.Max(Y, R);
-                    XYs[i] = (X, newY);
-                }
+            for (int i = 1; i < LRs.Count; i++)
+            {
+                var L = LRs[i].L;
+                var R = LRs[i].R;
                 
-                if(isSeparateSection) XYs.Add((L, R));
+                // 既存の区間に含まれていないのでスルー
+                if (XYs.Last().Y < L)
+                {
+                    XYs.Add((L, R));
+                }
+                else
+                {
+                    var newY = Math.Max(XYs.Last().Y, R);
+                    XYs[^1] = (XYs.Last().X, newY);
+                }
             }
             
-            XYs.Sort((a, b) => a.X.CompareTo(b.X));
             foreach ((long X, long Y) in XYs)
             {
                 Console.WriteLine($"{X} {Y}");
