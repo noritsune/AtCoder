@@ -15,26 +15,35 @@ namespace KyoPro {
     public class Solver {
         public void Solve()
         {
-            var N = Rl();
-            var Xs = Rla();
-            var Cs = Rla();
+            var N = Ri();
+            var Xs = Ria().Select(x => x - 1).ToArray();
+            var Cs = Ria();
 
-            var idxAndXAndCs = new List<(int idx, long X, long C)>();
+            var graph = new Graph<int>(Graph<int>.Type.DirectedGraph);
+            for (int i = 0; i < N; i++) graph.AddVertex(i);
+            for (int i = 0; i < N; i++) graph.AddEdge(i, Xs[i]);
+            
+            var uf = new UnionFind((int)N);
+            long ans = 0;
             for (int i = 0; i < N; i++)
             {
-                idxAndXAndCs.Add((i + 1, Xs[i], Cs[i]));
-            }
-            
-            idxAndXAndCs.Sort((a, b) => a.C.CompareTo(b.C));
-            idxAndXAndCs.Sort((a, b) => a.X.CompareTo(b.X));
-            
-            var existIdxs = new HashSet<long>();
-            long ans = 0;
-            foreach ((int idx, long X, long C) in idxAndXAndCs)
-            {
-                if (existIdxs.Contains(X)) ans += C;
-                
-                existIdxs.Add(idx);
+                var X = Xs[i];
+                var C = Cs[i];
+                if (!uf.Same(i, X))
+                {
+                    uf.Union(i, X);
+                    continue;
+                }
+
+                int minC = C;
+                int nextV = graph.Vertices[i].First();
+                while (nextV != i)
+                {
+                    minC = Math.Min(minC, Cs[nextV]);
+                    nextV = graph.Vertices[nextV].First();
+                }
+
+                ans += minC;
             }
 
             Console.WriteLine(ans);
