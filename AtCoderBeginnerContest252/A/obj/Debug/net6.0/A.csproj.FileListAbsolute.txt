@@ -1,0 +1,15 @@
+/Users/tsunenorimotomura/GitHub/AtCoder/AtCoderBeginnerContest252/A/bin/Debug/net6.0/A
+/Users/tsunenorimotomura/GitHub/AtCoder/AtCoderBeginnerContest252/A/bin/Debug/net6.0/A.deps.json
+/Users/tsunenorimotomura/GitHub/AtCoder/AtCoderBeginnerContest252/A/bin/Debug/net6.0/A.runtimeconfig.json
+/Users/tsunenorimotomura/GitHub/AtCoder/AtCoderBeginnerContest252/A/bin/Debug/net6.0/A.dll
+/Users/tsunenorimotomura/GitHub/AtCoder/AtCoderBeginnerContest252/A/bin/Debug/net6.0/A.pdb
+/Users/tsunenorimotomura/GitHub/AtCoder/AtCoderBeginnerContest252/A/obj/Debug/net6.0/A.csproj.AssemblyReference.cache
+/Users/tsunenorimotomura/GitHub/AtCoder/AtCoderBeginnerContest252/A/obj/Debug/net6.0/A.GeneratedMSBuildEditorConfig.editorconfig
+/Users/tsunenorimotomura/GitHub/AtCoder/AtCoderBeginnerContest252/A/obj/Debug/net6.0/A.AssemblyInfoInputs.cache
+/Users/tsunenorimotomura/GitHub/AtCoder/AtCoderBeginnerContest252/A/obj/Debug/net6.0/A.AssemblyInfo.cs
+/Users/tsunenorimotomura/GitHub/AtCoder/AtCoderBeginnerContest252/A/obj/Debug/net6.0/A.csproj.CoreCompileInputs.cache
+/Users/tsunenorimotomura/GitHub/AtCoder/AtCoderBeginnerContest252/A/obj/Debug/net6.0/A.dll
+/Users/tsunenorimotomura/GitHub/AtCoder/AtCoderBeginnerContest252/A/obj/Debug/net6.0/refint/A.dll
+/Users/tsunenorimotomura/GitHub/AtCoder/AtCoderBeginnerContest252/A/obj/Debug/net6.0/A.pdb
+/Users/tsunenorimotomura/GitHub/AtCoder/AtCoderBeginnerContest252/A/obj/Debug/net6.0/A.genruntimeconfig.cache
+/Users/tsunenorimotomura/GitHub/AtCoder/AtCoderBeginnerContest252/A/obj/Debug/net6.0/ref/A.dll
