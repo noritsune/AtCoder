@@ -21,24 +21,29 @@ namespace KyoPro {
             var b = Nab[2];
             var As = Rla();
 
-            var tax = b - a;
+            // 探索範囲のインデックス
+            var min = As.Min();
+            var max = As.Sum() / N;
 
-            var sum = As.Sum();
-            var min = As[0];
-            var max = As[0];
-            for (int i = 1; i < As.Length; i++)
+            while (min <= max) // 範囲内にある限り探し続ける
             {
-                // sum += As[i];
-                min = Math.Min(min, As[i]);
-                max = Math.Max(max, As[i]);
-                
-                var cnt = (max - min) / (a + b);
-                min += cnt * a;
-                max -= cnt * b;
-                // sum -= cnt * tax;
+                var mid = min + (max - min) / 2;
+                bool isOK = CanMakeAllAsGraterOrEqualC(As, mid, a, b); 
+                if(isOK) min = mid + 1;
+                else max = mid - 1;
             }
+            var ans = min - 1;
 
-            Console.WriteLine(min);
+            Console.WriteLine(ans);
+        }
+        
+        bool CanMakeAllAsGraterOrEqualC(long[] As, long C, long takeNum, long giveNum)
+        {
+            var takeCntSum = As.Where(A => A < C)
+                .Sum(A => (long)Math.Ceiling((C - A) / (double)takeNum));
+            var giveCntSum = As.Where(A => A > C)
+                .Sum(A => (A - C) / giveNum);
+            return giveCntSum >= takeCntSum;
         }
         
         public void Solve1()
