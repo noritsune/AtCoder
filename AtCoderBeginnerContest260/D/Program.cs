@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 
@@ -19,16 +20,54 @@ namespace KyoPro {
             var N = NK[0];
             var K = NK[1];
             var Ps = Ria();
+            
+            var endTurns = Enumerable.Repeat(-1, N).ToArray();
+            var topPToDeck = new Dictionary<int, List<int>>();
+            var topPs = new Set<int>();
 
-            var endTurns = Enumerable.Repeat(-1, N + 1).ToArray();
-            var topPToDeck = new SortedDictionary<int, List<int>>();
             for (int turn = 1; turn <= N; turn++)
             {
                 var P = Ps[turn - 1];
-                
-            }
 
-            for (int i = 1; i <= N; i++) Console.WriteLine(endTurns[i]);
+                var topPsLowerBound = topPs.LowerBound(P);
+                if (topPsLowerBound < 0 || topPsLowerBound >= topPs.Count())
+                {
+                    if (K == 1)
+                    {
+                        endTurns[P - 1] = turn;
+                    }
+                    else
+                    {
+                        var deck = new List<int> { P };
+                        topPToDeck.Add(P, deck);
+                        topPs.Insert(P);
+                    }
+                }
+                else
+                {
+                    var topPOld = topPs[topPsLowerBound];
+                    var deck = topPToDeck[topPOld];
+                    deck.Add(P);
+
+                    if (deck.Count == K)
+                    {
+                        foreach (var removeP in deck)
+                        {
+                            endTurns[removeP - 1] = turn;
+                        }
+                    }
+                    else
+                    {
+                        topPToDeck.Add(P, deck);
+                        topPs.Insert(P);
+                    }
+                    
+                    topPToDeck.Remove(topPOld);
+                    topPs.Remove(topPOld);
+                }
+            }
+            
+            Console.WriteLine(string.Join("\n", endTurns));
         }
         
         public void Solve1()
