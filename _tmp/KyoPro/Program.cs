@@ -642,6 +642,8 @@ namespace KyoPro {
     /// <summary>
     /// Self-Balancing Binary Search Tree
     /// (using Randomized BST)
+    /// 平衡二分探索木
+    /// https://yambe2002.hatenablog.com/entry/2017/02/07/122421
     /// </summary>
     public class SB_BinarySearchTree<T> where T : IComparable
     {
@@ -843,7 +845,8 @@ namespace KyoPro {
     }
     
     /// <summary>
-    /// C-like set
+    /// C言語のsetクラスに相当するもの
+    /// 追加、挿入、LowerBound、UpperBoundがO(logN)でできる
     /// </summary>
     public class Set<T> where T : IComparable
     {
@@ -916,7 +919,8 @@ namespace KyoPro {
     }
     
     /// <summary>
-    /// C-like multiset
+    /// C言語のmultisetクラスに相当するもの
+    /// 追加、挿入、LowerBound、UpperBoundがO(logN)でできる
     /// </summary>
     public class MultiSet<T> : Set<T> where T : IComparable
     {
