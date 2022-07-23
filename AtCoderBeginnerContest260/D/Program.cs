@@ -4,16 +4,71 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace KyoPro {
     public static class EntryPoint {
         public static void Main() {
             var solver = new Solver();
-            solver.Solve2();
+            solver.Solve3();
         }
     }
 
     public class Solver {
+        public void Solve3()
+        {
+            var NK = Ria();
+            var N = NK[0];
+            var K = NK[1];
+            var Ps = Ria();
+
+            var endTurns = Enumerable.Repeat(-1, N).ToArray();
+            var topCardToDeck = new Dictionary<int, Stack<int>>();
+            var deckIdxToTopCard = new List<int>();
+
+            for (int turn = 1; turn <= N; turn++)
+            {
+                var drawCard = Ps[turn - 1];
+
+                var deckIdx = LowerBound(deckIdxToTopCard, drawCard);
+                
+                // 今回引いたカードを重ねた山
+                Stack<int> deck;
+                if(deckIdx < deckIdxToTopCard.Count)
+                {
+                    // 重ねられる山があった
+                    var topCard = deckIdxToTopCard[deckIdx];
+                    deck = topCardToDeck[topCard];
+                    
+                    topCardToDeck.Remove(topCard);
+                    deckIdxToTopCard[deckIdx] = drawCard;
+                }
+                else
+                {
+                    // 重ねられる山が無かった
+                    deck = new Stack<int>();
+                    deckIdxToTopCard.Add(drawCard);
+                }
+                
+                deck.Push(drawCard);
+                topCardToDeck[drawCard] = deck;
+
+                if (deck.Count < K) continue;
+                
+                // 今回重ねた山がいっぱいになったので食べる
+                while (deck.Count > 0)
+                {
+                    var card = deck.Pop();
+                    endTurns[card - 1] = turn;
+                }
+                
+                topCardToDeck.Remove(drawCard);
+                deckIdxToTopCard.RemoveAt(deckIdx);
+            }
+
+            Console.WriteLine(string.Join("\n", endTurns));
+        }
+
         public void Solve2()
         {
             var NK = Ria();
@@ -230,8 +285,7 @@ namespace KyoPro {
         /// </summary>
         /// <param name="enumerable">昇順ソートされた配列</param>
         /// <param name="target">検索対象</param>
-        /// <param name="comparer"></param>
-        public static int LowerBound<T>(IEnumerable<T> enumerable, T target, Comparer<T> comparer)
+        public static int LowerBound<T>(IEnumerable<T> enumerable, T target) where T : IComparable
         {
             var array = enumerable as T[] ?? enumerable.ToArray();
             
@@ -242,7 +296,7 @@ namespace KyoPro {
             while (min <= max) // 範囲内にある限り探し続ける
             {
                 var mid = min + (max - min) / 2;
-                int compareResult = comparer.Compare(target, array.ElementAt(mid));
+                int compareResult = target.CompareTo(array.ElementAt(mid));
                 if(compareResult > 0) min = mid + 1;
                 else max = mid - 1;
             }
