@@ -226,36 +226,29 @@ namespace KyoPro {
 
         //順列をすべて列挙する
         //使い方 var patterns = Enumerable.Range(1, N - 1).Perm().Select(x => x.ToArray()).ToArray();
-        public static IEnumerable<IEnumerable<T>> Perm<T>(this IEnumerable<T> items, int? k = null)
+        public static IEnumerable<IEnumerable<T>> Perm<T>(this IEnumerable<T> items, int? k = null) where T : IComparable
         {
-            var enumerable = items.ToList();
-            k ??= enumerable.Count();
-
-            if (k == 0)
+            var list = items.ToList();
+            int len = list.Count;
+            yield return list;
+            
+            while(true)
             {
-                yield return Enumerable.Empty<T>();
+                int l = len-2;
+                while(l>=0 && list[l].CompareTo(list[l+1])>=0) l--;
+                if(l<0) break;
+            
+                int r = len-1;
+                while(list[l].CompareTo(list[r])>0) r--;
+                if(list[l].CompareTo(list[r])>=0) break;
+            
+                var tmp = list[l];
+                list[l] = list[r];
+                list[r] = tmp;
+            
+                list.Reverse(l+1,len-l-1);
+                yield return list;
             }
-            else
-            {
-                var i = 0;
-                foreach (var x in enumerable)
-                {
-                    var xs = enumerable.Where((_, index) => i != index);
-                    foreach (var c in Perm(xs, k - 1))
-                        yield return c.Before(x);
-
-                    i++;
-                }
-            }
-        }
-
-        // 要素をシーケンスに追加するユーティリティ
-        static IEnumerable<T> Before<T>(this IEnumerable<T> items, T first)
-        {
-            yield return first;
-
-            foreach (var i in items)
-                yield return i;
         }
     }
 
