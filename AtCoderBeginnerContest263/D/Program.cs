@@ -20,112 +20,15 @@ namespace KyoPro {
             var L = NLR[1];
             var R = NLR[2];
             var As = Rla();
-            
-            var shouldChangeL = new bool[N];
-            long endIdxL = -1;
-            long diffMinL = 0;
-            long sumL = 0;
-            for (long i = 0; i < N; i++)
+
+            long tmp = 0, ans = N * R;
+            for (int k = 1; k <= N; k++)
             {
-                sumL += As[i];
-                var diff = L * (i + 1) - sumL;
- 
-                if (diff >= diffMinL) continue;
-                
-                endIdxL = i;
-                diffMinL = diff;
+                tmp = Math.Min(tmp + As[k - 1], k * L);
+                ans = Math.Min(ans, tmp + (N - k) * R);
             }
-            for (int i = 0; i <= endIdxL; i++)
-            {
-                shouldChangeL[i] = true;
-            }
- 
-            var shouldChangeR = new bool[N];
-            long endIdxR = -1;
-            long diffMinR = 0;
-            long sumR = 0;
-            for (long i = N - 1; i >= 0; i--)
-            {
-                sumR += As[i];
-                var diff = L * (i + 1) - sumR;
- 
-                if (diff >= diffMinR) continue;
-                
-                endIdxR = i;
-                diffMinR = diff;
-            }
-            for (long i = N - 1; i >= 0; i--)
-            {
-                shouldChangeR[i] = true;
-            }
-            
-            var shouldNotChange = new bool[N];
-            for (int i = 0; i < N; i++)
-            {
-                shouldNotChange[i] = As[i] < L && As[i] < R;
-            }
-            
-            var changedAs = As.ToArray();
-            for (int i = 0; i < N; i++)
-            {
-                
-            }
-            for (int i = N - 1; i >= 0; i--)
-            {
-                
-            }
-            
-            // for (int i = 0; i < N; i++)
-            // {
-            //     if(shouldNotChange[i]) continue;
-            //     
-            //     if(shouldChangeR[i] && shouldChangeL[i])
-            //     {
-            //         if (R <= L)
-            //         {
-            //             changedAs[i] = R;
-            //         }
-            //         else
-            //         {
-            //             changedAs[i] = L;
-            //         }
-            //     }
-            //     else if(shouldChangeR[i])
-            //     {
-            //         changedAs[i] = R;
-            //     }
-            //     else if(shouldChangeL[i])
-            //     {
-            //         changedAs[i] = L;
-            //     }
-            // }
- 
-            Console.WriteLine(changedAs.Sum());
-        }
- 
-        long[] Func(long[] nums, long changedNum)
-        {
-            long endIdx = -1;
-            long diffMin = 0;
-            long sum = 0;
-            for (int i = 0; i < nums.Length; i++)
-            {
-                sum += nums[i];
-                var diff = changedNum * (i + 1) - sum;
- 
-                if (diff >= diffMin) continue;
-                
-                endIdx = i;
-                diffMin = diff;
-            }
- 
-            var retNums = nums.ToArray();
-            for (int i = 0; i <= endIdx; i++)
-            {
-                retNums[i] = changedNum;
-            }
- 
-            return retNums;
+
+            Console.WriteLine(ans);
         }
         
         static string Rs(){return Console.ReadLine();}
