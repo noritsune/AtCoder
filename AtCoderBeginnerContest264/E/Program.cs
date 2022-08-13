@@ -24,7 +24,9 @@ namespace KyoPro {
             for (int i = 0; i < E; i++)
             {
                 var UV = Ria();
-                UVs.Add((UV[0] - 1, UV[1] - 1));
+                var U = UV[0] - 1;
+                var V = UV[1] - 1;
+                UVs.Add((Math.Min(U, N), Math.Min(V, N)));
             }
 
             var Q = Ri();
@@ -44,11 +46,7 @@ namespace KyoPro {
             var liveCityCnts = new int[Q];
             for (int xIdx = Q - 1; xIdx >= 0; xIdx--)
             {
-                int liveCityCnt = Enumerable.Range(0, N)
-                    .Count(cityIdx =>
-                        Enumerable.Range(N, M)
-                            .Any(powIdx => uf.Same(cityIdx, powIdx))
-                    );
+                int liveCityCnt = uf.Size(N) - 1;
                 liveCityCnts[xIdx] = liveCityCnt;
                 
                 var X = Xs[xIdx];
