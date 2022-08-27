@@ -17,46 +17,38 @@ namespace KyoPro {
         {
             const int holeCnt = 5;
             var N = Ri();
-
-            var TXAs = new List<(int T, int X, int A)>();
+            var TtoXA = new Dictionary<int, (int X, int A)>();
             for (int i = 0; i < N; i++)
             {
                 var TXA = Ria();
-                TXAs.Add((TXA[0], TXA[1], TXA[2]));
+                TtoXA.Add(TXA[0], (TXA[1], TXA[2]));
             }
 
-            var TMax = TXAs.Max(x => x.T);
 
-            var XAs = new long[TMax + 1, holeCnt];
-            foreach ((int T, int X, int A) in TXAs)
-            {
-                XAs[T, X] += A;
-            }
+            var TMax = TtoXA.Keys.Last();
 
             var dp = new long[TMax + 1, holeCnt];
-            var canVisits = new bool[TMax + 1, holeCnt];
-            canVisits[0, 0] = true;
-            for (int i = 1; i < TMax + 1; i++)
+            for (int i = 0; i <= TMax; i++)
             {
                 for (int j = 0; j < holeCnt; j++)
                 {
-                    bool leftCanVisit = j >= 1 && canVisits[i - 1, j - 1];
-                    bool centerCanVisit = canVisits[i - 1, j];
-                    bool rightCanVisit = j <= 3 && canVisits[i - 1, j + 1];
-                    bool canVisit = leftCanVisit || centerCanVisit || rightCanVisit;
-                    canVisits[i, j] |= canVisit;
+                    dp[i, j] = long.MinValue;
+                }
+            }
+            dp[0, 0] = 0;
 
-                    var leftSum = j >= 1 ? dp[i - 1, j - 1] : 0;
-                    var centerSum = dp[i - 1, j];
-                    var rightSum = j <= 3 ? dp[i - 1, j + 1] : 0;
+            for (int i = 1; i <= TMax; i++)
+            {
+                for (int j = 0; j < holeCnt; j++)
+                {
+                    dp[i, j] = dp[i - 1, j];
+                    if(j >= 1)          dp[i, j] = Math.Max(dp[i, j], dp[i - 1, j - 1]);
+                    if(j < holeCnt - 1) dp[i, j] = Math.Max(dp[i, j], dp[i - 1, j + 1]);
+                }
 
-                    long max = Math.Max(leftSum, Math.Max(centerSum, rightSum));
-                    if (canVisit)
-                    {
-                        max += XAs[i, j];
-                    }
-
-                    dp[i, j] += max;
+                if (TtoXA.ContainsKey(i))
+                {
+                    dp[i, TtoXA[i].X] += TtoXA[i].A;
                 }
             }
 
@@ -334,6 +326,8 @@ namespace KyoPro {
         public double DistanceTo(Vector2 other) => Math.Sqrt(Math.Pow(X - other.X, 2) + Math.Pow(Y - other.Y, 2));
 
         public double Length => Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
+
+        public double Cross(Vector2 other) => X * other.Y - Y * other.X;
     }
 
     /// <summary>

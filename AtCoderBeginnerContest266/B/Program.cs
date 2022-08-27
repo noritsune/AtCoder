@@ -13,17 +13,12 @@ namespace KyoPro {
     }
 
     public class Solver {
-        public void Solve()
-        {
+        public void Solve() {
+            const long MOD = 998244353;
             var N = Rl();
 
-            const long MOD = 998244353;
-
-            var factor = N / MOD;
-            if(N < 0 && N % MOD != 0) factor--;
-            var baiLeft = factor * MOD;
-
-            var ans = N - baiLeft;
+            var ans = N % MOD;
+            if(ans < 0) ans += MOD;
             Console.WriteLine(ans);
         }
 

@@ -16,32 +16,32 @@ namespace KyoPro {
         public void Solve()
         {
             var AxAy = Ria();
-            var BxBy = Ria();
+            var BxBx = Ria();
             var CxCy = Ria();
             var DxDy = Ria();
 
-            var posA = new Vector2(AxAy[0], AxAy[1]);
-            var posB = new Vector2(BxBy[0], BxBy[1]);
-            var posC = new Vector2(CxCy[0], CxCy[1]);
-            var posD = new Vector2(DxDy[0], DxDy[1]);
+            var A = new Vector2(AxAy[0], AxAy[1]);
+            var B = new Vector2(BxBx[0], BxBx[1]);
+            var C = new Vector2(CxCy[0], CxCy[1]);
+            var D = new Vector2(DxDy[0], DxDy[1]);
 
-            var vecAC = posC - posA;
-            var vecAB = posB - posA;
-            var vecAD = posD - posA;
+            var poss = new[] { A, B, C, D };
+            for (int i = 0; i < poss.Length; i++)
+            {
+                var a = poss[i];
+                var b = poss[(i + 1) % poss.Length];
+                var c = poss[(i + 2) % poss.Length];
+                var ba = a - b;
+                var bc = c - b;
+                var cross = ba.Cross(bc);
 
-            var s1 = vecAC.Cross(vecAB);
-            var t1 = vecAC.Cross(vecAD);
-            var isCrossACWithBD = s1 * t1 < 0;
+                if(cross < 0) continue;
 
-            var vecBD = posD - posB;
-            var vecBA = posA - posB;
-            var vecBC = posC - posB;
+                Console.WriteLine("No");
+                return;
+            }
 
-            var s2 = vecBD.Cross(vecBA);
-            var t2 = vecBD.Cross(vecBC);
-            var isCrossBDWithAC = s2 * t2 < 0;
-
-            Console.WriteLine(isCrossACWithBD && isCrossBDWithAC ? "Yes" : "No");
+            Console.WriteLine("Yes");
         }
 
         static string Rs(){return Console.ReadLine();}
@@ -309,8 +309,6 @@ namespace KyoPro {
         public double DistanceTo(Vector2 other) => Math.Sqrt(Math.Pow(X - other.X, 2) + Math.Pow(Y - other.Y, 2));
 
         public double Length => Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
-
-        public double AngleTo(Vector2 other) => Math.Atan2(other.Y - Y, other.X - X);
 
         public double Cross(Vector2 other) => X * other.Y - Y * other.X;
     }
