@@ -2,3 +2,6 @@
 *.idea
 
 /_tmp/DownloadTestCases
+
+bin/
+obj/

@@ -26,7 +26,7 @@ namespace AtCoder {
             var maze = new List<string>();
             for (int i = 0; i < H; i++) maze.Add(rs());
 
-            var dijkstra = new Dijkstra();
+            // var dijkstra = new Dijkstra();
         }
 
         public void Solve1()
