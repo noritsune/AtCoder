@@ -18,43 +18,42 @@ namespace KyoPro {
             var N = Ri();
             var As = Ria().ToList();
 
-            As.Sort();
-
-            var lastReadComic = 0;
-            var currentIdx = 0;
-            var nextSellIdx = As.Count - 1;
-            var soledIdxes = new HashSet<int>();
-            var surplusComicCnt = 0;
-            while (currentIdx < As.Count && !soledIdxes.Contains(currentIdx))
+            var haveComic = new bool[As.Count + 2];
+            var soldCnt = 0;
+            foreach (var A in As)
             {
-                var currentComic = As[currentIdx];
-                if (currentComic == lastReadComic + 1)
+                if (A > As.Count || haveComic[A])
                 {
-                    lastReadComic++;
-                    currentIdx++;
-                }
-                else if (currentComic <= lastReadComic)
-                {
-                    surplusComicCnt++;
-                    currentIdx++;
+                    soldCnt++;
                 }
                 else
                 {
-                    surplusComicCnt++;
-                    soledIdxes.Add(nextSellIdx);
-                    nextSellIdx--;
-
-                    if(surplusComicCnt >= 2)
-                    {
-                        surplusComicCnt -= 2;
-                        lastReadComic++;
-                    }
+                    haveComic[A] = true;
                 }
             }
 
-            lastReadComic += surplusComicCnt / 2;
+            var L = 1;
+            var R = As.Count + 1;
+            while (true)
+            {
+                while (haveComic[L]) L++;
+                while (R > 0 && !haveComic[R]) R--;
 
-            Console.WriteLine(lastReadComic);
+                if (soldCnt >= 2)
+                {
+                    soldCnt -= 2;
+                    haveComic[L] = true;
+                }
+                else
+                {
+                    if(L >= R) break;
+
+                    haveComic[R] = false;
+                    soldCnt++;
+                }
+            }
+
+            Console.WriteLine(L - 1);
         }
 
         public void Solve1()
