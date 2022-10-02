@@ -13,8 +13,52 @@ namespace KyoPro {
     }
 
     public class Solver {
-        public void Solve() {
-            
+        public void Solve()
+        {
+            var NS = Ria();
+            var N = NS[0];
+            var S = NS[1];
+            var cards = new List<(int H, int T)>();
+            for (int i = 0; i < N; i++)
+            {
+                var HT = Ria();
+                cards.Add((HT[0], HT[1]));
+            }
+
+            var dp = new string[N + 1, S + 1];
+            dp[0, 0] = "";
+            for (int i = 0; i < N; i++)
+            {
+                var card = cards[i];
+                for (int j = 0; j <= S; j++)
+                {
+                    var prevOkikata = dp[i, j];
+                    if(prevOkikata == null) continue;
+
+                    var nextJH = j + card.H;
+                    if (nextJH <= S)
+                    {
+                        dp[i + 1, nextJH] = prevOkikata + "H";
+                    }
+
+                    var nextJT = j + card.T;
+                    if (nextJT <= S)
+                    {
+                        dp[i + 1, nextJT] = prevOkikata + "T";
+                    }
+                }
+            }
+
+            var ansOkikata = dp[N, S];
+            if (ansOkikata != null)
+            {
+                Console.WriteLine("Yes");
+                Console.WriteLine(ansOkikata);
+            }
+            else
+            {
+                Console.WriteLine("No");
+            }
         }
 
         static string Rs(){return Console.ReadLine();}
@@ -29,7 +73,7 @@ namespace KyoPro {
         static BigInteger[] Rba(char sep=' '){return Array.ConvertAll(Console.ReadLine().Split(sep),BigInteger.Parse);}
         static int[] GenerateNums(int num, int N){return Enumerable.Repeat(num, N).ToArray();}
         static int[] GenerateSuretsu(int N){return Enumerable.Range(0, N).ToArray();}
-        
+
         /// <summary>
         /// 素因数分解する
         /// </summary>
@@ -49,9 +93,9 @@ namespace KyoPro {
             }
             if(tmp != 1) yield return tmp;//最後の素数も返す
         }
-        
+
         /// <summary>
-        /// 最大公約数をユークリッドの互除法で求める 
+        /// 最大公約数をユークリッドの互除法で求める
         /// </summary>
         static long Gcd(long a, long b)
         {
@@ -73,7 +117,7 @@ namespace KyoPro {
                 return a;
             }
         }
-        
+
         /// <summary>
         /// 2^nパターン分の全探索結果を返す
         /// </summary>
@@ -107,7 +151,7 @@ namespace KyoPro {
         public static int BinarySearch<T>(IEnumerable<T> enumerable, T target, Comparer<T> comparer)
         {
             var array = enumerable as T[] ?? enumerable.ToArray();
-            
+
             // 探索範囲のインデックス
             var min = 0;
             var max = array.Count() - 1;
@@ -137,7 +181,7 @@ namespace KyoPro {
         public static int LowerBound<T>(IEnumerable<T> enumerable, T target, Comparer<T> comparer)
         {
             var array = enumerable as T[] ?? enumerable.ToArray();
-            
+
             // 探索範囲のインデックス
             var min = 0;
             var max = array.Count() - 1;
@@ -162,7 +206,7 @@ namespace KyoPro {
         public static int LowerBoundUnder<T>(IEnumerable<T> enumerable, T target, Comparer<T> comparer)
         {
             var array = enumerable as T[] ?? enumerable.ToArray();
-            
+
             // 探索範囲のインデックス
             var min = 0;
             var max = array.Count() - 1;
@@ -186,7 +230,7 @@ namespace KyoPro {
         public static int UpperBound<T>(IEnumerable<T> enumerable, T target, Comparer<T> comparer)
         {
             var array = enumerable as T[] ?? enumerable.ToArray();
-            
+
             // 探索範囲のインデックス
             var min = 0;
             var max = array.Length - 1;
@@ -222,7 +266,7 @@ namespace KyoPro {
                 }
             }
         }
-        
+
 
         //順列をすべて列挙する
         //使い方 var patterns = Enumerable.Range(1, N - 1).Perm().Select(x => x.ToArray()).ToArray();
@@ -231,21 +275,21 @@ namespace KyoPro {
             var list = items.ToList();
             int len = list.Count;
             yield return list;
-            
+
             while(true)
             {
                 int l = len-2;
                 while(l>=0 && list[l].CompareTo(list[l+1])>=0) l--;
                 if(l<0) break;
-            
+
                 int r = len-1;
                 while(list[l].CompareTo(list[r])>0) r--;
                 if(list[l].CompareTo(list[r])>=0) break;
-            
+
                 var tmp = list[l];
                 list[l] = list[r];
                 list[r] = tmp;
-            
+
                 list.Reverse(l+1,len-l-1);
                 yield return list;
             }
@@ -260,7 +304,7 @@ namespace KyoPro {
             X = x;
             Y = y;
         }
-        
+
         public override bool Equals(object obj)
         {
             //objがnullか、型が違うときは、等価でない
@@ -268,22 +312,22 @@ namespace KyoPro {
             {
                 return false;
             }
-            
+
             Vector2 other = (Vector2)obj;
             return X == other.X && Y == other.Y;
         }
 
         public override int GetHashCode() => X ^ Y;
-        
+
         public static Vector2 operator +(Vector2 a, Vector2 b) => new Vector2(a.X + b.X, a.Y + b.Y);
         public static Vector2 operator -(Vector2 a, Vector2 b) => new Vector2(a.X - b.X, a.Y - b.Y);
         public static Vector2 operator *(Vector2 a, int b) => new Vector2(a.X * b, a.Y * b);
-        
+
         public double DistanceTo(Vector2 other) => Math.Sqrt(Math.Pow(X - other.X, 2) + Math.Pow(Y - other.Y, 2));
-        
+
         public double Length => Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
     }
-    
+
     /// <summary>
     /// グラフ
     /// </summary>
@@ -394,7 +438,7 @@ namespace KyoPro {
             }
         }
     }
-    
+
     public class PriorityQueue<T> : IEnumerable<T>
     {
         readonly List<T> _data = new List<T>();
@@ -478,7 +522,7 @@ namespace KyoPro {
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
-    
+
     public class Dijkstra
     {
         int N { get; }               // 頂点の数
@@ -631,7 +675,7 @@ namespace KyoPro {
             return true;
         }
     }
-    
+
     /// <summary>
     /// Self-Balancing Binary Search Tree
     /// (using Randomized BST)
@@ -766,7 +810,7 @@ namespace KyoPro {
             while (t != null)
             {
                 var cmp = t.Value.CompareTo(v);
-                    
+
                 if (cmp > 0)
                 {
                     ret = Math.Min(ret, idx);
@@ -836,7 +880,7 @@ namespace KyoPro {
             Enumerate(t.RChild, ret);
         }
     }
-    
+
     /// <summary>
     /// C言語のsetクラスに相当するもの
     /// 追加、挿入、LowerBound、UpperBoundがO(logN)でできる
@@ -910,7 +954,7 @@ namespace KyoPro {
             return new List<T>(SB_BinarySearchTree<T>.Enumerate(_root));
         }
     }
-    
+
     /// <summary>
     /// C言語のmultisetクラスに相当するもの
     /// 追加、挿入、LowerBound、UpperBoundがO(logN)でできる
@@ -919,7 +963,7 @@ namespace KyoPro {
     {
         public override void Insert(T v)
         {
-            _root = _root == null 
+            _root = _root == null
                 ? new SB_BinarySearchTree<T>.Node(v)
                 : SB_BinarySearchTree<T>.Insert(_root, v);
         }
