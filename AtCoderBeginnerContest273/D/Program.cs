@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Numerics;
 
@@ -13,8 +14,108 @@ namespace KyoPro {
     }
 
     public class Solver {
-        public void Solve() {
-            
+        public void Solve()
+        {
+            var HWrscs = Ria();
+            var H = HWrscs[0];
+            var W = HWrscs[1];
+            var rs = HWrscs[2];
+            var cs = HWrscs[3];
+            var N = Ri();
+
+
+            var rowToWallColsMutable = new Dictionary<int, SortedSet<int>>();
+            var colToWallRowsMutable = new Dictionary<int, SortedSet<int>>();
+            var wallColsDefaultMutable = new SortedSet<int>{ 0, W + 1 };
+            var wallRowsDefaultMutable = new SortedSet<int>{ 0, H + 1 };
+            for (int i = 0; i < N; i++)
+            {
+                var rc = Ria();
+                var r = rc[0];
+                var c = rc[1];
+
+                if (!rowToWallColsMutable.ContainsKey(r))
+                {
+                    rowToWallColsMutable.Add(r, new SortedSet<int>{ 0, W + 1 });
+                }
+                rowToWallColsMutable[r].Add(c);
+
+                if (!colToWallRowsMutable.ContainsKey(c))
+                {
+                    colToWallRowsMutable.Add(c, new SortedSet<int>{ 0, H + 1 });
+                }
+                colToWallRowsMutable[c].Add(r);
+            }
+
+            var rowToWallCols = rowToWallColsMutable.Keys
+                .ToDictionary(
+                    row => row,
+                    row => rowToWallColsMutable[row].ToImmutableSortedSet()
+                );
+            var colToWallRows = colToWallRowsMutable.Keys
+                .ToDictionary(
+                    col => col,
+                    col => colToWallRowsMutable[col].ToImmutableSortedSet()
+                );
+            var wallColsDefault = wallColsDefaultMutable.ToImmutableSortedSet();
+            var wallRowsDefault = wallRowsDefaultMutable.ToImmutableSortedSet();
+
+            var Q = Ri();
+            var currentRow = rs;
+            var currentCol = cs;
+            for (int i = 0; i < Q; i++)
+            {
+                var dl = Rsa();
+                var d = dl[0];
+                var l = int.Parse(dl[1]);
+
+                switch (d)
+                {
+                    case "U":
+                    {
+                        var wallRows = colToWallRows.GetValueOrDefault(currentCol, wallRowsDefault);
+                        var lowerBound = wallRows.IndexOf(currentRow);
+                        var idx = InvertTwoComplement(lowerBound);
+                        var nextWallRow = wallRows[idx - 1];
+                        currentRow = Math.Max(nextWallRow + 1, currentRow - l);
+                        break;
+                    }
+                    case "D":
+                    {
+                        var wallRows = colToWallRows.GetValueOrDefault(currentCol, wallRowsDefault);
+                        var lowerBound = wallRows.IndexOf(currentRow);
+                        var idx = InvertTwoComplement(lowerBound);
+                        var nextWallRow = wallRows[idx];
+                        currentRow = Math.Min(nextWallRow - 1, currentRow + l);
+                        break;
+                    }
+                    case "L":
+                    {
+                        var wallCols = rowToWallCols.GetValueOrDefault(currentRow, wallColsDefault);
+                        var lowerBound = wallCols.IndexOf(currentCol);
+                        var idx = InvertTwoComplement(lowerBound);
+                        var nextWallCol = wallCols[idx - 1];
+                        currentCol = Math.Max(nextWallCol + 1, currentCol - l);
+                        break;
+                    }
+                    case "R":
+                    {
+                        var wallCols = rowToWallCols.GetValueOrDefault(currentRow, wallColsDefault);
+                        var lowerBound = wallCols.IndexOf(currentCol);
+                        var idx = InvertTwoComplement(lowerBound);
+                        var nextWallCol = wallCols[idx];
+                        currentCol = Math.Min(nextWallCol - 1, currentCol + l);
+                        break;
+                    }
+                }
+
+                Console.WriteLine($"{currentRow} {currentCol}");
+            }
+        }
+
+        int InvertTwoComplement(int n)
+        {
+            return -n - 1;
         }
 
         static string Rs(){return Console.ReadLine();}
