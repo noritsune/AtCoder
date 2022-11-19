@@ -43,6 +43,7 @@ namespace KyoPro {
                         {
                             aIdxToAddNum[notResetAIdx] = 0;
                         }
+                        notResetAIdxes.Clear();
 
                         latestResetNum = resetNum;
                         break;
