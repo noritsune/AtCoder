@@ -3,85 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 
 namespace KyoPro {
     public static class EntryPoint {
+
         public static void Main() {
             var solver = new Solver();
-            solver.Solve2();
+            solver.Solve();
         }
     }
 
     public class Solver {
-        long A;
-        long B;
-
-        public void Solve2()
+        public void Solve()
         {
-            var AB = Rla();
-            A = AB[0];
-            B = AB[1];
+            var N = Ri();
+            var Ss = Ria();
 
-            long left = 1;
-            long right = (long)Math.Pow(10, 18);
-            while (right - left > 2)
+            var As = new int[N];
+            As[0] = Ss[0];
+            for (int i = 1; i < N; i++)
             {
-                var leftSide = (2 * left + right) / 3;
-                var rightSide = (left + 2 * right) / 3;
-                if (F(leftSide) > F(rightSide))
-                {
-                    left = leftSide;
-                }
-                else
-                {
-                    right = rightSide;
-                }
+                As[i] = Ss[i] - Ss[i - 1];
             }
 
-            decimal ans = decimal.MaxValue;
-            for (long i = left; i <= right; i++)
-            {
-                ans = Math.Min(ans, F(i));
-            }
-
-            Console.WriteLine(ans);
-        }
-
-        decimal F(decimal g)
-        {
-            var t = A / Sqrt(g) + B * g - B;
-            return t;
-        }
-
-        public void Solve1()
-        {
-            var AB = Rla();
-            A = AB[0]; B = AB[1];
-
-            var ansGInDouble = Math.Pow(2 * B / (double)A, -2 / (double)3);
-            var ansGInLong = (long)Math.Ceiling(ansGInDouble);
-
-            decimal ansT = A / Sqrt(ansGInLong) + B * ansGInLong - B;
-            Console.WriteLine(ansT);
-        }
-
-        /// <summary>
-        /// doubleより高精度な平方根を求める
-        /// </summary>
-        public static decimal Sqrt(decimal x, decimal epsilon = 0.0M)
-        {
-            if (x < 0) throw new OverflowException("Cannot calculate square root from a negative number");
-
-            decimal current = (decimal)Math.Sqrt((double)x), previous;
-            do
-            {
-                previous = current;
-                if (previous == 0.0M) return 0;
-                current = (previous + x / previous) / 2;
-            }
-            while (Math.Abs(previous - current) > epsilon);
-            return current;
+            Console.WriteLine(string.Join(" ", As));
         }
 
         static string Rs(){return Console.ReadLine();}
@@ -266,6 +211,24 @@ namespace KyoPro {
                 else min = mid + 1;
             }
             return min;
+        }
+
+        /// <summary>
+        /// doubleより高精度な平方根を求める
+        /// </summary>
+        public static decimal Sqrt(decimal x, decimal epsilon = 0.0M)
+        {
+            if (x < 0) throw new OverflowException("Cannot calculate square root from a negative number");
+
+            decimal current = (decimal)Math.Sqrt((double)x), previous;
+            do
+            {
+                previous = current;
+                if (previous == 0.0M) return 0;
+                current = (previous + x / previous) / 2;
+            }
+            while (Math.Abs(previous - current) > epsilon);
+            return current;
         }
     }
 

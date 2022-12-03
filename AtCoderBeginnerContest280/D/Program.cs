@@ -3,85 +3,41 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 
 namespace KyoPro {
     public static class EntryPoint {
         public static void Main() {
             var solver = new Solver();
-            solver.Solve2();
+            solver.Solve();
         }
     }
 
     public class Solver {
-        long A;
-        long B;
-
-        public void Solve2()
+        public void Solve()
         {
-            var AB = Rla();
-            A = AB[0];
-            B = AB[1];
+            var K = Rl();
 
-            long left = 1;
-            long right = (long)Math.Pow(10, 18);
-            while (right - left > 2)
+            // Kを素因数分解する
+            var primeFactorToCnt = PrimeFactors(K);
+
+            long maxLimit = 0;
+            foreach ((long primeFactor, int cnt) in primeFactorToCnt)
             {
-                var leftSide = (2 * left + right) / 3;
-                var rightSide = (left + 2 * right) / 3;
-                if (F(leftSide) > F(rightSide))
+                long remainedCnt = cnt;
+                long currentFactor = 0;
+
+                while (remainedCnt > 0)
                 {
-                    left = leftSide;
+                    currentFactor += primeFactor;
+
+                    var primeFactorCntInCurrentFactor = PrimeFactors(currentFactor)[primeFactor];
+                    remainedCnt -= primeFactorCntInCurrentFactor;
                 }
-                else
-                {
-                    right = rightSide;
-                }
+
+                maxLimit = Math.Max(maxLimit, currentFactor);
             }
 
-            decimal ans = decimal.MaxValue;
-            for (long i = left; i <= right; i++)
-            {
-                ans = Math.Min(ans, F(i));
-            }
-
-            Console.WriteLine(ans);
-        }
-
-        decimal F(decimal g)
-        {
-            var t = A / Sqrt(g) + B * g - B;
-            return t;
-        }
-
-        public void Solve1()
-        {
-            var AB = Rla();
-            A = AB[0]; B = AB[1];
-
-            var ansGInDouble = Math.Pow(2 * B / (double)A, -2 / (double)3);
-            var ansGInLong = (long)Math.Ceiling(ansGInDouble);
-
-            decimal ansT = A / Sqrt(ansGInLong) + B * ansGInLong - B;
-            Console.WriteLine(ansT);
-        }
-
-        /// <summary>
-        /// doubleより高精度な平方根を求める
-        /// </summary>
-        public static decimal Sqrt(decimal x, decimal epsilon = 0.0M)
-        {
-            if (x < 0) throw new OverflowException("Cannot calculate square root from a negative number");
-
-            decimal current = (decimal)Math.Sqrt((double)x), previous;
-            do
-            {
-                previous = current;
-                if (previous == 0.0M) return 0;
-                current = (previous + x / previous) / 2;
-            }
-            while (Math.Abs(previous - current) > epsilon);
-            return current;
+            Console.WriteLine(maxLimit);
         }
 
         static string Rs(){return Console.ReadLine();}
@@ -100,21 +56,31 @@ namespace KyoPro {
         /// <summary>
         /// 素因数分解する
         /// </summary>
-        public static IEnumerable<int> PrimeFactors(int n)
+        public static Dictionary<long, int> PrimeFactors(long n)
         {
-            int i = 2;
-            int tmp = n;
+            var factorToCnt = new Dictionary<long, int>();
 
-            while (i * i <= n) //※1
+            for (long i = 2; i * i <= n; i++)
             {
-                if(tmp % i == 0){
-                    tmp /= i;
-                    yield return i;
-                }else{
-                    i++;
+                while (n % i == 0)
+                {
+                    if (!factorToCnt.ContainsKey(i))
+                    {
+                        factorToCnt[i] = 0;
+                    }
+                    factorToCnt[i]++;
+
+                    n /= i;
                 }
             }
-            if(tmp != 1) yield return tmp;//最後の素数も返す
+
+            // nが素数の場合は、nをそのまま出力する
+            if (n > 1)
+            {
+                factorToCnt[n] = 1;
+            }
+
+            return factorToCnt;
         }
         
         /// <summary>
@@ -266,6 +232,24 @@ namespace KyoPro {
                 else min = mid + 1;
             }
             return min;
+        }
+
+        /// <summary>
+        /// doubleより高精度な平方根を求める
+        /// </summary>
+        public static decimal Sqrt(decimal x, decimal epsilon = 0.0M)
+        {
+            if (x < 0) throw new OverflowException("Cannot calculate square root from a negative number");
+
+            decimal current = (decimal)Math.Sqrt((double)x), previous;
+            do
+            {
+                previous = current;
+                if (previous == 0.0M) return 0;
+                current = (previous + x / previous) / 2;
+            }
+            while (Math.Abs(previous - current) > epsilon);
+            return current;
         }
     }
 
