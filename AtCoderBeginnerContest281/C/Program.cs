@@ -15,20 +15,22 @@ namespace KyoPro {
     public class Solver {
         public void Solve()
         {
-            var NP = Ria();
-            var N = NP[0]; var P = NP[1];
+            var NT = Rla();
+            var N = NT[0]; var T = NT[1];
+            var As = Rla();
 
-            double criticalHitP = P / 100.0;
-            double normalHitP = 1 - criticalHitP;
-
-            var dp = new double[N + 2];
-            for (int i = 1; i <= N + 1; i++)
+            long AsSum = As.Sum();
+            long secInLoop = T % AsSum;
+            long remainedSec = secInLoop;
+            for (int i = 0; i < N; i++)
             {
-                dp[i] = dp[i - 1] + normalHitP;
-                if (i >= 2)
+                if(remainedSec <= As[i])
                 {
-                    dp[i] += dp[i - 2] + 2 * criticalHitP;
+                    Console.WriteLine((i + 1) + " " + remainedSec);
+                    return;
                 }
+
+                remainedSec -= As[i];
             }
         }
 

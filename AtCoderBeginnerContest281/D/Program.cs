@@ -15,20 +15,63 @@ namespace KyoPro {
     public class Solver {
         public void Solve()
         {
-            var NP = Ria();
-            var N = NP[0]; var P = NP[1];
+            var NKD = Rla();
+            var N = NKD[0]; var K = NKD[1]; var D = NKD[2];
+            var As = Rla();
 
-            double criticalHitP = P / 100.0;
-            double normalHitP = 1 - criticalHitP;
-
-            var dp = new double[N + 2];
-            for (int i = 1; i <= N + 1; i++)
+            var dp = new long[K + 1, N + 1, D];
+            // dpの全要素を-1で初期化
+            for (int i = 0; i < K + 1; i++)
             {
-                dp[i] = dp[i - 1] + normalHitP;
-                if (i >= 2)
+                for (int j = 0; j < N + 1; j++)
                 {
-                    dp[i] += dp[i - 2] + 2 * criticalHitP;
+                    for (int k = 0; k < D; k++)
+                    {
+                        dp[i, j, k] = -1;
+                    }
                 }
+            }
+
+            for (int aIdx = 0; aIdx <= N; aIdx++)
+            {
+                dp[0, aIdx, 0] = 0;
+            }
+
+            for (int k = 1; k <= K; k++)
+            {
+                for (int aIdx = k; aIdx <= N; aIdx++)
+                {
+                    var a = As[aIdx - 1];
+
+                    for (int dMod = 0; dMod < D; dMod++)
+                    {
+                        var prevDiv = dp[k, aIdx - 1, dMod];
+                        if(prevDiv == -1) continue;
+
+                        dp[k, aIdx, dMod] = Math.Max(dp[k, aIdx, dMod], prevDiv);
+                    }
+
+                    for (int dMod = 0; dMod < D; dMod++)
+                    {
+                        var prevDiv = dp[k - 1, aIdx - 1, dMod];
+                        if(prevDiv == -1) continue;
+
+                        var nextSum = prevDiv * D + dMod + a;
+                        var nextDMod = nextSum % D;
+                        var nextDiv = nextSum / D;
+                        dp[k, aIdx, nextDMod] = Math.Max(dp[k, aIdx, nextDMod], nextDiv);
+                    }
+                }
+            }
+
+            var ansSource = dp[K, N, 0];
+            if(ansSource == -1)
+            {
+                Console.WriteLine(-1);
+            }
+            else
+            {
+                Console.WriteLine(ansSource * D);
             }
         }
 

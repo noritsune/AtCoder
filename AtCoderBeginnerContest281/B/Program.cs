@@ -15,21 +15,37 @@ namespace KyoPro {
     public class Solver {
         public void Solve()
         {
-            var NP = Ria();
-            var N = NP[0]; var P = NP[1];
+            var S = Rs();
 
-            double criticalHitP = P / 100.0;
-            double normalHitP = 1 - criticalHitP;
-
-            var dp = new double[N + 2];
-            for (int i = 1; i <= N + 1; i++)
+            if (S.Length != 8 || !IsUpperCase(S.First()) || !IsUpperCase(S.Last()))
             {
-                dp[i] = dp[i - 1] + normalHitP;
-                if (i >= 2)
-                {
-                    dp[i] += dp[i - 2] + 2 * criticalHitP;
-                }
+                Console.WriteLine("No");
+                return;
             }
+
+            var middleStr = S.Substring(1, S.Length - 2);
+
+            var firstC = middleStr.First();
+            if ('1' > firstC || firstC > '9')
+            {
+                Console.WriteLine("No");
+                return;
+            }
+
+            var isValidNum = middleStr.All(c => 0 <= c - '0' && c - '0' <= 9);
+            if (isValidNum)
+            {
+                Console.WriteLine("Yes");
+            }
+            else
+            {
+                Console.WriteLine("No");
+            }
+        }
+
+        bool IsUpperCase(char c)
+        {
+            return 'A' <= c && c <= 'Z';
         }
 
         static string Rs(){return Console.ReadLine();}
