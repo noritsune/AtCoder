@@ -15,15 +15,70 @@ namespace KyoPro {
     public class Solver {
         public void Solve()
         {
-            var NMK = Ria();
-            var N = NMK[0]; var M = NMK[1]; var K = NMK[2];
-            var As = Rla();
+            var NM = Ria();
+            var N = NM[0]; var M = NM[1];
 
-            var sums = new SortedSet<long>();
-            for (int i = 0; i < N - M + 1; i++)
+            var graph = new Graph<int>(Graph<int>.Type.UndirectedGraph);
+            for (int i = 0; i < N; i++) graph.AddVertex(i);
+            for (int i = 0; i < M; i++)
             {
-
+                var uv = Ria();
+                graph.AddEdge(uv[0] - 1, uv[1] - 1);
             }
+
+            // 未定なら-1, 白なら0, 黒なら1
+            var colors = Enumerable.Repeat(-1, N).ToArray();
+
+            long ans = N * (N - 1) / 2 - M;
+            for (int startV = 0; startV < N; startV++)
+            {
+                if(colors[startV] != -1) continue;
+
+                long whiteCnt = 0; long blackCnt = 0;
+
+                var q = new Queue<int>();
+                q.Enqueue(startV);
+                colors[startV] = 0;
+                whiteCnt++;
+                while (q.Count > 0)
+                {
+                    var v = q.Dequeue();
+
+                    var nextVs = graph.Vertices[v];
+                    foreach (var nextV in nextVs)
+                    {
+                        bool isNextVFirstVisit = colors[nextV] == -1;
+                        if (isNextVFirstVisit)
+                        {
+                            if (colors[v] == 0)
+                            {
+                                colors[nextV] = 1;
+                                blackCnt++;
+                            }
+                            else
+                            {
+                                colors[nextV] = 0;
+                                whiteCnt++;
+                            }
+                            q.Enqueue(nextV);
+                        }
+                        else
+                        {
+                            bool isSameSide = colors[v] == colors[nextV];
+                            if (!isSameSide) continue;
+
+                            // 二部グラフでない
+                            Console.WriteLine(0);
+                            return;
+                        }
+                    }
+                }
+
+                ans -= whiteCnt * (whiteCnt - 1) / 2;
+                ans -= blackCnt * (blackCnt - 1) / 2;
+            }
+
+            Console.WriteLine(ans);
         }
 
         static string Rs(){return Console.ReadLine();}

@@ -15,15 +15,29 @@ namespace KyoPro {
     public class Solver {
         public void Solve()
         {
-            var NMK = Ria();
-            var N = NMK[0]; var M = NMK[1]; var K = NMK[2];
-            var As = Rla();
+            var N = Ri();
+            var S = Rs();
 
-            var sums = new SortedSet<long>();
-            for (int i = 0; i < N - M + 1; i++)
+            bool isInDelimiter = false;
+            var SInChars = S.ToArray();
+            for (int i = 0; i < N; i++)
             {
-
+                switch (SInChars[i])
+                {
+                    case '"':
+                        isInDelimiter = !isInDelimiter;
+                        break;
+                    case ',':
+                        if (!isInDelimiter)
+                        {
+                            SInChars[i] = '.';
+                        }
+                        break;
+                }
             }
+
+            var replacedStr = string.Join("", SInChars);
+            Console.WriteLine(replacedStr);
         }
 
         static string Rs(){return Console.ReadLine();}

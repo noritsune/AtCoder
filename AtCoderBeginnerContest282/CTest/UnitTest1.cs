@@ -22,17 +22,17 @@ namespace Test
 			TestInOut(testCaseDirPath + "2In.txt", testCaseDirPath + "2Out.txt");
 		}
 		
-		// [TestMethod]
-		// public void Test3()
-		// {
-		// 	TestInOut(testCaseDirPath + "3In.txt", testCaseDirPath + "3Out.txt");
-		// }
+		[TestMethod]
+		public void Test3()
+		{
+			TestInOut(testCaseDirPath + "3In.txt", testCaseDirPath + "3Out.txt");
+		}
 		
-		// [TestMethod]
-		// public void Test4()
-		// {
-		// 	TestInOut(testCaseDirPath + "4In.txt", testCaseDirPath + "4Out.txt");
-		// }
+		[TestMethod]
+		public void Test4()
+		{
+			TestInOut(testCaseDirPath + "4In.txt", testCaseDirPath + "4Out.txt");
+		}
 		
 		private static void TestInOut(string inputFileName, string outputFileName)
 		{

@@ -15,15 +15,33 @@ namespace KyoPro {
     public class Solver {
         public void Solve()
         {
-            var NMK = Ria();
-            var N = NMK[0]; var M = NMK[1]; var K = NMK[2];
-            var As = Rla();
+            var NM = Ria();
+            var N = NM[0]; var M = NM[1];
+            var Ss = new List<string>();
+            for (int i = 0; i < N; i++) Ss.Add(Rs());
 
-            var sums = new SortedSet<long>();
-            for (int i = 0; i < N - M + 1; i++)
+            int okCnt = 0;
+            var items = Enumerable.Range(0, N);
+            var pairs = Combination.Enumerate(items, 2, false);
+            foreach (var pair in pairs)
             {
+                var strA = Ss[pair[0]];
+                var strB = Ss[pair[1]];
 
+                var oIdxInStrs = new HashSet<int>();
+                for (int m = 0; m < M; m++)
+                {
+                    if (strA[m] == 'o') oIdxInStrs.Add(m);
+                    if (strB[m] == 'o') oIdxInStrs.Add(m);
+                }
+
+                if(oIdxInStrs.Count == M)
+                {
+                    okCnt++;
+                }
             }
+
+            Console.WriteLine(okCnt);
         }
 
         static string Rs(){return Console.ReadLine();}

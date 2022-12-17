@@ -15,15 +15,15 @@ namespace KyoPro {
     public class Solver {
         public void Solve()
         {
-            var NMK = Ria();
-            var N = NMK[0]; var M = NMK[1]; var K = NMK[2];
-            var As = Rla();
+            var K = Ri();
 
-            var sums = new SortedSet<long>();
-            for (int i = 0; i < N - M + 1; i++)
+            var str = "";
+            for (int i = 0; i < K; i++)
             {
-
+                str += char.ConvertFromUtf32('A' + i);
             }
+
+            Console.WriteLine(str);
         }
 
         static string Rs(){return Console.ReadLine();}

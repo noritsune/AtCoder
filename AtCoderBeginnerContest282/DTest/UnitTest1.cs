@@ -22,17 +22,47 @@ namespace Test
 			TestInOut(testCaseDirPath + "2In.txt", testCaseDirPath + "2Out.txt");
 		}
 		
-		// [TestMethod]
-		// public void Test3()
-		// {
-		// 	TestInOut(testCaseDirPath + "3In.txt", testCaseDirPath + "3Out.txt");
-		// }
+		[TestMethod]
+		public void Test3()
+		{
+			TestInOut(testCaseDirPath + "3In.txt", testCaseDirPath + "3Out.txt");
+		}
 		
-		// [TestMethod]
-		// public void Test4()
-		// {
-		// 	TestInOut(testCaseDirPath + "4In.txt", testCaseDirPath + "4Out.txt");
-		// }
+		[TestMethod]
+		public void Test4()
+		{
+			TestInOut(testCaseDirPath + "4In.txt", testCaseDirPath + "4Out.txt");
+		}
+
+		[TestMethod]
+		public void Test5()
+		{
+			TestInOut(testCaseDirPath + "5In.txt", testCaseDirPath + "5Out.txt");
+		}
+
+		[TestMethod]
+		public void Test6()
+		{
+			TestInOut(testCaseDirPath + "6In.txt", testCaseDirPath + "6Out.txt");
+		}
+
+		[TestMethod]
+		public void Test7()
+		{
+			TestInOut(testCaseDirPath + "7In.txt", testCaseDirPath + "7Out.txt");
+		}
+
+		[TestMethod]
+		public void Test8()
+		{
+			TestInOut(testCaseDirPath + "8In.txt", testCaseDirPath + "8Out.txt");
+		}
+
+		[TestMethod]
+		public void Test9()
+		{
+			TestInOut(testCaseDirPath + "9In.txt", testCaseDirPath + "9Out.txt");
+		}
 		
 		private static void TestInOut(string inputFileName, string outputFileName)
 		{
