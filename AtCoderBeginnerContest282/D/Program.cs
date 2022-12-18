@@ -15,7 +15,7 @@ namespace KyoPro {
     public class Solver {
         public void Solve()
         {
-            var NM = Ria();
+            var NM = Rla();
             var N = NM[0]; var M = NM[1];
 
             var graph = new Graph<int>(Graph<int>.Type.UndirectedGraph);
@@ -27,7 +27,7 @@ namespace KyoPro {
             }
 
             // 未定なら-1, 白なら0, 黒なら1
-            var colors = Enumerable.Repeat(-1, N).ToArray();
+            var colors = Enumerable.Repeat(-1, (int)N).ToArray();
 
             long ans = N * (N - 1) / 2 - M;
             for (int startV = 0; startV < N; startV++)
