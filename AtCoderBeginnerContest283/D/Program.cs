@@ -17,31 +17,36 @@ namespace KyoPro {
         {
             var S = Rs();
 
-            var eachScopeChars = new List<HashSet<char>> { new HashSet<char>() };
-            var charExistScopeIdxes = new HashSet<int>();
+            var usedChars = new HashSet<char>();
+            var eachScopeChars = new Stack<HashSet<char>>();
+            eachScopeChars.Push(new HashSet<char>());
             foreach (var c in S)
             {
                 switch (c)
                 {
                     case '(':
-                        eachScopeChars.Add(new HashSet<char>());
+                        eachScopeChars.Push(new HashSet<char>());
                         break;
                     case ')':
-                        charExistScopeIdxes.Remove(eachScopeChars.Count - 1);
-                        eachScopeChars.RemoveAt(eachScopeChars.Count - 1);
+                        var charsInScope = eachScopeChars.Pop();
+                        foreach (var charInScope in charsInScope)
+                        {
+                            usedChars.Remove(charInScope);
+                        }
                         break;
                     default:
-                        foreach (var idx in charExistScopeIdxes)
-                        {
-                            var chars = eachScopeChars[idx];
-                            if (!chars.Contains(c)) continue;
+                        var charsInThisScope = eachScopeChars.Pop();
 
+                        if (usedChars.Contains(c) || charsInThisScope.Contains(c))
+                        {
                             Console.WriteLine("No");
                             return;
                         }
 
-                        eachScopeChars.Last().Add(c);
-                        charExistScopeIdxes.Add(eachScopeChars.Count - 1);
+                        usedChars.Add(c);
+                        charsInThisScope.Add(c);
+
+                        eachScopeChars.Push(charsInThisScope);
                         break;
                 }
             }
