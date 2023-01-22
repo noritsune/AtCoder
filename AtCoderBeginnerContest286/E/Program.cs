@@ -20,14 +20,51 @@ namespace KyoPro {
             var Ss = new List<string>();
             for (int i = 0; i < N; i++) Ss.Add(Rs());
 
-            var graph = new Graph<int>(Graph<int>.Type.DirectedGraph);
-            for (int i = 0; i < N; i++) graph.AddVertex(i);
+            var minCnt = new long[N, N];
+            for (int i = 0; i < N; i++)
+            {
+                for (int j = 0; j < N; j++)
+                {
+                    if(i == j) continue;
+
+                    minCnt[i, j] = long.MaxValue;
+                }
+            }
+
+            var maxVal = new long[N, N];
             for (int i = 0; i < N; i++)
             {
                 var s = Ss[i];
                 for (int j = 0; j < N; j++)
                 {
-                    if (s[j] == 'Y') graph.AddEdge(i, j);
+                    if (s[j] != 'Y') continue;
+
+                    minCnt[i, j] = 1;
+                    maxVal[i, j] = As[j];
+                }
+            }
+
+            // warshall floyd
+            for (int k = 0; k < N; k++)
+            {
+                for (int i = 0; i < N; i++)
+                {
+                    for (int j = 0; j < N; j++)
+                    {
+                        if (minCnt[i, k] == long.MaxValue || minCnt[k, j] == long.MaxValue) continue;
+
+                        var exCnt = minCnt[i, k] + minCnt[k, j];
+                        var exVal = maxVal[i, k] + maxVal[k, j];
+                        if (exCnt < minCnt[i, j])
+                        {
+                            minCnt[i, j] = exCnt;
+                            maxVal[i, j] = maxVal[i, k] + maxVal[k, j];
+                        }
+                        else if (exCnt == minCnt[i, j])
+                        {
+                            maxVal[i, j] = Math.Max(maxVal[i, j], exVal);
+                        }
+                    }
                 }
             }
 
@@ -37,49 +74,10 @@ namespace KyoPro {
                 var ST = Ria();
                 var S = ST[0] - 1; var T = ST[1] - 1;
 
-                // コストをスタート頂点以外を無限大に
-                var minCnt = new long[N];
-                for (int i = 0; i < N; i++) minCnt[i] = 1000000000000000000;
-                minCnt[S] = 0;
-
-                var maxVal = new long[N];
-                maxVal[S] = As[S];
-
-                // 未確定の頂点を格納する優先度付きキュー(コストが小さいほど優先度が高い)
-                var q = new PriorityQueue<Vertex>(Comparer<Vertex>.Create((a, b) => b.CompareTo(a)));
-                q.Enqueue(new Vertex(S, 0));
-
-                while (q.Count > 0)
-                {
-                    var v = q.Dequeue();
-
-                    // 記録されているコストと異なる(コストがより大きい)場合は無視
-                    // if (v.cost != minCnt[v.index]) continue;
-
-                    // 今回確定した頂点からつながる頂点に対して更新を行う
-                    foreach (var nextV in graph.Vertices[v.index])
-                    {
-                        var nextCost = v.cost + 1;
-                        // 既に記録されている回数より少なく出来なければ無視。同じなら価値が高いかもしれないので更新する
-                        if (minCnt[nextV] < nextCost) continue;
-
-                        var nextVal = maxVal[v.index] + As[nextV];
-                        if (minCnt[nextV] == nextCost && nextVal <= maxVal[nextV]) continue;
-
-                        minCnt[nextV] = nextCost;
-                        maxVal[nextV] = Math.Max(maxVal[nextV], nextVal);
-                        q.Enqueue(new Vertex(nextV, minCnt[nextV]));
-                    }
-                }
-
-                if (minCnt[T] == 1000000000000000000)
-                {
-                    Console.WriteLine("Impossible");
-                }
-                else
-                {
-                    Console.WriteLine($"{minCnt[T]} {maxVal[T]}");
-                }
+                Console.WriteLine(minCnt[S, T] == long.MaxValue
+                    ? "Impossible"
+                    : $"{minCnt[S, T]} {As[S] + maxVal[S, T]}"
+                );
             }
         }
 
