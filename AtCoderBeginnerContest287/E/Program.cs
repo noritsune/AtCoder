@@ -13,8 +13,51 @@ namespace KyoPro {
     }
 
     public class Solver {
-        public void Solve() {
-            
+        public void Solve()
+        {
+            var N = Ri();
+            var Ss = new List<string>();
+            for (int i = 0; i < N; i++) Ss.Add(Rs());
+
+            var sortedSWithIdx = Ss.Select((s, i) => (s, i)).OrderBy(x => x.s).ToArray();
+            var maxLcps = new int[N];
+            for (int i = 0; i < N; i++)
+            {
+                var (s, idx) = sortedSWithIdx[i];
+                var maxLcp = int.MinValue;
+                if (i > 0)
+                {
+                    var prevS = sortedSWithIdx[i - 1].s;
+                    int prevLcp = CalcLcp(prevS, s);
+                    maxLcp = Math.Max(maxLcp, prevLcp);
+                }
+
+                if (i < N - 1)
+                {
+                    var nextS = sortedSWithIdx[i + 1].s;
+                    var nextLcp = CalcLcp(nextS, s);
+                    maxLcp = Math.Max(maxLcp, nextLcp);
+                }
+
+                maxLcps[idx] = maxLcp;
+            }
+
+            foreach (var maxLcp in maxLcps)
+            {
+                Console.WriteLine(maxLcp);
+            }
+        }
+
+        int CalcLcp(string s1, string s2)
+        {
+            var lcp = 0;
+            for (int i = 0; i < Math.Min(s1.Length, s2.Length); i++)
+            {
+                if (s1[i] == s2[i]) lcp++;
+                else break;
+            }
+
+            return lcp;
         }
 
         static string Rs(){return Console.ReadLine();}
