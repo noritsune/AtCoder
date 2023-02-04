@@ -13,51 +13,16 @@ namespace KyoPro {
     }
 
     public class Solver {
-        public void Solve()
-        {
-            var N = Ri();
+        public void Solve() {
+            var NK = Ria();
+            var N = NK[0]; var K = NK[1];
             var Ss = new List<string>();
-            for (int i = 0; i < N; i++) Ss.Add(Rs());
-
-            var sortedSWithIdx = Ss.Select((s, i) => (s, i)).OrderBy(x => x.s).ToArray();
-            var maxLcps = new int[N];
-            for (int i = 0; i < N; i++)
-            {
-                var (s, idx) = sortedSWithIdx[i];
-                var maxLcp = int.MinValue;
-                if (i > 0)
-                {
-                    var prevS = sortedSWithIdx[i - 1].s;
-                    int prevLcp = CalcLcp(prevS, s);
-                    maxLcp = Math.Max(maxLcp, prevLcp);
-                }
-
-                if (i < N - 1)
-                {
-                    var nextS = sortedSWithIdx[i + 1].s;
-                    var nextLcp = CalcLcp(nextS, s);
-                    maxLcp = Math.Max(maxLcp, nextLcp);
-                }
-
-                maxLcps[idx] = maxLcp;
+            for (int i = 0; i < N; i++) {
+                Ss.Add(Rs());
             }
 
-            foreach (var maxLcp in maxLcps)
-            {
-                Console.WriteLine(maxLcp);
-            }
-        }
-
-        int CalcLcp(string s1, string s2)
-        {
-            var lcp = 0;
-            for (int i = 0; i < Math.Min(s1.Length, s2.Length); i++)
-            {
-                if (s1[i] == s2[i]) lcp++;
-                else break;
-            }
-
-            return lcp;
+            var topKSorted = Ss.Take(K).OrderBy(s => s);
+            Console.WriteLine(string.Join("\n", topKSorted));
         }
 
         static string Rs(){return Console.ReadLine();}
@@ -617,67 +582,7 @@ namespace KyoPro {
 
         public struct Vertex : IComparable<Vertex>
         {
-            class UnionFind
-            {
-                // 親要素のインデックスを保持する
-                // 親要素が存在しない(自身がルートである)とき、マイナスでグループの要素数を持つ
-                int[] Parents { get; }
-                public UnionFind(int n)
-                {
-                    Parents = new int[n];
-                    for (int i = 0; i < n; i++)
-                    {
-                        // 初期状態ではそれぞれが別のグループ(ルートは自分自身)
-                        // ルートなのでマイナスで要素数(1個)を保持する
-                        Parents[i] = -1;
-                    }
-                }
-
-                // 要素xのルート要素はどれか
-                public int Find(int x)
-                {
-                    // 親がマイナスの場合は自分自身がルート
-                    if (Parents[x] < 0) return x;
-                    // ルートが見つかるまで再帰的に探す
-                    // 見つかったルートにつなぎかえる
-                    Parents[x] = Find(Parents[x]);
-                    return Parents[x];
-                }
-
-                // 要素xの属するグループの要素数を取得する
-                public int Size(int x)
-                {
-                    // ルート要素を取得して、サイズを取得して返す
-                    return -Parents[Find(x)];
-                }
-
-                // 要素x, yが同じグループかどうか判定する
-                public bool Same(int x, int y)
-                {
-                    return Find(x) == Find(y);
-                }
-
-                // 要素x, yが属するグループを同じグループにまとめる
-                public bool Union(int x, int y)
-                {
-                    // x, y のルート
-                    x = Find(x);
-                    y = Find(y);
-                    // すでに同じグループの場合処理しない
-                    if (x == y) return false;
-
-                    // 要素数が少ないグループを多いほうに書き換えたい
-                    if (Size(x) < Size(y))
-                    {
-                        (x, y) = (y, x);
-                    }
-                    // まとめる先のグループの要素数を更新
-                    Parents[x] += Parents[y];
-                    // まとめられるグループのルートの親を書き換え
-                    Parents[y] = x;
-                    return true;
-                }
-            }public readonly int index;                   // 頂点の番号
+            public readonly int index;                   // 頂点の番号
             public readonly long cost;                   // 記録したコスト
 
             public Vertex(int index, long cost)
