@@ -36,29 +36,28 @@ namespace KyoPro {
             }
 
             var minCnt = int.MaxValue;
-            var q = new Queue<(int taka, int aoki, int cnt, HashSet<int> takaVisited, HashSet<int> aokiVisited)>();
-            q.Enqueue((1, N, 0, new HashSet<int>(), new HashSet<int>()));
+            var visited = new bool[100000000];
+            var q = new Queue<(int taka, int aoki, int cnt)>();
+            q.Enqueue((1, N, 0));
             while (q.Count > 0)
             {
-                var (taka, aoki, cnt, takaVisited, aokiVisited) = q.Dequeue();
-                takaVisited.Add(taka);
-                aokiVisited.Add(aoki);
-
-                if (taka == N && aoki == 1)
-                {
-                    minCnt = Math.Min(minCnt, cnt);
-                }
-
+                var (taka, aoki, cnt) = q.Dequeue();
                 foreach (var takaNext in graph.Vertices[taka])
                 {
-                    if (takaVisited.Contains(takaNext)) continue;
-
                     foreach (var aokiNext in graph.Vertices[aoki])
                     {
-                        if (aokiVisited.Contains(aokiNext)) continue;
-                        if (Cs[takaNext - 1] == Cs[aokiNext - 1]) continue;
+                        if (visited[takaNext * 10000 + aokiNext]
+                        || Cs[takaNext - 1] == Cs[aokiNext - 1]) continue;
 
-                        q.Enqueue((takaNext, aokiNext, cnt + 1, takaVisited.ToHashSet(), aokiVisited.ToHashSet()));
+                        visited[takaNext * 10000 + aokiNext] = true;
+
+                        if (takaNext == N && aokiNext == 1)
+                        {
+                            minCnt = Math.Min(minCnt, cnt + 1);
+                            continue;
+                        }
+
+                        q.Enqueue((takaNext, aokiNext, cnt + 1));
                     }
                 }
             }
