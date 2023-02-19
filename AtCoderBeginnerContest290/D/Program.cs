@@ -18,44 +18,16 @@ namespace KyoPro {
             var T = Ri();
             for (int i = 0; i < T; i++)
             {
-                var NDK = Ria();
-                var ans = SolveInner(NDK[0], NDK[1], NDK[2]);
+                var NDK = Rla();
+                var ans = SolveInner(NDK[0], NDK[1], NDK[2] - 1);
                 Console.WriteLine(ans);
             }
         }
 
-        int SolveInner(int N, int D, int K)
+        long SolveInner(long N, long D, long K)
         {
-            var fixedD = D % N == 0 ? 1 : D % N;
-            var lastXStart = 0;
-            var x = 0;
-            var remainedMarkCnt = K - 1;
-            while (remainedMarkCnt > 0)
-            {
-                var markCntInThisLoop = (N + 1 - x) / fixedD;
-                if (markCntInThisLoop > remainedMarkCnt || markCntInThisLoop == 0)
-                {
-                    x += fixedD * remainedMarkCnt;
-                    x %= N;
-                    remainedMarkCnt = 0;
-                    continue;
-                }
-
-                remainedMarkCnt -= markCntInThisLoop;
-
-                if (N % D == 0)
-                {
-                    lastXStart++;
-                    x = lastXStart;
-                }
-                else
-                {
-                    x += fixedD * markCntInThisLoop;
-                    x %= N;
-                }
-            }
-
-            return x;
+            var gcd = N / Gcd(N, D);
+            return D * K % N + K / gcd;
         }
 
         static string Rs(){return Console.ReadLine();}
