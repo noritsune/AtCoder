@@ -18,38 +18,18 @@ namespace KyoPro {
             var nm = Rla();
             var n = nm[0]; var m = nm[1];
 
-            if (m == 1)
+            var limit = Math.Ceiling(Math.Sqrt(m));
+            var ans = long.MaxValue;
+            for (int a = 1; a <= limit; a++)
             {
-                Console.WriteLine(1);
-                return;
+                var b = (m + a - 1) / a;
+                if (b > n) continue;
+                if (a > n) continue;
+
+                ans = Math.Min(ans, a * b);
             }
 
-            long min = 1;
-            long max = n;
-
-            while (min <= max)
-            {
-                long a = (min + max) / 2;
-                long b = Math.Min(n, (m - 1) / a + 1);
-
-                if (a * b == m)
-                {
-                    min = a;
-                    break;
-                }
-                if (a * b < m) min = a + 1;
-                else max = a - 1;
-            }
-
-            if (min > n)
-            {
-                Console.WriteLine(-1);
-            }
-            else
-            {
-                var b = (m - 1) / min + 1;
-                Console.WriteLine(min * b);
-            }
+            Console.WriteLine(ans == long.MaxValue ? -1 : ans);
         }
 
         static string Rs(){return Console.ReadLine();}
