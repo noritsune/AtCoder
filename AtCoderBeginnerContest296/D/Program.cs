@@ -15,35 +15,41 @@ namespace KyoPro {
     public class Solver {
         public void Solve()
         {
-            var S = Rs();
+            var nm = Rla();
+            var n = nm[0]; var m = nm[1];
 
-            int r = 0;
-            long goodCnt = 0;
-            for (int l = 0; l < S.Length; l++)
+            if (m == 1)
             {
-                while (r < S.Length && IsGood(S.Substring(l, r - l + 1)))
-                {
-                    goodCnt++;
-                    r++;
-                }
-
-                if (r == l) r++;
+                Console.WriteLine(1);
+                return;
             }
 
-            Console.WriteLine(goodCnt);
-        }
+            long min = 1;
+            long max = n;
 
-        bool IsGood(string str)
-        {
-            if (str.Length == 0 || str.Length % 2 == 1) return false;
+            while (min <= max)
+            {
+                long a = (min + max) / 2;
+                long b = Math.Min(n, (m - 1) / a + 1);
 
-            var firstHalf = str.Substring(0, str.Length / 2)
-                .OrderBy(c => c)
-                .ToArray();
-            var secondHalf = str.Substring(str.Length / 2, str.Length / 2)
-                .OrderBy(c => c)
-                .ToArray();
-            return firstHalf.SequenceEqual(secondHalf);
+                if (a * b == m)
+                {
+                    min = a;
+                    break;
+                }
+                if (a * b < m) min = a + 1;
+                else max = a - 1;
+            }
+
+            if (min > n)
+            {
+                Console.WriteLine(-1);
+            }
+            else
+            {
+                var b = (m - 1) / min + 1;
+                Console.WriteLine(min * b);
+            }
         }
 
         static string Rs(){return Console.ReadLine();}

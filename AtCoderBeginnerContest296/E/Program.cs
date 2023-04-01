@@ -13,37 +13,8 @@ namespace KyoPro {
     }
 
     public class Solver {
-        public void Solve()
-        {
-            var S = Rs();
-
-            int r = 0;
-            long goodCnt = 0;
-            for (int l = 0; l < S.Length; l++)
-            {
-                while (r < S.Length && IsGood(S.Substring(l, r - l + 1)))
-                {
-                    goodCnt++;
-                    r++;
-                }
-
-                if (r == l) r++;
-            }
-
-            Console.WriteLine(goodCnt);
-        }
-
-        bool IsGood(string str)
-        {
-            if (str.Length == 0 || str.Length % 2 == 1) return false;
-
-            var firstHalf = str.Substring(0, str.Length / 2)
-                .OrderBy(c => c)
-                .ToArray();
-            var secondHalf = str.Substring(str.Length / 2, str.Length / 2)
-                .OrderBy(c => c)
-                .ToArray();
-            return firstHalf.SequenceEqual(secondHalf);
+        public void Solve() {
+            
         }
 
         static string Rs(){return Console.ReadLine();}

@@ -15,35 +15,21 @@ namespace KyoPro {
     public class Solver {
         public void Solve()
         {
-            var S = Rs();
+            var grid = new List<string>();
+            for (int i = 0; i < 8; i++) grid.Add(Rs());
 
-            int r = 0;
-            long goodCnt = 0;
-            for (int l = 0; l < S.Length; l++)
+            var colLabels = new [] { "a", "b", "c", "d", "e", "f", "g", "h" };
+            var rowLabels = new [] { "8", "7", "6", "5", "4", "3", "2", "1" };
+
+            for (int i = 0; i < 8; i++)
             {
-                while (r < S.Length && IsGood(S.Substring(l, r - l + 1)))
-                {
-                    goodCnt++;
-                    r++;
-                }
+                var asterIdx = grid[i].IndexOf('*');
+                if (asterIdx == -1) continue;
 
-                if (r == l) r++;
+                var cellLabel = colLabels[asterIdx] + rowLabels[i];
+                Console.WriteLine(cellLabel);
+                return;
             }
-
-            Console.WriteLine(goodCnt);
-        }
-
-        bool IsGood(string str)
-        {
-            if (str.Length == 0 || str.Length % 2 == 1) return false;
-
-            var firstHalf = str.Substring(0, str.Length / 2)
-                .OrderBy(c => c)
-                .ToArray();
-            var secondHalf = str.Substring(str.Length / 2, str.Length / 2)
-                .OrderBy(c => c)
-                .ToArray();
-            return firstHalf.SequenceEqual(secondHalf);
         }
 
         static string Rs(){return Console.ReadLine();}

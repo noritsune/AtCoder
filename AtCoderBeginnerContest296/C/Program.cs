@@ -15,35 +15,21 @@ namespace KyoPro {
     public class Solver {
         public void Solve()
         {
-            var S = Rs();
+            var NX = Rla();
+            var N = NX[0]; var X = NX[1];
+            var As = Rla();
 
-            int r = 0;
-            long goodCnt = 0;
-            for (int l = 0; l < S.Length; l++)
+            var AsSet = As.ToHashSet();
+            foreach (var A in AsSet)
             {
-                while (r < S.Length && IsGood(S.Substring(l, r - l + 1)))
-                {
-                    goodCnt++;
-                    r++;
-                }
+                var remained = A - X;
+                if (!AsSet.Contains(remained)) continue;
 
-                if (r == l) r++;
+                Console.WriteLine("Yes");
+                return;
             }
 
-            Console.WriteLine(goodCnt);
-        }
-
-        bool IsGood(string str)
-        {
-            if (str.Length == 0 || str.Length % 2 == 1) return false;
-
-            var firstHalf = str.Substring(0, str.Length / 2)
-                .OrderBy(c => c)
-                .ToArray();
-            var secondHalf = str.Substring(str.Length / 2, str.Length / 2)
-                .OrderBy(c => c)
-                .ToArray();
-            return firstHalf.SequenceEqual(secondHalf);
+            Console.WriteLine("No");
         }
 
         static string Rs(){return Console.ReadLine();}
