@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
+namespace KyoPro
+{
 public static class CONST
 {
     public const long MOD = 998244353;
@@ -1114,4 +1116,5 @@ public struct ModInt : IEquatable<ModInt>
 
         return Num == other.Num;
     }
+}
 }
