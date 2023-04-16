@@ -9,6 +9,13 @@ namespace Test
 	public class UnitTest1
 	{
 		const string testCaseDirPath = "../../../SampleInOut/";
+
+		[TestMethod]
+		public void ModIntの除算が正しく動くこと()
+		{
+			var inputs = new[] { 0, 1, 2 };
+			var expected = new[] { 0, 1, 2 };
+		}
 		
 		[TestMethod]
 		public void Test1()

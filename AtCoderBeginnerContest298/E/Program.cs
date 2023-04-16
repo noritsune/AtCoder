@@ -4,35 +4,121 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
-namespace KyoPro {
-    public static class EntryPoint {
-        public static void Main() {
+namespace KyoPro
+{
+    public static class CONST
+    {
+        public const long MOD = 998244353;
+    }
+
+    public static class EntryPoint
+    {
+        public static void Main()
+        {
             var solver = new Solver();
             solver.Solve();
         }
     }
 
-    public class Solver {
-        public void Solve() {
-            var NABPQ = Rla();
-            var N = (int)NABPQ[0]; var A = NABPQ[1]; var B = NABPQ[2]; var P = NABPQ[3]; var Q = NABPQ[4];
+    public class Solver
+    {
+        public void Solve()
+        {
+            var NABPQ = Ria();
+            var N = NABPQ[0]; var A = NABPQ[1]; var B = NABPQ[2]; var P = NABPQ[3]; var Q = NABPQ[4];
 
+            // 高橋くんが地点i, 青木くんが地点jにいて次の手番が[k=0:高橋くん, k=1:青木くん]のときの高橋くんの勝率mod
+            var dp = new ModInt[N + 1, N + 1, 2];
+            for (int i = 0; i < N; i++)
+            {
+                for (int k = 0; k < 2; k++)
+                {
+                    dp[N, i, k] = 1;
+                    dp[i, N, k] = 0;
+                }
+            }
 
+            for (int i = N - 1; i >= 0; i--)
+            {
+                for (int j = N - 1; j >= 0; j--)
+                {
+                    for (int p = 1; p <= P; p++)
+                    {
+                        dp[i, j, 0] = dp[Math.Min(i + p, N), j, 1];
+                    }
+                    dp[i, j, 0] /= P;
+
+                    for (int q = 1; q <= Q; q++)
+                    {
+                        dp[i, j, 1] = dp[i, Math.Min(j + q, N), 0];
+                    }
+                    dp[i, j, 1] /= Q;
+                }
+            }
+
+            Console.WriteLine(dp[A, B, 0]);
         }
 
-        static string Rs(){return Console.ReadLine();}
-        static int Ri(){return int.Parse(Console.ReadLine() ?? string.Empty);}
-        static long Rl(){return long.Parse(Console.ReadLine() ?? string.Empty);}
-        static double Rd(){return double.Parse(Console.ReadLine() ?? string.Empty);}
-        static BigInteger Rb(){return BigInteger.Parse(Console.ReadLine() ?? string.Empty);}
-        static string[] Rsa(char sep=' '){return Console.ReadLine().Split(sep);}
-        static int[] Ria(char sep=' '){return Array.ConvertAll(Console.ReadLine().Split(sep),int.Parse);}
-        static long[] Rla(char sep=' '){return Array.ConvertAll(Console.ReadLine().Split(sep),long.Parse);}
-        static double[] Rda(char sep=' '){return Array.ConvertAll(Console.ReadLine().Split(sep),double.Parse);}
-        static BigInteger[] Rba(char sep=' '){return Array.ConvertAll(Console.ReadLine().Split(sep),BigInteger.Parse);}
-        static int[] GenerateNums(int num, int N){return Enumerable.Repeat(num, N).ToArray();}
-        static int[] GenerateSuretsu(int N){return Enumerable.Range(0, N).ToArray();}
-        
+        static string Rs()
+        {
+            return Console.ReadLine();
+        }
+
+        static int Ri()
+        {
+            return int.Parse(Console.ReadLine() ?? string.Empty);
+        }
+
+        static long Rl()
+        {
+            return long.Parse(Console.ReadLine() ?? string.Empty);
+        }
+
+        static double Rd()
+        {
+            return double.Parse(Console.ReadLine() ?? string.Empty);
+        }
+
+        static BigInteger Rb()
+        {
+            return BigInteger.Parse(Console.ReadLine() ?? string.Empty);
+        }
+
+        static string[] Rsa(char sep = ' ')
+        {
+            return Console.ReadLine().Split(sep);
+        }
+
+        static int[] Ria(char sep = ' ')
+        {
+            return Array.ConvertAll(Console.ReadLine().Split(sep), int.Parse);
+        }
+
+        static long[] Rla(char sep = ' ')
+        {
+            return Array.ConvertAll(Console.ReadLine().Split(sep), long.Parse);
+        }
+
+        static double[] Rda(char sep = ' ')
+        {
+            return Array.ConvertAll(Console.ReadLine().Split(sep), double.Parse);
+        }
+
+        static BigInteger[] Rba(char sep = ' ')
+        {
+            return Array.ConvertAll(Console.ReadLine().Split(sep), BigInteger.Parse);
+        }
+
+        static int[] GenerateNums(int num, int N)
+        {
+            return Enumerable.Repeat(num, N).ToArray();
+        }
+
+        static int[] GenerateSuretsu(int N)
+        {
+            return Enumerable.Range(0, N).ToArray();
+        }
+
         /// <summary>
         /// 素因数分解する
         /// </summary>
@@ -43,18 +129,22 @@ namespace KyoPro {
 
             while (i * i <= n) //※1
             {
-                if(tmp % i == 0){
+                if (tmp % i == 0)
+                {
                     tmp /= i;
                     yield return i;
-                }else{
+                }
+                else
+                {
                     i++;
                 }
             }
-            if(tmp != 1) yield return tmp;//最後の素数も返す
+
+            if (tmp != 1) yield return tmp; //最後の素数も返す
         }
-        
+
         /// <summary>
-        /// 最大公約数をユークリッドの互除法で求める 
+        /// 最大公約数をユークリッドの互除法で求める
         /// </summary>
         static long Gcd(long a, long b)
         {
@@ -76,7 +166,7 @@ namespace KyoPro {
                 return a;
             }
         }
-        
+
         /// <summary>
         /// 2^nパターン分の全探索結果を返す
         /// </summary>
@@ -110,7 +200,7 @@ namespace KyoPro {
         public static int BinarySearch<T>(IEnumerable<T> enumerable, T target, Comparer<T> comparer)
         {
             var array = enumerable as T[] ?? enumerable.ToArray();
-            
+
             // 探索範囲のインデックス
             var min = 0;
             var max = array.Count() - 1;
@@ -119,15 +209,22 @@ namespace KyoPro {
             {
                 var mid = min + (max - min) / 2;
                 int compareResult = comparer.Compare(target, array.ElementAt(mid));
-                if (compareResult > 0) {// 中央値より大きい場合
+                if (compareResult > 0)
+                {
+                    // 中央値より大きい場合
                     min = mid + 1;
                 }
-                else if (compareResult < 0) {// 中央値より小さい場合
+                else if (compareResult < 0)
+                {
+                    // 中央値より小さい場合
                     max = mid - 1;
-                } else {
+                }
+                else
+                {
                     return mid;
                 }
             }
+
             return -1; // 見つからなかった
         }
 
@@ -140,7 +237,7 @@ namespace KyoPro {
         public static int LowerBound<T>(IEnumerable<T> enumerable, T target, Comparer<T> comparer)
         {
             var array = enumerable as T[] ?? enumerable.ToArray();
-            
+
             // 探索範囲のインデックス
             var min = 0;
             var max = array.Count() - 1;
@@ -149,9 +246,10 @@ namespace KyoPro {
             {
                 var mid = min + (max - min) / 2;
                 int compareResult = comparer.Compare(target, array.ElementAt(mid));
-                if(compareResult > 0) min = mid + 1;
+                if (compareResult > 0) min = mid + 1;
                 else max = mid - 1;
             }
+
             return min;
         }
 
@@ -165,7 +263,7 @@ namespace KyoPro {
         public static int LowerBoundUnder<T>(IEnumerable<T> enumerable, T target, Comparer<T> comparer)
         {
             var array = enumerable as T[] ?? enumerable.ToArray();
-            
+
             // 探索範囲のインデックス
             var min = 0;
             var max = array.Count() - 1;
@@ -174,9 +272,10 @@ namespace KyoPro {
             {
                 var mid = min + (max - min) / 2;
                 int compareResult = comparer.Compare(target, array.ElementAt(mid));
-                if(compareResult < 0) max = mid - 1;
+                if (compareResult < 0) max = mid - 1;
                 else min = mid + 1;
             }
+
             return max;
         }
 
@@ -189,7 +288,7 @@ namespace KyoPro {
         public static int UpperBound<T>(IEnumerable<T> enumerable, T target, Comparer<T> comparer)
         {
             var array = enumerable as T[] ?? enumerable.ToArray();
-            
+
             // 探索範囲のインデックス
             var min = 0;
             var max = array.Length - 1;
@@ -198,9 +297,10 @@ namespace KyoPro {
             {
                 var mid = min + (max - min) / 2;
                 int compareResult = comparer.Compare(target, array.ElementAt(mid));
-                if(compareResult < 0) max = mid - 1;
+                if (compareResult < 0) max = mid - 1;
                 else min = mid + 1;
             }
+
             return min;
         }
 
@@ -217,71 +317,96 @@ namespace KyoPro {
                 previous = current;
                 if (previous == 0.0M) return 0;
                 current = (previous + x / previous) / 2;
-            }
-            while (Math.Abs(previous - current) > epsilon);
+            } while (Math.Abs(previous - current) > epsilon);
+
             return current;
+        }
+
+        /// <summary>
+        /// 繰り返し二乗法で累乗のmodを求める
+        /// </summary>
+        long ModPow(long a, long n, long mod)
+        {
+            long res = 1;
+            while (n > 0)
+            {
+                if ((n & 1) == 1) res = res * a % mod;
+                a = a * a % mod;
+                n >>= 1;
+            }
+
+            return res;
         }
     }
 
-    public static class Combination {
+    public static class Combination
+    {
         //使い方:int[][] Is = Combination.Enumerate(nums, k, withRepetition:false).ToArray();
-        public static IEnumerable<T[]> Enumerate<T>(IEnumerable<T> items, int k, bool withRepetition) {
-            if (k == 1) {
+        public static IEnumerable<T[]> Enumerate<T>(IEnumerable<T> items, int k, bool withRepetition)
+        {
+            if (k == 1)
+            {
                 foreach (var item in items)
                     yield return new T[] { item };
                 yield break;
             }
-            foreach (var item in items) {
+
+            foreach (var item in items)
+            {
                 var leftSide = new T[] { item };
 
                 // item よりも前のものを除く （順列と組み合わせの違い)
                 // 重複を許さないので、unusedから item そのものも取り除く
                 var unused = withRepetition ? items : items.SkipWhile(e => !e.Equals(item)).Skip(1).ToList();
 
-                foreach (var rightSide in Enumerate(unused, k - 1, withRepetition)) {
+                foreach (var rightSide in Enumerate(unused, k - 1, withRepetition))
+                {
                     yield return leftSide.Concat(rightSide).ToArray();
                 }
             }
         }
-        
+
 
         //順列をすべて列挙する
         //使い方 var patterns = Enumerable.Range(1, N - 1).Perm().Select(x => x.ToArray()).ToArray();
-        public static IEnumerable<IEnumerable<T>> Perm<T>(this IEnumerable<T> items, int? k = null) where T : IComparable
+        public static IEnumerable<IEnumerable<T>> Perm<T>(this IEnumerable<T> items, int? k = null)
+            where T : IComparable
         {
             var list = items.ToList();
             int len = list.Count;
             yield return list;
-            
-            while(true)
+
+            while (true)
             {
-                int l = len-2;
-                while(l>=0 && list[l].CompareTo(list[l+1])>=0) l--;
-                if(l<0) break;
-            
-                int r = len-1;
-                while(list[l].CompareTo(list[r])>0) r--;
-                if(list[l].CompareTo(list[r])>=0) break;
-            
+                int l = len - 2;
+                while (l >= 0 && list[l].CompareTo(list[l + 1]) >= 0) l--;
+                if (l < 0) break;
+
+                int r = len - 1;
+                while (list[l].CompareTo(list[r]) > 0) r--;
+                if (list[l].CompareTo(list[r]) >= 0) break;
+
                 var tmp = list[l];
                 list[l] = list[r];
                 list[r] = tmp;
-            
-                list.Reverse(l+1,len-l-1);
+
+                list.Reverse(l + 1, len - l - 1);
                 yield return list;
             }
         }
     }
 
-    public class Vector2 {
+    public class Vector2
+    {
         public int X { get; }
         public int Y { get; }
 
-        public Vector2(int x, int y) {
+        public Vector2(int x, int y)
+        {
             X = x;
             Y = y;
         }
-        
+
         public override bool Equals(object obj)
         {
             //objがnullか、型が違うときは、等価でない
@@ -289,22 +414,22 @@ namespace KyoPro {
             {
                 return false;
             }
-            
+
             Vector2 other = (Vector2)obj;
             return X == other.X && Y == other.Y;
         }
 
         public override int GetHashCode() => X ^ Y;
-        
+
         public static Vector2 operator +(Vector2 a, Vector2 b) => new Vector2(a.X + b.X, a.Y + b.Y);
         public static Vector2 operator -(Vector2 a, Vector2 b) => new Vector2(a.X - b.X, a.Y - b.Y);
         public static Vector2 operator *(Vector2 a, int b) => new Vector2(a.X * b, a.Y * b);
-        
+
         public double DistanceTo(Vector2 other) => Math.Sqrt(Math.Pow(X - other.X, 2) + Math.Pow(Y - other.Y, 2));
-        
+
         public double Length => Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
     }
-    
+
     /// <summary>
     /// グラフ
     /// </summary>
@@ -313,14 +438,15 @@ namespace KyoPro {
     {
         public enum Type
         {
-            DirectedGraph,      // 有向グラフ
-            UndirectedGraph,    // 無向グラフ
+            DirectedGraph, // 有向グラフ
+            UndirectedGraph, // 無向グラフ
         }
 
         /// <summary>
         /// グラフ上の全頂点 (ラベル，接続先の頂点集合)
         /// </summary>
         public IReadOnlyDictionary<T, HashSet<T>> Vertices => _vertices;
+
         private readonly Dictionary<T, HashSet<T>> _vertices;
 
         /// <summary>
@@ -397,25 +523,25 @@ namespace KyoPro {
             if (GraphType == Type.DirectedGraph)
             {
                 foreach (var v in _vertices)
-                    foreach (var to in v.Value)
-                        yield return (v.Key, to);
+                foreach (var to in v.Value)
+                    yield return (v.Key, to);
             }
             else if (GraphType == Type.UndirectedGraph)
             {
                 var memo = new Dictionary<T, List<T>>();
                 foreach (var v in _vertices)
-                    foreach (var to in v.Value)
-                    {
-                        if (!memo.ContainsKey(to)) memo[to] = new List<T>();
-                        if (memo[to].Contains(v.Key)) continue;
-                        yield return (v.Key, to);
-                        if (!memo.ContainsKey(v.Key)) memo[v.Key] = new List<T>();
-                        memo[v.Key].Add(to);
-                    }
+                foreach (var to in v.Value)
+                {
+                    if (!memo.ContainsKey(to)) memo[to] = new List<T>();
+                    if (memo[to].Contains(v.Key)) continue;
+                    yield return (v.Key, to);
+                    if (!memo.ContainsKey(v.Key)) memo[v.Key] = new List<T>();
+                    memo[v.Key].Add(to);
+                }
             }
         }
     }
-    
+
     public class PriorityQueue<T> : IEnumerable<T>
     {
         readonly List<T> _data = new List<T>();
@@ -472,6 +598,7 @@ namespace KyoPro {
                 Swap(parentIndex, childIndex);
                 parentIndex = childIndex;
             }
+
             return firstItem;
         }
 
@@ -499,11 +626,11 @@ namespace KyoPro {
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
-    
+
     public class Dijkstra
     {
-        int N { get; }               // 頂点の数
-        private readonly List<Edge>[] _graph;        // グラフの辺のデータ
+        int N { get; } // 頂点の数
+        private readonly List<Edge>[] _graph; // グラフの辺のデータ
 
         /// <summary>
         /// 初期化
@@ -523,7 +650,7 @@ namespace KyoPro {
         /// <param name="b">接続先の頂点</param>
         /// <param name="cost">コスト</param>
         public void Add(int a, int b, long cost = 1)
-                => _graph[a].Add(new Edge(b, cost));
+            => _graph[a].Add(new Edge(b, cost));
 
         /// <summary>
         /// 最短経路のコストを取得
@@ -565,8 +692,8 @@ namespace KyoPro {
 
         struct Edge
         {
-            public readonly int to;                      // 接続先の頂点
-            public readonly long cost;                   // 辺のコスト
+            public readonly int to; // 接続先の頂点
+            public readonly long cost; // 辺のコスト
 
             public Edge(int to, long cost)
             {
@@ -577,8 +704,8 @@ namespace KyoPro {
 
         public struct Vertex : IComparable<Vertex>
         {
-            public readonly int index;                   // 頂点の番号
-            public readonly long cost;                   // 記録したコスト
+            public readonly int index; // 頂点の番号
+            public readonly long cost; // 記録したコスト
 
             public Vertex(int index, long cost)
             {
@@ -596,6 +723,7 @@ namespace KyoPro {
         // 親要素のインデックスを保持する
         // 親要素が存在しない(自身がルートである)とき、マイナスでグループの要素数を持つ
         int[] Parents { get; }
+
         public UnionFind(int n)
         {
             Parents = new int[n];
@@ -645,6 +773,7 @@ namespace KyoPro {
             {
                 (x, y) = (y, x);
             }
+
             // まとめる先のグループの要素数を更新
             Parents[x] += Parents[y];
             // まとめられるグループのルートの親を書き換え
@@ -652,7 +781,7 @@ namespace KyoPro {
             return true;
         }
     }
-    
+
     /// <summary>
     /// Self-Balancing Binary Search Tree
     /// (using Randomized BST)
@@ -666,7 +795,7 @@ namespace KyoPro {
             public T Value;
             public Node LChild;
             public Node RChild;
-            public int Count;     //size of the sub tree
+            public int Count; //size of the sub tree
 
             public Node(T v)
             {
@@ -751,6 +880,7 @@ namespace KyoPro {
                 else if (cmp < 0) t = t.RChild;
                 else break;
             }
+
             return t;
         }
 
@@ -787,7 +917,7 @@ namespace KyoPro {
             while (t != null)
             {
                 var cmp = t.Value.CompareTo(v);
-                    
+
                 if (cmp > 0)
                 {
                     ret = Math.Min(ret, idx);
@@ -800,6 +930,7 @@ namespace KyoPro {
                     idx += (Count(t?.LChild) + 1);
                 }
             }
+
             return ret == int.MaxValue ? Count(torg) : ret;
         }
 
@@ -827,6 +958,7 @@ namespace KyoPro {
                     if (t == null) return idx;
                 }
             }
+
             return ret == int.MaxValue ? Count(torg) : ret;
         }
 
@@ -857,7 +989,7 @@ namespace KyoPro {
             Enumerate(t.RChild, ret);
         }
     }
-    
+
     /// <summary>
     /// C言語のsetクラスに相当するもの
     /// 追加、挿入、LowerBound、UpperBoundがO(logN)でできる
@@ -923,7 +1055,8 @@ namespace KyoPro {
         public Tuple<int, int> EqualRange(T v)
         {
             if (!Contains(v)) return new Tuple<int, int>(-1, -1);
-            return new Tuple<int, int>(SB_BinarySearchTree<T>.LowerBound(_root, v), SB_BinarySearchTree<T>.UpperBound(_root, v) - 1);
+            return new Tuple<int, int>(SB_BinarySearchTree<T>.LowerBound(_root, v),
+                SB_BinarySearchTree<T>.UpperBound(_root, v) - 1);
         }
 
         public List<T> ToList()
@@ -931,7 +1064,7 @@ namespace KyoPro {
             return new List<T>(SB_BinarySearchTree<T>.Enumerate(_root));
         }
     }
-    
+
     /// <summary>
     /// C言語のmultisetクラスに相当するもの
     /// 追加、挿入、LowerBound、UpperBoundがO(logN)でできる
@@ -940,9 +1073,174 @@ namespace KyoPro {
     {
         public override void Insert(T v)
         {
-            _root = _root == null 
+            _root = _root == null
                 ? new SB_BinarySearchTree<T>.Node(v)
                 : SB_BinarySearchTree<T>.Insert(_root, v);
+        }
+    }
+
+    public struct ModInt : IEquatable<ModInt>
+    {
+        public long Num;
+        const bool ModIsPrime = true;
+
+        public ModInt(long num)
+        {
+            Num = num;
+        }
+
+        public static ModInt GetInv(long f)
+        {
+            return ModIsPrime ? GetInvByFermat(f) : GetInvByEuclid(f);
+        }
+
+        // x^n
+        public static long Power(long x, long n)
+        {
+            x %= CONST.MOD;
+            long pow = 1;
+            while (n > 0)
+            {
+                if (n % 2 == 0)
+                {
+                    x *= x;
+                    x %= CONST.MOD;
+                    n /= 2;
+                }
+                else
+                {
+                    pow *= x;
+                    pow %= CONST.MOD;
+                    n--;
+                }
+            }
+
+            return pow;
+        }
+
+        public static ModInt GetInvByFermat(long f)
+        {
+            // フェルマーの小定理 a^(-1) = a^(mod-2)
+            // Modが素数であることが前提
+            return new ModInt(Power(f, CONST.MOD - 2));
+        }
+
+        public static void Swap<T>(ref T lhs, ref T rhs)
+        {
+            T temp = lhs;
+            lhs = rhs;
+            rhs = temp;
+        }
+
+        public static ModInt GetInvByEuclid(long a)
+        {
+            // 拡張ユークリッドの互除法
+            long b = CONST.MOD, u = 1, v = 0;
+            while (b != 0)
+            {
+                long t = a / b;
+                a -= t * b;
+                Swap(ref a, ref b);
+                u -= t * v;
+                Swap(ref u, ref v);
+            }
+
+            u %= CONST.MOD;
+            if (u < 0)
+            {
+                u += CONST.MOD;
+            }
+
+            return u;
+        }
+
+        public ModInt GetInv()
+        {
+            return GetInv(Num);
+        }
+
+        public override string ToString()
+        {
+            return Num.ToString();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ModInt @int && Num == @int.Num;
+        }
+
+        public override int GetHashCode()
+        {
+            return Num.GetHashCode();
+        }
+
+        public static bool operator ==(ModInt left, ModInt right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ModInt left, ModInt right)
+        {
+            return !(left == right);
+        }
+
+        public static ModInt operator +(ModInt l, ModInt r)
+        {
+            l.Num += r.Num;
+            if (l.Num >= CONST.MOD)
+            {
+                l.Num -= CONST.MOD;
+            }
+
+            return l;
+        }
+
+        public static ModInt operator -(ModInt l, ModInt r)
+        {
+            l.Num -= r.Num;
+            if (l.Num < 0)
+            {
+                l.Num += CONST.MOD;
+            }
+
+            return l;
+        }
+
+        public static ModInt operator *(ModInt l, ModInt r)
+        {
+            return new ModInt(l.Num * r.Num % CONST.MOD);
+        }
+
+        public static ModInt operator /(ModInt l, ModInt r)
+        {
+            return l * r.GetInv();
+        }
+
+
+        public static ModInt operator /(ModInt l, int r)
+        {
+            return l * ((ModInt)r).GetInv();
+        }
+
+        public static implicit operator ModInt(long n)
+        {
+            n %= CONST.MOD;
+            if (n < 0)
+            {
+                n += CONST.MOD;
+            }
+
+            return new ModInt(n);
+        }
+
+        public bool Equals(ModInt other)
+        {
+            if (this == other)
+            {
+                return true;
+            }
+
+            return Num == other.Num;
         }
     }
 }
