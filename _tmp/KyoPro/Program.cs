@@ -1096,6 +1096,17 @@ public struct ModInt : IEquatable<ModInt>
         return new ModInt(l.Num * r.Num % CONST.MOD);
     }
 
+    public static ModInt operator /(ModInt l, ModInt r)
+    {
+        return l * r.GetInv();
+    }
+
+
+    public static ModInt operator /(ModInt l, int r)
+    {
+        return l * ((ModInt)r).GetInv();
+    }
+
     public static implicit operator ModInt(long n)
     {
         n %= CONST.MOD;
