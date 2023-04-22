@@ -19,8 +19,24 @@ public static class EntryPoint {
 }
 
 public class Solver {
-    public void Solve() {
+    public void Solve()
+    {
+        var N = Ri();
+        var S = Rs();
 
+        var stickCnt = 0;
+        for (var i = 0; i < S.Length; i++)
+        {
+            switch (S[i])
+            {
+                case '|':
+                    stickCnt++;
+                    break;
+                case '*':
+                    Console.WriteLine(stickCnt == 1 ? "in" : "out");
+                    return;
+            }
+        }
     }
 
     static string Rs(){return Console.ReadLine();}

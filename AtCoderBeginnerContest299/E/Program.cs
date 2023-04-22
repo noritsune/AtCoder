@@ -19,8 +19,65 @@ public static class EntryPoint {
 }
 
 public class Solver {
-    public void Solve() {
+    public void Solve()
+    {
+        var NM = Ria();
+        var N = NM[0]; var M = NM[1];
+        var graph = new IntGraph(GraphType.Undirected);
+        graph.InitFromStdin(N, M);
 
+        var dijkstra = new Dijkstra(N + 1);
+        foreach (var from in graph.Vertices.Keys)
+        {
+            foreach (var to in graph.Vertices[from])
+            {
+                dijkstra.Add(from, to);
+                dijkstra.Add(to, from);
+            }
+        }
+
+        // 0: 白, 1: 黒
+        var cols = new int[N + 1];
+        for (int i = 0; i <= N; i++)
+        {
+            cols[i] = 1;
+        }
+
+        var K = Ri();
+        var startToMinCosts = new Dictionary<int, long[]>();
+        var pds = new List<(int p, int d)>();
+        for (int k = 0; k < K; k++)
+        {
+            var pd = Ria();
+            var p = pd[0]; var d = pd[1];
+            pds.Add((p, d));
+
+            var minCosts = dijkstra.GetMinCost(p);
+            startToMinCosts[p] = minCosts;
+
+            for (int other = 1; other <= N; other++)
+            {
+                var minCost = minCosts[other];
+
+                // 範囲より内側は間違いなく白
+                if (minCost < d) cols[other] = 0;
+            }
+        }
+
+        foreach ((var p, var d) in pds)
+        {
+            var minCosts = startToMinCosts[p];
+            var vertsCostD = Enumerable.Range(1, N).Where(vert => minCosts[vert] == d).ToList();
+            var isAny1 = vertsCostD.Any(vert => cols[vert] == 1);
+            if (!isAny1)
+            {
+                Console.WriteLine("No");
+                return;
+            }
+        }
+
+        Console.WriteLine("Yes");
+        Console.WriteLine(string.Join("", cols.Skip(1)));
     }
 
     static string Rs(){return Console.ReadLine();}
@@ -323,18 +380,18 @@ public class Vector2 {
     public double Length => Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
 }
 
+public enum GraphType
+{
+    Directed,      // 有向グラフ
+    Undirected,    // 無向グラフ
+}
+
 /// <summary>
 /// グラフ
 /// </summary>
 /// <typeparam name="T">頂点のラベルの型</typeparam>
 public class Graph<T>
 {
-    public enum Type
-    {
-        DirectedGraph,      // 有向グラフ
-        UndirectedGraph,    // 無向グラフ
-    }
-
     /// <summary>
     /// グラフ上の全頂点 (ラベル，接続先の頂点集合)
     /// </summary>
@@ -344,15 +401,15 @@ public class Graph<T>
     /// <summary>
     /// グラフの種類(有向グラフ or 無向グラフ)
     /// </summary>
-    public Type GraphType { get; }
+    public GraphType GraphType { get; }
 
-    public Graph(Type type)
+    public Graph(GraphType type)
     {
         _vertices = new Dictionary<T, HashSet<T>>();
         GraphType = type;
     }
 
-    public Graph(Type type, IEnumerable<(T, HashSet<T>)> vertices) : this(type)
+    public Graph(GraphType type, IEnumerable<(T, HashSet<T>)> vertices) : this(type)
     {
         foreach (var v in vertices)
             _vertices[v.Item1] = v.Item2;
@@ -391,7 +448,7 @@ public class Graph<T>
         if (!_vertices.ContainsKey(from) || !_vertices.ContainsKey(to)) return false;
 
         _vertices[from].Add(to);
-        if (GraphType == Type.UndirectedGraph) _vertices[to].Add(from);
+        if (GraphType == GraphType.Undirected) _vertices[to].Add(from);
         return true;
     }
 
@@ -402,7 +459,7 @@ public class Graph<T>
     public int GetEdgeCount()
     {
         var count = _vertices.Aggregate(0, (sum, v) => sum += v.Value.Count);
-        if (GraphType == Type.DirectedGraph) return count;
+        if (GraphType == GraphType.Directed) return count;
         else return count / 2;
     }
 
@@ -412,13 +469,13 @@ public class Graph<T>
     /// <returns>辺のコレクション(接続元のラベル, 接続先のラベル)</returns>
     public IEnumerable<(T, T)> GetEdges()
     {
-        if (GraphType == Type.DirectedGraph)
+        if (GraphType == GraphType.Directed)
         {
             foreach (var v in _vertices)
                 foreach (var to in v.Value)
                     yield return (v.Key, to);
         }
-        else if (GraphType == Type.UndirectedGraph)
+        else if (GraphType == GraphType.Undirected)
         {
             var memo = new Dictionary<T, List<T>>();
             foreach (var v in _vertices)
@@ -430,6 +487,22 @@ public class Graph<T>
                     if (!memo.ContainsKey(v.Key)) memo[v.Key] = new List<T>();
                     memo[v.Key].Add(to);
                 }
+        }
+    }
+}
+
+public class IntGraph : Graph<int>
+{
+    public IntGraph(GraphType type) : base(type) { }
+
+    public void InitFromStdin(int N, int M)
+    {
+        for (int i = 1; i <= N; i++) AddVertex(i);
+
+        for (int i = 0; i < M; i++)
+        {
+            var uv = Console.ReadLine().Split().Select(int.Parse).ToArray();
+            AddEdge(uv[0], uv[1]);
         }
     }
 }

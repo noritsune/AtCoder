@@ -19,8 +19,28 @@ public static class EntryPoint {
 }
 
 public class Solver {
-    public void Solve() {
+    public void Solve()
+    {
+        var N = Ri();
 
+        var min = 1;
+        var max = N;
+        for (int i = 0; i < 20; i++)
+        {
+            var mid = min + (max - min) / 2;
+            Console.WriteLine($"? {mid}");
+            Console.Clear();
+
+            var si = Ri();
+            if(si == 0) min = mid + 1;
+            else max = mid - 1;
+
+            if (min > max)
+            {
+                Console.WriteLine($"! {min - 1}");
+                return;
+            }
+        }
     }
 
     static string Rs(){return Console.ReadLine();}

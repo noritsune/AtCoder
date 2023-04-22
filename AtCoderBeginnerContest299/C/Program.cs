@@ -19,8 +19,53 @@ public static class EntryPoint {
 }
 
 public class Solver {
-    public void Solve() {
+    public void Solve()
+    {
+        var N = Ri();
+        var S = Rs();
 
+        var beginIdxes = new List<int>();
+        var endIdxes = new List<int>();
+        bool isInDango = false;
+        for (int i = 0; i < N; i++)
+        {
+            if (S[i] == 'o')
+            {
+                if (!isInDango)
+                {
+                    beginIdxes.Add(i);
+                }
+                isInDango = true;
+            }
+            else
+            {
+                if (isInDango)
+                {
+                    endIdxes.Add(i - 1);
+                }
+                isInDango = false;
+            }
+        }
+        if (isInDango)
+        {
+            endIdxes.Add(N - 1);
+        }
+
+        var maxContinue = -1;
+        for (int i = 0; i < beginIdxes.Count; i++)
+        {
+            var begin = beginIdxes[i];
+            var end   = endIdxes[i];
+
+            bool hasBeginKushi = begin - 1 >= 0 && S[begin - 1] == '-';
+            bool hasEndKushi   = end + 1 < N    && S[end + 1]   == '-';
+            if (!hasBeginKushi && !hasEndKushi) continue;
+
+            var continueCount = end - begin + 1;
+            maxContinue = Math.Max(maxContinue, continueCount);
+        }
+
+        Console.WriteLine(maxContinue);
     }
 
     static string Rs(){return Console.ReadLine();}

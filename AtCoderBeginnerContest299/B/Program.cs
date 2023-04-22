@@ -19,8 +19,26 @@ public static class EntryPoint {
 }
 
 public class Solver {
-    public void Solve() {
+    public void Solve()
+    {
+        var NT = Ria();
+        var N = NT[0]; var T = NT[1];
+        var Cs = Ria();
+        var Rs = Ria();
 
+        var targetC = Cs.Contains(T) ? T : Cs[0];
+        var maxRInTargetC = 0;
+        var winner = 0;
+        for (int i = 0; i < N; i++)
+        {
+            if (Cs[i] != targetC) continue;
+            if (Rs[i] <= maxRInTargetC) continue;
+
+            maxRInTargetC = Rs[i];
+            winner = i + 1;
+        }
+
+        Console.WriteLine(winner);
     }
 
     static string Rs(){return Console.ReadLine();}
