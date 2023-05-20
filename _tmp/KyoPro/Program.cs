@@ -534,45 +534,48 @@ public class PriorityQueue<T> : IEnumerable<T>
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
 
-public class Dijkstra
+public class Dijkstra<T> where T : notnull
 {
-    int N { get; }               // 頂点の数
-    private readonly List<Edge>[] _graph;        // グラフの辺のデータ
+    private readonly Dictionary<T, List<Edge<T>>> _graph;        // グラフの辺のデータ
 
     /// <summary>
     /// 初期化
     /// </summary>
-    /// <param name="n">頂点数</param>
-    public Dijkstra(int n)
+    public Dijkstra()
     {
-        N = n;
-        _graph = new List<Edge>[n];
-        for (int i = 0; i < n; i++) _graph[i] = new List<Edge>();
+        _graph = new Dictionary<T, List<Edge<T>>>();
+    }
+
+    public void AddVertex(T vertex)
+    {
+        _graph.TryAdd(vertex, new List<Edge<T>>());
     }
 
     /// <summary>
     /// 辺を追加
     /// </summary>
-    /// <param name="a">接続元の頂点</param>
-    /// <param name="b">接続先の頂点</param>
+    /// <param name="from">接続元の頂点</param>
+    /// <param name="to">接続先の頂点</param>
     /// <param name="cost">コスト</param>
-    public void Add(int a, int b, long cost = 1)
-            => _graph[a].Add(new Edge(b, cost));
+    public void AddEdge(T from, T to, long cost = 1)
+    {
+        _graph[from].Add(new Edge<T>(to, cost));
+    }
 
     /// <summary>
     /// 最短経路のコストを取得
     /// </summary>
     /// <param name="start">開始頂点</param>
-    public long[] GetMinCost(int start)
+    public Dictionary<T, long> GetMinCost(T start)
     {
         // コストをスタート頂点以外を無限大に
-        var cost = new long[N];
-        for (int i = 0; i < N; i++) cost[i] = 1000000000000000000;
+        var cost = new Dictionary<T, long>();
+        foreach (var v in _graph.Keys) cost[v] = long.MaxValue;
         cost[start] = 0;
 
         // 未確定の頂点を格納する優先度付きキュー(コストが小さいほど優先度が高い)
-        var q = new PriorityQueue<Vertex>(Comparer<Vertex>.Create((a, b) => b.CompareTo(a)));
-        q.Enqueue(new Vertex(start, 0));
+        var q = new PriorityQueue<Vertex<T>>(Comparer<Vertex<T>>.Create((a, b) => b.CompareTo(a)));
+        q.Enqueue(new Vertex<T>(start, 0));
 
         while (q.Count > 0)
         {
@@ -588,7 +591,7 @@ public class Dijkstra
                 {
                     // 既に記録されているコストより小さければコストを更新
                     cost[e.to] = v.cost + e.cost;
-                    q.Enqueue(new Vertex(e.to, cost[e.to]));
+                    q.Enqueue(new Vertex<T>(e.to, cost[e.to]));
                 }
             }
         }
@@ -597,30 +600,30 @@ public class Dijkstra
         return cost;
     }
 
-    struct Edge
+    struct Edge<T>
     {
-        public readonly int to;                      // 接続先の頂点
+        public readonly T to;                      // 接続先の頂点
         public readonly long cost;                   // 辺のコスト
 
-        public Edge(int to, long cost)
+        public Edge(T to, long cost)
         {
             this.to = to;
             this.cost = cost;
         }
     }
 
-    public struct Vertex : IComparable<Vertex>
+    public struct Vertex<T> : IComparable<Vertex<T>>
     {
-        public readonly int index;                   // 頂点の番号
+        public readonly T index;                   // 頂点の番号
         public readonly long cost;                   // 記録したコスト
 
-        public Vertex(int index, long cost)
+        public Vertex(T index, long cost)
         {
             this.index = index;
             this.cost = cost;
         }
 
-        public int CompareTo(Vertex other)
+        public int CompareTo(Vertex<T> other)
             => cost.CompareTo(other.cost);
     }
 }
