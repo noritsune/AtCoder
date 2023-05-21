@@ -31,30 +31,20 @@ public class Solver {
             Ss.Add(Ria());
         }
 
-        var dijkstra = new Dijkstra<string>();
-
-        // 超頂点を追加する
-        for (int vertNum = 1; vertNum <= M; vertNum++)
-        {
-            dijkstra.AddVertex($"v{vertNum}");
-        }
+        var dijkstra = new Dijkstra(N + M + 1);
 
         for (int floor = 0; floor < N; floor++)
         {
-            var floorStr = $"f{floor}";
-            dijkstra.AddVertex(floorStr);
-
             var S = Ss[floor];
             foreach (var vertNum in S)
             {
-                var vertStr = $"v{vertNum}";
                 // 超頂点に辺を貼る
-                dijkstra.AddEdge(floorStr, vertStr, 1);
-                dijkstra.AddEdge(vertStr, floorStr, 1);
+                dijkstra.Add(floor, N + vertNum, 1);
+                dijkstra.Add(N + vertNum, floor, 1);
             }
         }
 
-        long minCost = dijkstra.GetMinCost($"v1")[$"v{M}"];
+        long minCost = dijkstra.GetMinCost(N + 1)[N + M];
         Console.WriteLine(minCost == long.MaxValue ? -1 : (minCost - 1) / 2);
     }
 
@@ -1201,6 +1191,97 @@ public struct ModInt : IEquatable<ModInt>
         }
 
         return Num == other.Num;
+    }
+}
+
+public class Dijkstra
+{
+    int N { get; }               // 頂点の数
+    private readonly List<Edge>[] _graph;        // グラフの辺のデータ
+
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="n">頂点数</param>
+    public Dijkstra(int n)
+    {
+        N = n;
+        _graph = new List<Edge>[n];
+        for (int i = 0; i < n; i++) _graph[i] = new List<Edge>();
+    }
+
+    /// <summary>
+    /// 辺を追加
+    /// </summary>
+    /// <param name="a">接続元の頂点</param>
+    /// <param name="b">接続先の頂点</param>
+    /// <param name="cost">コスト</param>
+    public void Add(int a, int b, long cost = 1)
+            => _graph[a].Add(new Edge(b, cost));
+
+    /// <summary>
+    /// 最短経路のコストを取得
+    /// </summary>
+    /// <param name="start">開始頂点</param>
+    public long[] GetMinCost(int start)
+    {
+        // コストをスタート頂点以外を無限大に
+        var cost = new long[N];
+        for (int i = 0; i < N; i++) cost[i] = long.MaxValue;
+        cost[start] = 0;
+
+        // 未確定の頂点を格納する優先度付きキュー(コストが小さいほど優先度が高い)
+        var q = new PriorityQueue<Vertex>(Comparer<Vertex>.Create((a, b) => b.CompareTo(a)));
+        q.Enqueue(new Vertex(start, 0));
+
+        while (q.Count > 0)
+        {
+            var v = q.Dequeue();
+
+            // 記録されているコストと異なる(コストがより大きい)場合は無視
+            if (v.cost != cost[v.index]) continue;
+
+            // 今回確定した頂点からつながる頂点に対して更新を行う
+            foreach (var e in _graph[v.index])
+            {
+                if (cost[e.to] > v.cost + e.cost)
+                {
+                    // 既に記録されているコストより小さければコストを更新
+                    cost[e.to] = v.cost + e.cost;
+                    q.Enqueue(new Vertex(e.to, cost[e.to]));
+                }
+            }
+        }
+
+        // 確定したコストを返す
+        return cost;
+    }
+
+    struct Edge
+    {
+        public readonly int to;                      // 接続先の頂点
+        public readonly long cost;                   // 辺のコスト
+
+        public Edge(int to, long cost)
+        {
+            this.to = to;
+            this.cost = cost;
+        }
+    }
+
+    public struct Vertex : IComparable<Vertex>
+    {
+        public readonly int index;                   // 頂点の番号
+        public readonly long cost;                   // 記録したコスト
+
+        public Vertex(int index, long cost)
+        {
+            this.index = index;
+            this.cost = cost;
+        }
+
+        public int CompareTo(Vertex other)
+            => cost.CompareTo(other.cost);
     }
 }
 }
