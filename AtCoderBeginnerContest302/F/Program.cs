@@ -34,33 +34,27 @@ public class Solver {
         var dijkstra = new Dijkstra<string>();
 
         // 超頂点を追加する
-        for (int i = 1; i <= M; i++)
+        for (int vertNum = 1; vertNum <= M; vertNum++)
         {
-            dijkstra.AddVertex(i.ToString());
+            dijkstra.AddVertex($"v{vertNum}");
         }
 
         for (int floor = 0; floor < N; floor++)
         {
+            var floorStr = $"f{floor}";
+            dijkstra.AddVertex(floorStr);
+
             var S = Ss[floor];
             foreach (var vertNum in S)
             {
-                var vertStr = $"{floor},{vertNum}";
-                dijkstra.AddVertex(vertStr);
-
+                var vertStr = $"v{vertNum}";
                 // 超頂点に辺を貼る
-                dijkstra.AddEdge(vertStr, vertNum.ToString(), 1);
-                dijkstra.AddEdge(vertNum.ToString(), vertStr, 1);
-            }
-
-            for (int SIdx = 0; SIdx < S.Length - 1; SIdx++)
-            {
-                var fromStr = $"{floor},{S[SIdx]}";
-                var toStr = $"{floor},{S[SIdx + 1]}";
-                dijkstra.AddEdge(fromStr, toStr, 0);
+                dijkstra.AddEdge(floorStr, vertStr, 1);
+                dijkstra.AddEdge(vertStr, floorStr, 1);
             }
         }
 
-        long minCost = dijkstra.GetMinCost("1")[M.ToString()];
+        long minCost = dijkstra.GetMinCost($"v1")[$"v{M}"];
         Console.WriteLine(minCost == long.MaxValue ? -1 : (minCost - 1) / 2);
     }
 
