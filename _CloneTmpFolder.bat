@@ -14,6 +14,7 @@ set problemNames[1]=B
 set problemNames[2]=C
 set problemNames[3]=D
 set problemNames[4]=E
+set problemNames[5]=F
 
 rem 問題ごとに処理を繰り返す
 for /l %%i in (0, 1, 4) do (
