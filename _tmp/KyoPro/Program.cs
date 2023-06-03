@@ -632,7 +632,7 @@ public class GenericDijkstra<T> where T : notnull
     /// <summary>
     /// 初期化
     /// </summary>
-    public Dijkstra()
+    public GenericDijkstra()
     {
         _graph = new Dictionary<T, List<Edge<T>>>();
     }
