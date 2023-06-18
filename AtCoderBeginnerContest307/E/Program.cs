@@ -24,8 +24,10 @@ public class Solver {
         var NKQ = Ria();
         var N = NKQ[0]; var K = NKQ[1]; var Q = NKQ[2];
 
-        var nums = new MultiSet<long>();
-        for (int i = 0; i < N; i++) nums.Insert(0);
+        var rankers = new MultiSet<long>();
+        var nonRankers = new MultiSet<long>();
+        for (int i = 0; i < K; i++) rankers.Insert(0);
+        for (int i = K; i < N; i++) nonRankers.Insert(0);
         var idxToNum = new long[N + 1];
 
         long sum = 0;
@@ -34,39 +36,57 @@ public class Solver {
             var XY = Ria();
             int idx = XY[0]; long newNum = XY[1];
 
-            var upperBoundNewNum = nums.UpperBound(newNum);
-            var newNumRank = N - upperBoundNewNum;
             var oldNum = idxToNum[idx];
-            var upperBoundOldNum = nums.UpperBound(oldNum);
-            var oldNumRank = N - upperBoundOldNum;
-
-            if (oldNumRank < K)
-            {
-                // 上位K個の群にある数が更新される場合は一旦抜ける
-                sum -= oldNum;
-            }
-            else if (newNumRank < K)
-            {
-                // K位の数が押し出される場合
-                sum -= nums[N - K];
-            }
-
             idxToNum[idx] = newNum;
-            nums.Remove(oldNum);
-            nums.Insert(newNum);
 
-            if (newNumRank < K)
+            // add操作
+            nonRankers.Insert(newNum);
+            sum = Balance(sum, K, rankers, nonRankers);
+
+            // erase操作
+            if (rankers.Contains(oldNum))
             {
-                // 新しい数が上位K個の群に入る場合は入る
-                sum += newNum;
+                sum -= oldNum;
+                rankers.Remove(oldNum);
             }
-            else if (oldNumRank < K)
+            else
             {
-                // K + 1位の数が入ってくる場合
-                sum += nums[N - K];
+                nonRankers.Remove(oldNum);
             }
+            sum = Balance(sum, K, rankers, nonRankers);
 
             Console.WriteLine(sum);
+        }
+    }
+
+    long Balance(long sum, int K, MultiSet<long> rankers, MultiSet<long> nonRankers)
+    {
+        // rankedNumsを上位K個にする
+        while (rankers.Count() < K)
+        {
+            var moveNum = nonRankers.Max();
+
+            sum += moveNum;
+
+            rankers.Insert(moveNum);
+            nonRankers.Remove(moveNum);
+        }
+
+        if (nonRankers.Count() == 0) return sum;
+
+        // rankedNumsの全ての数値がnotRankedNumsの最大値より大きくなる様に入れ替える
+        while (true)
+        {
+            var rankedNumMin = rankers.Min();
+            var notRankedNumMax = nonRankers.Max();
+            if (rankedNumMin >= notRankedNumMax) return sum;
+
+            sum += notRankedNumMax - rankedNumMin;
+
+            rankers.Remove(rankedNumMin);
+            rankers.Insert(notRankedNumMax);
+            nonRankers.Remove(notRankedNumMax);
+            nonRankers.Insert(rankedNumMin);
         }
     }
 
@@ -857,6 +877,16 @@ public class SB_BinarySearchTree<T> where T : IComparable
         return t?.Count ?? 0;
     }
 
+    public static T Min(Node t)
+    {
+        return t.LChild == null ? t.Value : Min(t.LChild);
+    }
+
+    public static T Max(Node t)
+    {
+        return t.RChild == null ? t.Value : Max(t.RChild);
+    }
+
     static Node Update(Node t)
     {
         t.Count = Count(t.LChild) + Count(t.RChild) + 1;
@@ -1035,7 +1065,7 @@ public class SB_BinarySearchTree<T> where T : IComparable
 
 /// <summary>
 /// C言語のsetクラスに相当するもの
-/// 追加、挿入、LowerBound、UpperBoundがO(logN)でできる
+/// 追加、削除、LowerBound、UpperBoundがO(logN)でできる
 /// </summary>
 public class Set<T> where T : IComparable
 {
@@ -1046,6 +1076,16 @@ public class Set<T> where T : IComparable
     public int Count()
     {
         return SB_BinarySearchTree<T>.Count(_root);
+    }
+
+    public T Min()
+    {
+        return SB_BinarySearchTree<T>.Min(_root);
+    }
+
+    public T Max()
+    {
+        return SB_BinarySearchTree<T>.Max(_root);
     }
 
     public virtual void Insert(T v)
