@@ -14,12 +14,46 @@ public static class CONST
 public static class EntryPoint {
     public static void Main() {
         var solver = new Solver();
-        solver.Solve();
+        solver.Solve1();
     }
 }
 
 public class Solver {
-    public void Solve() {
+    public void Solve2()
+    {
+        var N = Ri();
+        var S = Rs();
+
+        var graph = new Graph<int>(GraphType.Directed);
+        graph.AddVertex(0);
+        var firstV = 0;
+        for (int i = 1; i <= N; i++)
+        {
+            graph.AddVertex(i);
+            if (S[i - 1] == 'L')
+            {
+                graph.AddEdge(i, i - 1);
+                if (i - 1 == firstV) firstV = i;
+            }
+            else
+            {
+                graph.AddEdge(i - 1, i);
+            }
+        }
+
+        var ans = new List<int>();
+        var nextVs = new HashSet<int> { firstV };
+        while (nextVs.Any())
+        {
+            var nextV = nextVs.First();
+            ans.Add(nextV);
+            nextVs = graph.Vertices[nextV];
+        }
+
+        Console.WriteLine(string.Join(" ", ans));
+    }
+
+    public void Solve1() {
         var N = Ri();
         var S = Rs();
 
