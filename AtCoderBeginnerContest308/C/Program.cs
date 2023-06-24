@@ -25,15 +25,11 @@ public class Solver {
         var HA = HAWA[0]; var WA = HAWA[1];
         var gridA = new string[HA];
         for (int i = 0; i < HA; i++) gridA[i] = Rs();
-        gridA = TrimNonBlack(gridA);
-        HA = gridA.Length; WA = gridA[0].Length;
 
         var HBWB = Ria();
         var HB = HBWB[0]; var WB = HBWB[1];
         var gridB = new string[HB];
         for (int i = 0; i < HB; i++) gridB[i] = Rs();
-        gridB = TrimNonBlack(gridB);
-        HB = gridB.Length; WB = gridB[0].Length;
 
         var HXWX = Ria();
         var HX = HXWX[0]; var WX = HXWX[1];
@@ -42,8 +38,8 @@ public class Solver {
         gridX = TrimNonBlack(gridX);
         HX = gridX.Length; WX = gridX[0].Length;
 
-        var HAB = HA + HB * 2; var WAB = WA + WB * 2;
-        var offsetHA = HB; var offsetWA = WB;
+        var HAB = 50; var WAB = 50;
+        var offsetHA = 20; var offsetWA = 20;
         for (int offsetHB = 0; offsetHB < HAB - HB + 1; offsetHB++)
         {
             for (int offsetWB = 0; offsetWB < WAB - WB + 1; offsetWB++)
@@ -67,7 +63,7 @@ public class Solver {
                 var trimmedGridAB = TrimNonBlack(gridAB);
                 var trimmedHAB = trimmedGridAB.Length; var trimmedWAB = trimmedGridAB[0].Length;
 
-                if (trimmedHAB > HX || trimmedWAB > WX) continue;
+                if (trimmedHAB != HX || trimmedWAB != WX) continue;
 
                 // Xと一致する領域があるかチェック
                 bool isOk = true;

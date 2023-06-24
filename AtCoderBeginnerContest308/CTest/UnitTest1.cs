@@ -39,6 +39,12 @@ namespace Test
 		{
 			TestInOut(testCaseDirPath + "5In.txt", testCaseDirPath + "5Out.txt");
 		}
+
+		[TestMethod]
+		public void Test6()
+		{
+			TestInOut(testCaseDirPath + "6In.txt", testCaseDirPath + "6Out.txt");
+		}
 		
 		private static void TestInOut(string inputFileName, string outputFileName)
 		{
