@@ -21,23 +21,111 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var N = Ri();
-        var As = Ria();
+        var HAWA = Ria();
+        var HA = HAWA[0]; var WA = HAWA[1];
+        var gridA = new string[HA];
+        for (int i = 0; i < HA; i++) gridA[i] = Rs();
 
-        var numToCnt = new int[N + 1];
-        var numToCenterIdx = new SortedDictionary<int, int>();
-        for (int i = 0; i < As.Length; i++)
+        var HBWB = Ria();
+        var HB = HBWB[0]; var WB = HBWB[1];
+        var gridB = new string[HB];
+        for (int i = 0; i < HB; i++) gridB[i] = Rs();
+
+        var HXWX = Ria();
+        var HX = HXWX[0]; var WX = HXWX[1];
+        var gridX = new string[HX];
+        for (int i = 0; i < HX; i++) gridX[i] = Rs();
+        gridX = TrimNonBlack(gridX);
+        HX = gridX.Length; WX = gridX[0].Length;
+
+        var HAB = 50; var WAB = 50;
+        var offsetHA = 20; var offsetWA = 20;
+        for (int offsetHB = 0; offsetHB < HAB - HB + 1; offsetHB++)
         {
-            var A = As[i];
-            numToCnt[A]++;
-
-            if (numToCnt[A] == 2)
+            for (int offsetWB = 0; offsetWB < WAB - WB + 1; offsetWB++)
             {
-                numToCenterIdx.Add(i, A);
+                // 重ねる
+                var gridAB = new string[HAB];
+                for (int h = 0; h < HAB; h++)
+                {
+                    var row = "";
+                    for (int w = 0; w < WAB; w++)
+                    {
+                        var hA = h - offsetHA; var wA = w - offsetWA;
+                        bool isABlack = hA >= 0 && hA < HA && wA >= 0 && wA < WA && gridA[hA][wA] == '#';
+                        var hB = h - offsetHB; var wB = w - offsetWB;
+                        bool isBBlack = hB >= 0 && hB < HB && wB >= 0 && wB < WB && gridB[hB][wB] == '#';
+                        row += (isABlack || isBBlack) ? '#' : '.';
+                    }
+                    gridAB[h] = row;
+                }
+
+                var trimmedGridAB = TrimNonBlack(gridAB);
+                var trimmedHAB = trimmedGridAB.Length; var trimmedWAB = trimmedGridAB[0].Length;
+
+                if (trimmedHAB != HX || trimmedWAB != WX) continue;
+
+                // Xと一致する領域があるかチェック
+                bool isOk = true;
+                for (int offsetHX = 0; offsetHX < trimmedHAB - HX + 1; offsetHX++)
+                {
+                    for (int offsetWX = 0; offsetWX < trimmedWAB - WX + 1; offsetWX++)
+                    {
+                        for (int h = 0; h < HX; h++)
+                        {
+                            for (int w = 0; w < WX; w++)
+                            {
+                                bool isXBlack = gridX[h][w] == '#';
+                                bool isABlack = trimmedGridAB[h + offsetHX][w + offsetWX] == '#';
+                                if (isXBlack != isABlack)
+                                {
+                                    isOk = false;
+                                    break;
+                                }
+                            }
+                            if (!isOk) break;
+                        }
+
+                        if (isOk)
+                        {
+                            Console.WriteLine("Yes");
+                            return;
+                        }
+                    }
+                }
             }
         }
 
-        Console.WriteLine(string.Join(" ", numToCenterIdx.Select(x => x.Value)));
+        Console.WriteLine("No");
+    }
+
+    string[] TrimNonBlack(string[] grid)
+    {
+        var blackRectTop = int.MaxValue;
+        var blackRectBottom = int.MinValue;
+        var blackRectLeft = int.MaxValue;
+        var blackRectRight = int.MinValue;
+        for (int h = 0; h < grid.Length; h++)
+        {
+            for (int w = 0; w < grid[0].Length; w++)
+            {
+                if (grid[h][w] == '#')
+                {
+                    blackRectTop = Math.Min(blackRectTop, h);
+                    blackRectBottom = Math.Max(blackRectBottom, h);
+                    blackRectLeft = Math.Min(blackRectLeft, w);
+                    blackRectRight = Math.Max(blackRectRight, w);
+                }
+            }
+        }
+
+        var ret = new string[blackRectBottom - blackRectTop + 1];
+        for (int h = blackRectTop; h <= blackRectBottom; h++)
+        {
+            ret[h - blackRectTop] = grid[h].Substring(blackRectLeft, blackRectRight - blackRectLeft + 1);
+        }
+
+        return ret;
     }
 
     static string Rs(){return Console.ReadLine();}

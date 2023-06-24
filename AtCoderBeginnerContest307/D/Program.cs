@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Text;
 
 namespace KyoPro
 {
@@ -22,33 +23,33 @@ public class Solver {
     public void Solve()
     {
         var N = Ri();
+        var S = Rs();
 
-        // i番目までの料理を見た時に状態j(0: 元気, 1: 腹痛)の場合の美味しさの総和の最大値
-        var dp = new long[N + 1, 2];
-
-        for (int i = 1; i <= N; i++)
+        var headBracketIdxStack = new Stack<int>();
+        var ansBuilder = new StringBuilder();
+        var removeCnt = 0;
+        for (int i = 0; i < N; i++)
         {
-            var XY = Rla();
-            var isPoison = XY[0] == 1;
-            var score = XY[1];
+            var c = S[i];
+            ansBuilder.Append(c);
 
-            // 食べなかった場合
-            dp[i, 0] = Math.Max(dp[i, 0], dp[i - 1, 0]);
-            dp[i, 1] = Math.Max(dp[i, 1], dp[i - 1, 1]);
-
-            // 食べた場合
-            if (isPoison)
+            switch (c)
             {
-                dp[i, 1] = Math.Max(dp[i, 1], dp[i - 1, 0] + score);
-            }
-            else
-            {
-                dp[i, 0] = Math.Max(dp[i, 0], dp[i - 1, 0] + score);
-                dp[i, 0] = Math.Max(dp[i, 0], dp[i - 1, 1] + score);
+                case '(':
+                    headBracketIdxStack.Push(i);
+                    break;
+                case ')' when headBracketIdxStack.Any():
+                {
+                    var headBracketIdx = headBracketIdxStack.Pop();
+                    var removeLength = i - headBracketIdx + 1 - removeCnt;
+                    ansBuilder.Remove(headBracketIdx, removeLength);
+                    removeCnt += removeLength;
+                    break;
+                }
             }
         }
 
-        Console.WriteLine(Math.Max(dp[N, 0], dp[N, 1]));
+        Console.WriteLine(ansBuilder.ToString());
     }
 
     static string Rs(){return Console.ReadLine();}
@@ -74,7 +75,7 @@ public class Solver {
 
         while (i * i <= n) //※1
         {
-            if(tmp % i == 0){;
+            if(tmp % i == 0){
                 tmp /= i;
                 yield return i;
             }else{
