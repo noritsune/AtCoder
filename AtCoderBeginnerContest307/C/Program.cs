@@ -14,12 +14,79 @@ public static class CONST
 public static class EntryPoint {
     public static void Main() {
         var solver = new Solver();
-        solver.Solve();
+        solver.Solve2();
     }
 }
 
 public class Solver {
-    public void Solve()
+    public void Solve2()
+    {
+        var HAWA = Ria();
+        var HA = HAWA[0];
+        var WA = HAWA[1];
+        var gridA = new string[HA];
+        for (int i = 0; i < HA; i++) gridA[i] = Rs();
+        gridA = TrimNonBlack(gridA);
+        HA = gridA.Length; WA = gridA[0].Length;
+
+        var HBWB = Ria();
+        var HB = HBWB[0];
+        var WB = HBWB[1];
+        var gridB = new string[HB];
+        for (int i = 0; i < HB; i++) gridB[i] = Rs();
+        gridB = TrimNonBlack(gridB);
+        HB = gridB.Length; WB = gridB[0].Length;
+
+        var HXWX = Ria();
+        var HX = HXWX[0];
+        var WX = HXWX[1];
+        var gridX = new string[HX];
+        for (int i = 0; i < HX; i++) gridX[i] = Rs();
+        gridX = TrimNonBlack(gridX);
+        HX = gridX.Length;
+        WX = gridX[0].Length;
+
+        for (int dHA = 0; dHA <= HX - HA; dHA++)
+        {
+            for (int dWA = 0; dWA <= WX - WA; dWA++)
+            {
+                for (int dHB = 0; dHB <= HX - HB; dHB++)
+                {
+                    for (int dWB = 0; dWB <= WX - WB; dWB++)
+                    {
+                        bool isOk = true;
+                        for (int h = 0; h < HX; h++)
+                        {
+                            for (int w = 0; w < WX; w++)
+                            {
+                                var hA = h - dHA; var wA = w - dWA;
+                                bool isABlack = hA >= 0 && hA < HA && wA >= 0 && wA < WA && gridA[hA][wA] == '#';
+                                var hB = h - dHB; var wB = w - dWB;
+                                bool isBBlack = hB >= 0 && hB < HB && wB >= 0 && wB < WB && gridB[hB][wB] == '#';
+                                bool isXBlack = gridX[h][w] == '#';
+                                if ((isABlack || isBBlack) != isXBlack)
+                                {
+                                    isOk = false;
+                                    break;
+                                }
+                            }
+                            if (!isOk) break;
+                        }
+
+                        if (isOk)
+                        {
+                            Console.WriteLine("Yes");
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        Console.WriteLine("No");
+    }
+
+    public void Solve1()
     {
         var HAWA = Ria();
         var HA = HAWA[0]; var WA = HAWA[1];
