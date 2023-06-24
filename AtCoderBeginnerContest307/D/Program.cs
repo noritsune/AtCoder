@@ -25,31 +25,26 @@ public class Solver {
         var N = Ri();
         var S = Rs();
 
-        var headBracketIdxStack = new Stack<int>();
-        var ansBuilder = new StringBuilder();
-        var removeCnt = 0;
+        var ans= new Stack<char>();
+        int depth = 0;
         for (int i = 0; i < N; i++)
         {
             var c = S[i];
-            ansBuilder.Append(c);
+            ans.Push(c);
 
             switch (c)
             {
                 case '(':
-                    headBracketIdxStack.Push(i);
+                    depth++;
                     break;
-                case ')' when headBracketIdxStack.Any():
-                {
-                    var headBracketIdx = headBracketIdxStack.Pop();
-                    var removeLength = i - headBracketIdx + 1 - removeCnt;
-                    ansBuilder.Remove(headBracketIdx, removeLength);
-                    removeCnt += removeLength;
+                case ')' when depth > 0:
+                    while (ans.Any() && ans.Pop() != '(') {}
+                    depth--;
                     break;
-                }
             }
         }
 
-        Console.WriteLine(ansBuilder.ToString());
+        Console.WriteLine(string.Join("", ans.Reverse()));
     }
 
     static string Rs(){return Console.ReadLine();}
@@ -656,19 +651,19 @@ public class Dijkstra
 
 public class GenericDijkstra<T> where T : notnull
 {
-    private readonly Dictionary<T, List<Edge<T>>> _graph;        // グラフの辺のデータ
+    private readonly Dictionary<T, List<Edge>> _graph;        // グラフの辺のデータ
 
     /// <summary>
     /// 初期化
     /// </summary>
     public GenericDijkstra()
     {
-        _graph = new Dictionary<T, List<Edge<T>>>();
+        _graph = new Dictionary<T, List<Edge>>();
     }
 
     public void AddVertex(T vertex)
     {
-        _graph.TryAdd(vertex, new List<Edge<T>>());
+        _graph.TryAdd(vertex, new List<Edge>());
     }
 
     /// <summary>
@@ -679,7 +674,7 @@ public class GenericDijkstra<T> where T : notnull
     /// <param name="cost">コスト</param>
     public void AddEdge(T from, T to, long cost = 1)
     {
-        _graph[from].Add(new Edge<T>(to, cost));
+        _graph[from].Add(new Edge(to, cost));
     }
 
     /// <summary>
@@ -694,8 +689,8 @@ public class GenericDijkstra<T> where T : notnull
         cost[start] = 0;
 
         // 未確定の頂点を格納する優先度付きキュー(コストが小さいほど優先度が高い)
-        var q = new PriorityQueue<Vertex<T>>(Comparer<Vertex<T>>.Create((a, b) => b.CompareTo(a)));
-        q.Enqueue(new Vertex<T>(start, 0));
+        var q = new PriorityQueue<Vertex>(Comparer<Vertex>.Create((a, b) => b.CompareTo(a)));
+        q.Enqueue(new Vertex(start, 0));
 
         while (q.Count > 0)
         {
@@ -711,7 +706,7 @@ public class GenericDijkstra<T> where T : notnull
                 {
                     // 既に記録されているコストより小さければコストを更新
                     cost[e.to] = v.cost + e.cost;
-                    q.Enqueue(new Vertex<T>(e.to, cost[e.to]));
+                    q.Enqueue(new Vertex(e.to, cost[e.to]));
                 }
             }
         }
@@ -720,7 +715,7 @@ public class GenericDijkstra<T> where T : notnull
         return cost;
     }
 
-    struct Edge<T>
+    struct Edge
     {
         public readonly T to;                      // 接続先の頂点
         public readonly long cost;                   // 辺のコスト
@@ -732,7 +727,7 @@ public class GenericDijkstra<T> where T : notnull
         }
     }
 
-    public struct Vertex<T> : IComparable<Vertex<T>>
+    public struct Vertex : IComparable<Vertex>
     {
         public readonly T index;                   // 頂点の番号
         public readonly long cost;                   // 記録したコスト
@@ -743,7 +738,7 @@ public class GenericDijkstra<T> where T : notnull
             this.cost = cost;
         }
 
-        public int CompareTo(Vertex<T> other)
+        public int CompareTo(Vertex other)
             => cost.CompareTo(other.cost);
     }
 }
