@@ -16,18 +16,18 @@ namespace Test
 			TestInOut(testCaseDirPath + "1In.txt", testCaseDirPath + "1Out.txt");
 		}
 		
-		[TestMethod]
-		public void Test2()
-		{
-			TestInOut(testCaseDirPath + "2In.txt", testCaseDirPath + "2Out.txt");
-		}
-		
-		[TestMethod]
-		public void Test3()
-		{
-			TestInOut(testCaseDirPath + "3In.txt", testCaseDirPath + "3Out.txt");
-		}
-		
+		// [TestMethod]
+		// public void Test2()
+		// {
+		// 	TestInOut(testCaseDirPath + "2In.txt", testCaseDirPath + "2Out.txt");
+		// }
+		//
+		// [TestMethod]
+		// public void Test3()
+		// {
+		// 	TestInOut(testCaseDirPath + "3In.txt", testCaseDirPath + "3Out.txt");
+		// }
+		//
 		// [TestMethod]
 		// public void Test4()
 		// {

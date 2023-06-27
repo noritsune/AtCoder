@@ -21,17 +21,17 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var totalWeek = Ri();
-        var dailyScore = Rla();
+        var N = Ri();
+        var S = Rs();
 
-        var weeklyScore = new long[totalWeek];
-        for (int day = 0; day < dailyScore.Length; day++)
+        var ans = "";
+        for (var i = 0; i < S.Length; i++)
         {
-            var week = day / 7;
-            weeklyScore[week] += dailyScore[day];
+            ans += S[i];
+            ans += S[i];
         }
 
-        Console.WriteLine(string.Join(" ", weeklyScore));
+        Console.WriteLine(ans);
     }
 
     static string Rs(){return Console.ReadLine();}

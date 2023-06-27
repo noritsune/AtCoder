@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Text;
 
 namespace KyoPro
 {
@@ -23,28 +22,33 @@ public class Solver {
     public void Solve()
     {
         var N = Ri();
-        var S = Rs();
 
-        var ans= new Stack<char>();
-        int depth = 0;
-        for (int i = 0; i < N; i++)
+        // i番目までの料理を見た時に状態j(0: 元気, 1: 腹痛)の場合の美味しさの総和の最大値
+        var dp = new long[N + 1, 2];
+
+        for (int i = 1; i <= N; i++)
         {
-            var c = S[i];
-            ans.Push(c);
+            var XY = Rla();
+            var isPoison = XY[0] == 1;
+            var score = XY[1];
 
-            switch (c)
+            // 食べなかった場合
+            dp[i, 0] = Math.Max(dp[i, 0], dp[i - 1, 0]);
+            dp[i, 1] = Math.Max(dp[i, 1], dp[i - 1, 1]);
+
+            // 食べた場合
+            if (isPoison)
             {
-                case '(':
-                    depth++;
-                    break;
-                case ')' when depth > 0:
-                    while (ans.Any() && ans.Pop() != '(') {}
-                    depth--;
-                    break;
+                dp[i, 1] = Math.Max(dp[i, 1], dp[i - 1, 0] + score);
+            }
+            else
+            {
+                dp[i, 0] = Math.Max(dp[i, 0], dp[i - 1, 0] + score);
+                dp[i, 0] = Math.Max(dp[i, 0], dp[i - 1, 1] + score);
             }
         }
 
-        Console.WriteLine(string.Join("", ans.Reverse()));
+        Console.WriteLine(Math.Max(dp[N, 0], dp[N, 1]));
     }
 
     static string Rs(){return Console.ReadLine();}
@@ -70,7 +74,7 @@ public class Solver {
 
         while (i * i <= n) //※1
         {
-            if(tmp % i == 0){
+            if(tmp % i == 0){;
                 tmp /= i;
                 yield return i;
             }else{
@@ -651,19 +655,19 @@ public class Dijkstra
 
 public class GenericDijkstra<T> where T : notnull
 {
-    private readonly Dictionary<T, List<Edge>> _graph;        // グラフの辺のデータ
+    private readonly Dictionary<T, List<Edge<T>>> _graph;        // グラフの辺のデータ
 
     /// <summary>
     /// 初期化
     /// </summary>
     public GenericDijkstra()
     {
-        _graph = new Dictionary<T, List<Edge>>();
+        _graph = new Dictionary<T, List<Edge<T>>>();
     }
 
     public void AddVertex(T vertex)
     {
-        _graph.TryAdd(vertex, new List<Edge>());
+        _graph.TryAdd(vertex, new List<Edge<T>>());
     }
 
     /// <summary>
@@ -674,7 +678,7 @@ public class GenericDijkstra<T> where T : notnull
     /// <param name="cost">コスト</param>
     public void AddEdge(T from, T to, long cost = 1)
     {
-        _graph[from].Add(new Edge(to, cost));
+        _graph[from].Add(new Edge<T>(to, cost));
     }
 
     /// <summary>
@@ -689,8 +693,8 @@ public class GenericDijkstra<T> where T : notnull
         cost[start] = 0;
 
         // 未確定の頂点を格納する優先度付きキュー(コストが小さいほど優先度が高い)
-        var q = new PriorityQueue<Vertex>(Comparer<Vertex>.Create((a, b) => b.CompareTo(a)));
-        q.Enqueue(new Vertex(start, 0));
+        var q = new PriorityQueue<Vertex<T>>(Comparer<Vertex<T>>.Create((a, b) => b.CompareTo(a)));
+        q.Enqueue(new Vertex<T>(start, 0));
 
         while (q.Count > 0)
         {
@@ -706,7 +710,7 @@ public class GenericDijkstra<T> where T : notnull
                 {
                     // 既に記録されているコストより小さければコストを更新
                     cost[e.to] = v.cost + e.cost;
-                    q.Enqueue(new Vertex(e.to, cost[e.to]));
+                    q.Enqueue(new Vertex<T>(e.to, cost[e.to]));
                 }
             }
         }
@@ -715,7 +719,7 @@ public class GenericDijkstra<T> where T : notnull
         return cost;
     }
 
-    struct Edge
+    struct Edge<T>
     {
         public readonly T to;                      // 接続先の頂点
         public readonly long cost;                   // 辺のコスト
@@ -727,7 +731,7 @@ public class GenericDijkstra<T> where T : notnull
         }
     }
 
-    public struct Vertex : IComparable<Vertex>
+    public struct Vertex<T> : IComparable<Vertex<T>>
     {
         public readonly T index;                   // 頂点の番号
         public readonly long cost;                   // 記録したコスト
@@ -738,7 +742,7 @@ public class GenericDijkstra<T> where T : notnull
             this.cost = cost;
         }
 
-        public int CompareTo(Vertex other)
+        public int CompareTo(Vertex<T> other)
             => cost.CompareTo(other.cost);
     }
 }
