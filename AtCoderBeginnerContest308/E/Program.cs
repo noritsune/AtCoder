@@ -14,13 +14,118 @@ public static class CONST
 public static class EntryPoint {
     public static void Main() {
         var solver = new Solver();
-        solver.Solve();
+        solver.Solve2();
     }
 }
 
 public class Solver {
-    public void Solve() {
+    public void Solve2()
+    {
+        var N = Ri();
+        var As = Ria();
+        var S = Rs();
 
+        long scoreSum = 0;
+        var mAToCnt = new int[3];
+        var eScoreSetStrToCnt = new Dictionary<string, long>();
+        for (var i = 0; i < S.Length; i++)
+        {
+            var c = S[i];
+            var A = As[i];
+
+            switch (c)
+            {
+                case 'M':
+                    mAToCnt[A]++;
+                    break;
+                case 'E':
+                    for (int mA = 0; mA <= 2; mA++)
+                    {
+                        var prevMCnt = mAToCnt[mA];
+                        if (prevMCnt == 0) continue;
+
+                        var scoreSet = Enumerable.Range(0, 4).ToList();
+                        scoreSet.Remove(mA);
+                        scoreSet.Remove(A);
+                        var scoreSetStr = string.Join(",", scoreSet);
+
+                        eScoreSetStrToCnt.TryAdd(scoreSetStr, 0);
+                        eScoreSetStrToCnt[scoreSetStr] += prevMCnt;
+                    }
+                    break;
+                case 'X':
+                    var eScoreSetStrs = eScoreSetStrToCnt.Keys.ToList();
+                    foreach (var eScoreSetStr in eScoreSetStrs)
+                    {
+                        var scoreSet = eScoreSetStr.Split(',').Select(int.Parse).ToList();
+                        scoreSet.Remove(A);
+                        var score = scoreSet.Min();
+                        scoreSum += score * eScoreSetStrToCnt[eScoreSetStr];
+                    }
+                    break;
+            }
+        }
+
+        Console.WriteLine(scoreSum);
+    }
+
+    public void Solve1()
+    {
+        var N = Ri();
+        var As = Ria();
+        var S = Rs();
+
+        var cToIdxes = new Dictionary<char, List<int>>()
+        {
+            {'M', new List<int>()},
+            {'E', new List<int>()},
+            {'X', new List<int>()},
+        };
+        var cToPrevC = new Dictionary<char, char>()
+        {
+            {'X', 'E'},
+            {'E', 'M'},
+        };
+        var graph = new Graph<int>(GraphType.Directed);
+        for (var i = 0; i < S.Length; i++)
+        {
+            var c = S[i];
+            cToIdxes[c].Add(i);
+
+            graph.AddVertex(i);
+            if (!cToPrevC.TryGetValue(c, out var prevC)) continue;
+
+            foreach (var idx in cToIdxes[prevC])
+            {
+                graph.AddEdge(i, idx);
+            }
+        }
+
+        long scoreSum = 0;
+        var stack = new Stack<(int idx, HashSet<int> scoreSet)>();
+        foreach (var xIdx in cToIdxes['X'])
+        {
+            stack.Push((xIdx, new HashSet<int>{0, 1, 2, 3}));
+        }
+        while (stack.Any())
+        {
+            var (idx, scoreSet) = stack.Pop();
+            scoreSet.Remove(As[idx]);
+            if (S[idx] == 'M')
+            {
+                var score = scoreSet.Min();
+                scoreSum += score;
+            }
+            else
+            {
+                foreach (var prevIdx in graph.Vertices[idx])
+                {
+                    stack.Push((prevIdx, scoreSet.ToHashSet()));
+                }
+            }
+        }
+
+        Console.WriteLine(scoreSum);
     }
 
     static string Rs(){return Console.ReadLine();}

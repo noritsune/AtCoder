@@ -19,40 +19,22 @@ public static class EntryPoint {
 }
 
 public class Solver {
-    public void Solve() {
-        var N = Ri();
-        var Ss = new string[N];
-        for (int i = 0; i < N; i++) Ss[i] = Rs();
-
-        var nums = Enumerable.Range(0, N);
-        var patterns = Combination.Enumerate(nums, 2, withRepetition:false).ToArray();
-        foreach (var pattern in patterns)
-        {
-            var s1 = Ss[pattern[0]];
-            var s2 = Ss[pattern[1]];
-            var s1s2 = s1 + s2;
-            var s2s1 = s2 + s1;
-            if (IsPalindrome(s1s2) || IsPalindrome(s2s1))
-            {
-                Console.WriteLine("Yes");
-                return;
-            }
-        }
-
-        Console.WriteLine("No");
-    }
-
-    // 回文か
-    bool IsPalindrome(string str)
+    public void Solve()
     {
-        for (int i = 0; i < str.Length / 2; i++)
+        var NM = Ria();
+        var N = NM[0]; var M = NM[1];
+        var Cs = Rsa();
+        var Ds = Rsa();
+        var Ps = Ria();
+
+        var colorToPrice = new Dictionary<string, int>();
+        for (int i = 0; i < M; i++)
         {
-            if (str[i] != str[str.Length - 1 - i])
-            {
-                return false;
-            }
+            colorToPrice.Add(Ds[i], Ps[i + 1]);
         }
-        return true;
+
+        var ans = Cs.Sum(C => colorToPrice.GetValueOrDefault(C, Ps[0]));
+        Console.WriteLine(ans);
     }
 
     static string Rs(){return Console.ReadLine();}

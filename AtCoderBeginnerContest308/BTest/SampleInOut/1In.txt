@@ -1,6 +1,4 @@
-5
-ab
-ccef
-da
-a
-fe
+3 2
+red green blue
+blue red
+800 1600 2800

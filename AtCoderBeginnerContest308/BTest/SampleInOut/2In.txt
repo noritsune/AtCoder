@@ -1,4 +1,4 @@
-3
-a
-b
-aba
+3 2
+code queen atcoder
+king queen
+10 1 1

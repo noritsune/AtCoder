@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Text;
 
 namespace KyoPro
 {
@@ -22,29 +21,53 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var N = Ri();
-        var S = Rs();
+        var HW = Ria();
+        var H = HW[0]; var W = HW[1];
+        var grid = new string[H];
+        for (int i = 0; i < H; i++) grid[i] = Rs();
 
-        var ans= new Stack<char>();
-        int depth = 0;
-        for (int i = 0; i < N; i++)
+        var cToNextC = new Dictionary<char, char>()
         {
-            var c = S[i];
-            ans.Push(c);
+            {'s', 'n'},
+            {'n', 'u'},
+            {'u', 'k'},
+            {'k', 'e'},
+            {'e', 's'},
+        };
 
-            switch (c)
+        var offsetX = new int[]{-1, 0, 1, 0};
+        var offsetY = new int[]{0, -1, 0, 1};
+
+        var visited = new bool[H, W];
+        var stack = new Stack<(int x, int y)>();
+        stack.Push((0, 0));
+        while (stack.Any())
+        {
+            var (x, y) = stack.Pop();
+
+            if (x == W - 1 && y == H - 1)
             {
-                case '(':
-                    depth++;
-                    break;
-                case ')' when depth > 0:
-                    while (ans.Any() && ans.Pop() != '(') {}
-                    depth--;
-                    break;
+                Console.WriteLine("Yes");
+                return;
+            }
+
+            var c = grid[y][x];
+            for (int i = 0; i < 4; i++)
+            {
+                var nextX = x + offsetX[i];
+                var nextY = y + offsetY[i];
+
+                if (nextX < 0 || nextX >= W || nextY < 0 || nextY >= H) continue;
+                if (visited[nextY, nextX]) continue;
+                if (!cToNextC.ContainsKey(c)) continue;
+                if (grid[nextY][nextX] != cToNextC[c]) continue;
+
+                visited[nextY, nextX] = true;
+                stack.Push((nextX, nextY));
             }
         }
 
-        Console.WriteLine(string.Join("", ans.Reverse()));
+        Console.WriteLine("No");
     }
 
     static string Rs(){return Console.ReadLine();}
@@ -651,19 +674,19 @@ public class Dijkstra
 
 public class GenericDijkstra<T> where T : notnull
 {
-    private readonly Dictionary<T, List<Edge>> _graph;        // グラフの辺のデータ
+    private readonly Dictionary<T, List<Edge<T>>> _graph;        // グラフの辺のデータ
 
     /// <summary>
     /// 初期化
     /// </summary>
     public GenericDijkstra()
     {
-        _graph = new Dictionary<T, List<Edge>>();
+        _graph = new Dictionary<T, List<Edge<T>>>();
     }
 
     public void AddVertex(T vertex)
     {
-        _graph.TryAdd(vertex, new List<Edge>());
+        _graph.TryAdd(vertex, new List<Edge<T>>());
     }
 
     /// <summary>
@@ -674,7 +697,7 @@ public class GenericDijkstra<T> where T : notnull
     /// <param name="cost">コスト</param>
     public void AddEdge(T from, T to, long cost = 1)
     {
-        _graph[from].Add(new Edge(to, cost));
+        _graph[from].Add(new Edge<T>(to, cost));
     }
 
     /// <summary>
@@ -689,8 +712,8 @@ public class GenericDijkstra<T> where T : notnull
         cost[start] = 0;
 
         // 未確定の頂点を格納する優先度付きキュー(コストが小さいほど優先度が高い)
-        var q = new PriorityQueue<Vertex>(Comparer<Vertex>.Create((a, b) => b.CompareTo(a)));
-        q.Enqueue(new Vertex(start, 0));
+        var q = new PriorityQueue<Vertex<T>>(Comparer<Vertex<T>>.Create((a, b) => b.CompareTo(a)));
+        q.Enqueue(new Vertex<T>(start, 0));
 
         while (q.Count > 0)
         {
@@ -706,7 +729,7 @@ public class GenericDijkstra<T> where T : notnull
                 {
                     // 既に記録されているコストより小さければコストを更新
                     cost[e.to] = v.cost + e.cost;
-                    q.Enqueue(new Vertex(e.to, cost[e.to]));
+                    q.Enqueue(new Vertex<T>(e.to, cost[e.to]));
                 }
             }
         }
@@ -715,7 +738,7 @@ public class GenericDijkstra<T> where T : notnull
         return cost;
     }
 
-    struct Edge
+    struct Edge<T>
     {
         public readonly T to;                      // 接続先の頂点
         public readonly long cost;                   // 辺のコスト
@@ -727,7 +750,7 @@ public class GenericDijkstra<T> where T : notnull
         }
     }
 
-    public struct Vertex : IComparable<Vertex>
+    public struct Vertex<T> : IComparable<Vertex<T>>
     {
         public readonly T index;                   // 頂点の番号
         public readonly long cost;                   // 記録したコスト
@@ -738,7 +761,7 @@ public class GenericDijkstra<T> where T : notnull
             this.cost = cost;
         }
 
-        public int CompareTo(Vertex other)
+        public int CompareTo(Vertex<T> other)
             => cost.CompareTo(other.cost);
     }
 }

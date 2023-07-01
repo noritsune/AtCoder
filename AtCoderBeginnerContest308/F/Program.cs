@@ -21,21 +21,12 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var Ss = Ria();
+        var NM = Rla();
+        var Ps = Rla();
+        var Ls = Rla();
+        var Ds = Rla();
 
-        var isOk = true;
-        for (int i = 0; i < Ss.Length; i++)
-        {
-            var S = Ss[i];
-            if (i > 0)
-            {
-                isOk &= S >= Ss[i - 1];
-            }
-            isOk &= 100 <= S && S <= 675;
-            isOk &= S % 25 == 0;
-        }
 
-        Console.WriteLine(isOk ? "Yes" : "No");
     }
 
     static string Rs(){return Console.ReadLine();}
