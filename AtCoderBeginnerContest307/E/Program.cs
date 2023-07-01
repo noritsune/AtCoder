@@ -19,75 +19,8 @@ public static class EntryPoint {
 }
 
 public class Solver {
-    public void Solve()
-    {
-        var NKQ = Ria();
-        var N = NKQ[0]; var K = NKQ[1]; var Q = NKQ[2];
+    public void Solve() {
 
-        var rankers = new MultiSet<long>();
-        var nonRankers = new MultiSet<long>();
-        for (int i = 0; i < K; i++) rankers.Insert(0);
-        for (int i = K; i < N; i++) nonRankers.Insert(0);
-        var idxToNum = new long[N + 1];
-
-        long sum = 0;
-        for (int i = 0; i < Q; i++)
-        {
-            var XY = Ria();
-            int idx = XY[0]; long newNum = XY[1];
-
-            var oldNum = idxToNum[idx];
-            idxToNum[idx] = newNum;
-
-            // add操作
-            nonRankers.Insert(newNum);
-            sum = Balance(sum, K, rankers, nonRankers);
-
-            // erase操作
-            if (rankers.Contains(oldNum))
-            {
-                sum -= oldNum;
-                rankers.Remove(oldNum);
-            }
-            else
-            {
-                nonRankers.Remove(oldNum);
-            }
-            sum = Balance(sum, K, rankers, nonRankers);
-
-            Console.WriteLine(sum);
-        }
-    }
-
-    long Balance(long sum, int K, MultiSet<long> rankers, MultiSet<long> nonRankers)
-    {
-        // rankedNumsを上位K個にする
-        while (rankers.Count() < K)
-        {
-            var moveNum = nonRankers.Max();
-
-            sum += moveNum;
-
-            rankers.Insert(moveNum);
-            nonRankers.Remove(moveNum);
-        }
-
-        if (nonRankers.Count() == 0) return sum;
-
-        // rankedNumsの全ての数値がnotRankedNumsの最大値より大きくなる様に入れ替える
-        while (true)
-        {
-            var rankedNumMin = rankers.Min();
-            var notRankedNumMax = nonRankers.Max();
-            if (rankedNumMin >= notRankedNumMax) return sum;
-
-            sum += notRankedNumMax - rankedNumMin;
-
-            rankers.Remove(rankedNumMin);
-            rankers.Insert(notRankedNumMax);
-            nonRankers.Remove(notRankedNumMax);
-            nonRankers.Insert(rankedNumMin);
-        }
     }
 
     static string Rs(){return Console.ReadLine();}
@@ -877,16 +810,6 @@ public class SB_BinarySearchTree<T> where T : IComparable
         return t?.Count ?? 0;
     }
 
-    public static T Min(Node t)
-    {
-        return t.LChild == null ? t.Value : Min(t.LChild);
-    }
-
-    public static T Max(Node t)
-    {
-        return t.RChild == null ? t.Value : Max(t.RChild);
-    }
-
     static Node Update(Node t)
     {
         t.Count = Count(t.LChild) + Count(t.RChild) + 1;
@@ -1065,7 +988,7 @@ public class SB_BinarySearchTree<T> where T : IComparable
 
 /// <summary>
 /// C言語のsetクラスに相当するもの
-/// 追加、削除、LowerBound、UpperBoundがO(logN)でできる
+/// 追加、挿入、LowerBound、UpperBoundがO(logN)でできる
 /// </summary>
 public class Set<T> where T : IComparable
 {
@@ -1076,16 +999,6 @@ public class Set<T> where T : IComparable
     public int Count()
     {
         return SB_BinarySearchTree<T>.Count(_root);
-    }
-
-    public T Min()
-    {
-        return SB_BinarySearchTree<T>.Min(_root);
-    }
-
-    public T Max()
-    {
-        return SB_BinarySearchTree<T>.Max(_root);
     }
 
     public virtual void Insert(T v)
