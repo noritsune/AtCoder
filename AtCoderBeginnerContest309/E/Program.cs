@@ -31,63 +31,21 @@ public class Solver {
             graph.AddEdge(ps[i - 2], i);
         }
 
-        var idxToDepth = new int[N + 1];
-        var q1 = new Queue<(int idx, int depth)>();
-        q1.Enqueue((1, 0));
-        while (q1.Any())
-        {
-            var (idx, depth) = q1.Dequeue();
-            idxToDepth[idx] = depth;
-            var nextDepth = depth + 1;
-            foreach (var child in graph.Vertices[idx])
-            {
-                q1.Enqueue((child, nextDepth));
-            }
-        }
-
-        var xys = new List<(int x, int y)>();
+        // 人iは最大何代先まで保証対象か
+        var dp = Enumerable.Repeat(-1, N + 1).ToArray();
         for (int i = 0; i < M; i++)
         {
             var xy = Ria();
             var x = xy[0]; var y = xy[1];
-            xys.Add((x, y));
+            dp[x] = Math.Max(dp[x], y);
         }
-        xys = xys
-            .OrderBy(x => idxToDepth[x.x])
-            .ThenBy(x => x.x)
-            .ThenByDescending(x => x.y)
-            .ToList();
 
-        var isOk = new bool[N + 1];
-        var maxRemainedDepth = new int[N + 1];
-        var visitCnt = new int[N + 1];
-        for (int i = 0; i < M; i++)
+        for (int i = 2; i <= N; i++)
         {
-            var (x, y) = xys[i];
-            isOk[x] = true;
-            if (y <= maxRemainedDepth[x]) continue;
-            maxRemainedDepth[x] = y;
-
-            var q2 = new Queue<(int idx, int depth)>();
-            q2.Enqueue((x, 0));
-            while (q2.Any())
-            {
-                var (idx, depth) = q2.Dequeue();
-                var nextDepth = depth + 1;
-                var remainedDepth = y - nextDepth;
-                foreach (var child in graph.Vertices[idx])
-                {
-                    visitCnt[child]++;
-                    isOk[child] = true;
-                    if (remainedDepth <= maxRemainedDepth[child]) continue;
-                    maxRemainedDepth[child] = remainedDepth;
-                    if (nextDepth >= y) continue;
-                    q2.Enqueue((child, nextDepth));
-                }
-            }
+            dp[i] = Math.Max(dp[i], dp[ps[i - 2]] - 1);
         }
 
-        Console.WriteLine(isOk.Count(x => x));
+        Console.WriteLine(dp.Count(n => n >= 0));
     }
 
     static string Rs(){return Console.ReadLine();}
