@@ -18,87 +18,61 @@ public static class EntryPoint {
     }
 }
 
-public class Solver
-{
-    public void Solve() {
-        var HW = Ria();
-        var H = HW[0]; var W = HW[1];
-        var grid = new char[H][];
-        for(int i = 0; i < H; i++){
-            grid[i] = Rs().ToCharArray();
+public class Solver {
+    public void Solve()
+    {
+        var N = Ri();
+        var XYZs = new (int x, int y, int z)[N];
+        var ZSum = 0;
+        for(int i = 0; i < N; i++){
+            var xyz = Ria();
+            XYZs[i] = (xyz[0], xyz[1], xyz[2]);
+            ZSum += xyz[2];
         }
 
-        var rowAndCharToCnt = new int[H, 26];
-        var colAndCharToCnt = new int[W, 26];
-        for (int h = 0; h < H; h++)
+        var winBoarder = ZSum / 2 + 1;
+
+        var winXYZs = XYZs.Where(xyz => xyz.x > xyz.y).ToArray();
+        var winZSum = winXYZs.Sum(xyz => xyz.z);
+
+        if (winZSum >= winBoarder)
         {
-            for (int w = 0; w < W; w++)
+            Console.WriteLine(0);
+            return;
+        }
+
+        var loseXYZs = XYZs.Where(xyz => xyz.x < xyz.y).ToArray();
+
+        // i番目までの選挙区を見たときにj議席を獲得する為に必要な最低追加人数
+        var dp = new long[loseXYZs.Length + 1, winBoarder + 1];
+        for (int i = 0; i <= loseXYZs.Length; i++)
+        {
+            for (int j = 0; j <= winBoarder; j++)
             {
-                rowAndCharToCnt[h, grid[h][w] - 'a']++;
-                colAndCharToCnt[w, grid[h][w] - 'a']++;
+                dp[i, j] = j == winZSum ? 0 : long.MaxValue;
             }
         }
 
-        var deleteCharCnt = 0;
-        var remainedCnt = H * W;
-        var remainedRows = new HashSet<int>();
-        for (int h = 0; h < H; h++) remainedRows.Add(h);
-        var remainedCols = new HashSet<int>();
-        for (int w = 0; w < W; w++) remainedCols.Add(w);
-        do
+        var js = new HashSet<int> { winZSum };
+        for (int i = 0; i < loseXYZs.Length; i++)
         {
-            deleteCharCnt = 0;
+            var (X, Y, Z) = XYZs[i];
+            var remainedCnt = X > Y ? 0 : (X + Y) / 2 + 1 - X;
 
-            // 消せる行を探す
-            var deleteRows = new HashSet<int>();
-            foreach (var remainedRow in remainedRows)
+            var addJs = new HashSet<int>();
+            foreach (var j in js)
             {
-                for (int c = 0; c < 26; c++)
-                {
-                    if (rowAndCharToCnt[remainedRow, c] == remainedCols.Count)
-                    {
-                        deleteCharCnt += remainedCols.Count;
-                        deleteRows.Add(remainedRow);
-                    }
-                }
+                dp[i + 1, j] = Math.Min(dp[i + 1, j], dp[i, j]);
+
+                var nextJ = Math.Min(winBoarder, j + Z);
+                dp[i + 1, nextJ] = Math.Min(dp[i + 1, nextJ], dp[i, j] + remainedCnt);
+                addJs.Add(nextJ);
             }
 
-            // 消せる列を探す
-            var deleteCols = new HashSet<int>();
-            foreach (var remainedCol in remainedCols)
-            {
-                for (int c = 0; c < 26; c++)
-                {
-                    if (colAndCharToCnt[remainedCol, c] == remainedRows.Count)
-                    {
-                        deleteCharCnt += remainedRows.Count;
-                        deleteCols.Add(remainedCol);
-                    }
-                }
-            }
+            js.UnionWith(addJs);
+        }
 
-            // 行を消す
-            foreach (var deleteRow in deleteRows)
-            {
-                remainedRows.Remove(deleteRow);
-                for (int c = 0; c < 26; c++)
-                {
-                    rowAndCharToCnt[deleteRow, c] = 0;
-                }
-            }
-
-            // 列を消す
-            foreach (var deleteCol in deleteCols)
-            {
-                remainedCols.Remove(deleteCol);
-                for (int c = 0; c < 26; c++)
-                {
-                    colAndCharToCnt[deleteCol, c] = 0;
-                }
-            }
-        } while (deleteCharCnt > 0);
-
-        Console.WriteLine(remainedRows.Count * remainedCols.Count);
+        Console.WriteLine(dp[loseXYZs.Length, winBoarder]);
     }
 
     static string Rs(){return Console.ReadLine();}

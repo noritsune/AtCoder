@@ -20,85 +20,53 @@ public static class EntryPoint {
 
 public class Solver
 {
-    public void Solve() {
-        var HW = Ria();
-        var H = HW[0]; var W = HW[1];
-        var grid = new char[H][];
-        for(int i = 0; i < H; i++){
-            grid[i] = Rs().ToCharArray();
+    Graph<int> _graph;
+    int[,] _costs;
+
+    public void Solve()
+    {
+        var NM = Ria();
+        var N = NM[0]; var M = NM[1];
+
+        _graph = new Graph<int>(GraphType.Undirected);
+        _costs = new int[N, N];
+        for (int i = 0; i < N; i++) _graph.AddVertex(i);
+        for (int i = 0; i < M; i++)
+        {
+            var ABC = Ria();
+            var A = ABC[0] - 1; var B = ABC[1] - 1; var C = ABC[2];
+            _graph.AddEdge(A, B);
+            _costs[A, B] = C;
+            _costs[B, A] = C;
         }
 
-        var rowAndCharToCnt = new int[H, 26];
-        var colAndCharToCnt = new int[W, 26];
-        for (int h = 0; h < H; h++)
+        long maxCost = -1;
+        for (int startVert = 0; startVert < N; startVert++)
         {
-            for (int w = 0; w < W; w++)
-            {
-                rowAndCharToCnt[h, grid[h][w] - 'a']++;
-                colAndCharToCnt[w, grid[h][w] - 'a']++;
-            }
+            var visited = new bool[N];
+            visited[startVert] = true;
+            var cost = Dfs(startVert, 0, -1, visited);
+            maxCost = Math.Max(maxCost, cost);
         }
 
-        var deleteCharCnt = 0;
-        var remainedCnt = H * W;
-        var remainedRows = new HashSet<int>();
-        for (int h = 0; h < H; h++) remainedRows.Add(h);
-        var remainedCols = new HashSet<int>();
-        for (int w = 0; w < W; w++) remainedCols.Add(w);
-        do
+        Console.WriteLine(maxCost);
+    }
+
+    // startVertからスタートして同じ頂点を二度以上通らずに別の頂点へ移動するときの、通る道路の長さの和としてありえる最大値を求めてください。
+    long Dfs(int currentVert, long currentCost, long maxCost, bool[] visited)
+    {
+        if (visited.All(v => v)) return Math.Max(maxCost, currentCost);
+
+        foreach (var nextVert in _graph.Vertices[currentVert])
         {
-            deleteCharCnt = 0;
+            if (visited[nextVert]) continue;
+            visited[nextVert] = true;
 
-            // 消せる行を探す
-            var deleteRows = new HashSet<int>();
-            foreach (var remainedRow in remainedRows)
-            {
-                for (int c = 0; c < 26; c++)
-                {
-                    if (rowAndCharToCnt[remainedRow, c] == remainedCols.Count)
-                    {
-                        deleteCharCnt += remainedCols.Count;
-                        deleteRows.Add(remainedRow);
-                    }
-                }
-            }
+            maxCost = Math.Max(maxCost, Dfs(nextVert, currentCost + _costs[currentVert, nextVert], maxCost, visited));
+            visited[nextVert] = false;
+        }
 
-            // 消せる列を探す
-            var deleteCols = new HashSet<int>();
-            foreach (var remainedCol in remainedCols)
-            {
-                for (int c = 0; c < 26; c++)
-                {
-                    if (colAndCharToCnt[remainedCol, c] == remainedRows.Count)
-                    {
-                        deleteCharCnt += remainedRows.Count;
-                        deleteCols.Add(remainedCol);
-                    }
-                }
-            }
-
-            // 行を消す
-            foreach (var deleteRow in deleteRows)
-            {
-                remainedRows.Remove(deleteRow);
-                for (int c = 0; c < 26; c++)
-                {
-                    rowAndCharToCnt[deleteRow, c] = 0;
-                }
-            }
-
-            // 列を消す
-            foreach (var deleteCol in deleteCols)
-            {
-                remainedCols.Remove(deleteCol);
-                for (int c = 0; c < 26; c++)
-                {
-                    colAndCharToCnt[deleteCol, c] = 0;
-                }
-            }
-        } while (deleteCharCnt > 0);
-
-        Console.WriteLine(remainedRows.Count * remainedCols.Count);
+        return Math.Max(maxCost, currentCost);
     }
 
     static string Rs(){return Console.ReadLine();}
@@ -665,6 +633,50 @@ public class Dijkstra
                 if (cost[e.to] > v.cost + e.cost)
                 {
                     // 既に記録されているコストより小さければコストを更新
+                    cost[e.to] = v.cost + e.cost;
+                    q.Enqueue(new Vertex(e.to, cost[e.to]));
+                }
+            }
+        }
+
+        // 確定したコストを返す
+        return cost;
+    }
+
+    /// <summary>
+    /// 最長経路のコストを取得
+    /// </summary>
+    /// <param name="start">開始頂点</param>
+    public long[] GetMaxCost(int start)
+    {
+        // コストをスタート頂点以外を無限大に
+        var cost = new long[N];
+        for (int i = 0; i < N; i++) cost[i] = -1;
+        cost[start] = 0;
+
+        var visited = new bool[N];
+        visited[start] = true;
+
+        // 未確定の頂点を格納する優先度付きキュー(コストが大きいほど優先度が高い)
+        var q = new PriorityQueue<Vertex>(Comparer<Vertex>.Create((a, b) => a.CompareTo(b)));
+        q.Enqueue(new Vertex(start, 0));
+
+        while (q.Count > 0)
+        {
+            var v = q.Dequeue();
+
+            // 記録されているコストと異なる(コストがより大きい)場合は無視
+            if (v.cost != cost[v.index]) continue;
+
+            // 今回確定した頂点からつながる頂点に対して更新を行う
+            foreach (var e in _graph[v.index])
+            {
+                if (visited[e.to]) continue;
+                visited[e.to] = true;
+
+                if (cost[e.to] <= v.cost + e.cost)
+                {
+                    // 既に記録されているコストより大きければコストを更新
                     cost[e.to] = v.cost + e.cost;
                     q.Enqueue(new Vertex(e.to, cost[e.to]));
                 }

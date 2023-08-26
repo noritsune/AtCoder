@@ -18,9 +18,9 @@ public static class EntryPoint {
     }
 }
 
-public class Solver
-{
-    public void Solve() {
+public class Solver {
+    public void Solve()
+    {
         var HW = Ria();
         var H = HW[0]; var W = HW[1];
         var grid = new char[H][];
@@ -28,77 +28,103 @@ public class Solver
             grid[i] = Rs().ToCharArray();
         }
 
-        var rowAndCharToCnt = new int[H, 26];
-        var colAndCharToCnt = new int[W, 26];
-        for (int h = 0; h < H; h++)
+        // 危険地帯をマーク
+        var startPos = new Vector2(0, 0);
+        var goalPos = new Vector2(0, 0);
+        for (int y = 0; y < H; y++)
         {
-            for (int w = 0; w < W; w++)
+            for (int x = 0; x < W; x++)
             {
-                rowAndCharToCnt[h, grid[h][w] - 'a']++;
-                colAndCharToCnt[w, grid[h][w] - 'a']++;
+                var c = grid[y][x];
+
+                if (c == 'S')
+                {
+                    startPos = new Vector2(x, y);
+                }
+                if (c == 'G')
+                {
+                    goalPos = new Vector2(x, y);
+                }
+
+                if (c != '>' && c != '<' && c != '^' && c != 'v')
+                {
+                    continue;
+                }
+
+                var yOffset = c switch
+                {
+                    '^' => -1,
+                    'v' => 1,
+                    _ => 0
+                };
+                var xOffset = c switch
+                {
+                    '>' => 1,
+                    '<' => -1,
+                    _ => 0
+                };
+
+                var nextY = y + yOffset;
+                var nextX = x + xOffset;
+                while(nextY >= 0 && nextY < H && nextX >= 0 && nextX < W){
+                    if(grid[nextY][nextX] != '.' && grid[nextY][nextX] != '!'){
+                        break;
+                    }
+
+                    grid[nextY][nextX] = '!';
+
+                    nextY += yOffset;
+                    nextX += xOffset;
+                }
             }
         }
 
-        var deleteCharCnt = 0;
-        var remainedCnt = H * W;
-        var remainedRows = new HashSet<int>();
-        for (int h = 0; h < H; h++) remainedRows.Add(h);
-        var remainedCols = new HashSet<int>();
-        for (int w = 0; w < W; w++) remainedCols.Add(w);
-        do
+        // SからGまでの最短距離を求める。たどり着けないなら-1
+        // .のマスだけを通れる
+        var dist = new int[H, W];
+        for (int y = 0; y < H; y++)
         {
-            deleteCharCnt = 0;
-
-            // 消せる行を探す
-            var deleteRows = new HashSet<int>();
-            foreach (var remainedRow in remainedRows)
+            for (int x = 0; x < W; x++)
             {
-                for (int c = 0; c < 26; c++)
-                {
-                    if (rowAndCharToCnt[remainedRow, c] == remainedCols.Count)
-                    {
-                        deleteCharCnt += remainedCols.Count;
-                        deleteRows.Add(remainedRow);
-                    }
-                }
+                dist[y, x] = -1;
             }
+        }
+        dist[(int)startPos.Y, (int)startPos.X] = 0;
+        var yOffsets = new int[]{-1, 0, 1, 0};
+        var xOffsets = new int[]{0, 1, 0, -1};
+        var q = new Queue<Vector2>();
+        q.Enqueue(startPos);
+        while(q.Count > 0){
+            var pos = q.Dequeue();
+            var y = (int)pos.Y;
+            var x = (int)pos.X;
 
-            // 消せる列を探す
-            var deleteCols = new HashSet<int>();
-            foreach (var remainedCol in remainedCols)
+            for (int i = 0; i < 4; i++)
             {
-                for (int c = 0; c < 26; c++)
-                {
-                    if (colAndCharToCnt[remainedCol, c] == remainedRows.Count)
-                    {
-                        deleteCharCnt += remainedRows.Count;
-                        deleteCols.Add(remainedCol);
-                    }
+                var nextY = y + yOffsets[i];
+                var nextX = x + xOffsets[i];
+                if(nextY < 0 || nextY >= H || nextX < 0 || nextX >= W){
+                    continue;
                 }
-            }
-
-            // 行を消す
-            foreach (var deleteRow in deleteRows)
-            {
-                remainedRows.Remove(deleteRow);
-                for (int c = 0; c < 26; c++)
-                {
-                    rowAndCharToCnt[deleteRow, c] = 0;
+                if(grid[nextY][nextX] != '.' && grid[nextY][nextX] != 'G'){
+                    continue;
                 }
-            }
-
-            // 列を消す
-            foreach (var deleteCol in deleteCols)
-            {
-                remainedCols.Remove(deleteCol);
-                for (int c = 0; c < 26; c++)
-                {
-                    colAndCharToCnt[deleteCol, c] = 0;
+                if(dist[nextY, nextX] != -1){
+                    continue;
                 }
-            }
-        } while (deleteCharCnt > 0);
 
-        Console.WriteLine(remainedRows.Count * remainedCols.Count);
+                dist[nextY, nextX] = dist[y, x] + 1;
+
+                if (grid[nextY][nextX] == 'G')
+                {
+                    break;
+                }
+
+                q.Enqueue(new Vector2(nextX, nextY));
+            }
+        }
+
+        Console.WriteLine(dist[(int)goalPos.Y, (int)goalPos.X]);
     }
 
     static string Rs(){return Console.ReadLine();}

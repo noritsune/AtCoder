@@ -18,87 +18,15 @@ public static class EntryPoint {
     }
 }
 
-public class Solver
-{
-    public void Solve() {
-        var HW = Ria();
-        var H = HW[0]; var W = HW[1];
-        var grid = new char[H][];
-        for(int i = 0; i < H; i++){
-            grid[i] = Rs().ToCharArray();
-        }
+public class Solver {
+    public void Solve()
+    {
+        var NHX = Ria();
+        var N = NHX[0]; var H = NHX[1]; var X = NHX[2];
+        var Ps = Ria().OrderBy(x => x).ToArray();
 
-        var rowAndCharToCnt = new int[H, 26];
-        var colAndCharToCnt = new int[W, 26];
-        for (int h = 0; h < H; h++)
-        {
-            for (int w = 0; w < W; w++)
-            {
-                rowAndCharToCnt[h, grid[h][w] - 'a']++;
-                colAndCharToCnt[w, grid[h][w] - 'a']++;
-            }
-        }
-
-        var deleteCharCnt = 0;
-        var remainedCnt = H * W;
-        var remainedRows = new HashSet<int>();
-        for (int h = 0; h < H; h++) remainedRows.Add(h);
-        var remainedCols = new HashSet<int>();
-        for (int w = 0; w < W; w++) remainedCols.Add(w);
-        do
-        {
-            deleteCharCnt = 0;
-
-            // 消せる行を探す
-            var deleteRows = new HashSet<int>();
-            foreach (var remainedRow in remainedRows)
-            {
-                for (int c = 0; c < 26; c++)
-                {
-                    if (rowAndCharToCnt[remainedRow, c] == remainedCols.Count)
-                    {
-                        deleteCharCnt += remainedCols.Count;
-                        deleteRows.Add(remainedRow);
-                    }
-                }
-            }
-
-            // 消せる列を探す
-            var deleteCols = new HashSet<int>();
-            foreach (var remainedCol in remainedCols)
-            {
-                for (int c = 0; c < 26; c++)
-                {
-                    if (colAndCharToCnt[remainedCol, c] == remainedRows.Count)
-                    {
-                        deleteCharCnt += remainedRows.Count;
-                        deleteCols.Add(remainedCol);
-                    }
-                }
-            }
-
-            // 行を消す
-            foreach (var deleteRow in deleteRows)
-            {
-                remainedRows.Remove(deleteRow);
-                for (int c = 0; c < 26; c++)
-                {
-                    rowAndCharToCnt[deleteRow, c] = 0;
-                }
-            }
-
-            // 列を消す
-            foreach (var deleteCol in deleteCols)
-            {
-                remainedCols.Remove(deleteCol);
-                for (int c = 0; c < 26; c++)
-                {
-                    colAndCharToCnt[deleteCol, c] = 0;
-                }
-            }
-        } while (deleteCharCnt > 0);
-
-        Console.WriteLine(remainedRows.Count * remainedCols.Count);
+        var lb = LowerBound(Ps, X - H, Comparer<int>.Default);
+        Console.WriteLine(lb + 1);
     }
 
     static string Rs(){return Console.ReadLine();}
