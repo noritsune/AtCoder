@@ -20,7 +20,28 @@ public static class EntryPoint {
 
 public class Solver {
     public void Solve() {
+        var NML = Ria();
+        var N = NML[0]; var M = NML[1]; var L = NML[2];
+        var As = Ria();
+        var Bs = Ria();
+        var badCombis = new HashSet<string>();
+        for (int i = 0; i < L; i++)
+        {
+            var cd = Ria();
+            badCombis.Add($"{cd[0]},{cd[1]}");
+        }
 
+        var descSortedAs = As.OrderByDescending(x => x).ToArray();
+        var descSortedBs = Bs.OrderByDescending(x => x).ToArray();
+        var descSortedABs = As
+            .Select(x => ('A', x))
+            .Concat(Bs.Select(x => ('B', x)))
+            .OrderByDescending(x => x.Item2);
+        foreach (var (type, x) in descSortedABs)
+        {
+            var others = type == 'A' ? descSortedBs : descSortedAs;
+
+        }
     }
 
     static string Rs(){return Console.ReadLine();}
