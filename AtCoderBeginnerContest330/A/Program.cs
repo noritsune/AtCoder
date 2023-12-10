@@ -19,39 +19,14 @@ public static class EntryPoint {
 }
 
 public class Solver {
-    public void Solve()
-    {
-        var NML = Ria();
-        var N = NML[0];
-        var M = NML[1];
-        var L = NML[2];
-        var As = Ria();
-        var Bs = Ria()
-            .Select((x, i) => (x, i))
-            .OrderByDescending(x => x.x)
-            .ToArray();
-
-        var ngCombis = new HashSet<string>();
-        for (int i = 0; i < L; i++)
-        {
-            var cd = Ria();
-            ngCombis.Add($"{cd[0] - 1},{cd[1] - 1}");
-        }
-
-        var AidxToBIdx = new int[N];
-        var q = new PriorityQueue<(int cost, int AIdx)>(
-            (a, b) => a.cost - b.cost
-        );
-        for (int i = 0; i < N; i++)
-        {
-            q.Enqueue((As[i] + Bs[0].x, i));
-        }
-
-        while (q.Any())
-        {
-            var (cost, Aidx) = q.Dequeue();
-            var BIdx = Bs[AidxToBIdx[Aidx]].i;
-
+    public void Solve() {
+        var NL = Rla();
+        var N = NL[0]; var L = NL[1];
+        var As = Rla();
+        
+        // Aの中でL以上が何個か出力
+        var ans = As.Count(x => x >= L);
+        Console.WriteLine(ans);
     }
 
     static string Rs(){return Console.ReadLine();}
