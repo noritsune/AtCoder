@@ -14,154 +14,59 @@ public static class CONST
 public static class EntryPoint {
     public static void Main() {
         var solver = new Solver();
-        solver.Solve2();
+        solver.Solve();
     }
 }
 
-public class Solver
-{
-    int _H; int _W;
-    int[,] _gridA; int[,] _gridB;
-
-    public void Solve2()
-    {
-        var HW = Ria();
-        _H = HW[0]; _W = HW[1];
-        _gridA = new int[_H, _W];
-        for (int i = 0; i < _H; i++)
+public class Solver {
+    public void Solve() {
+        var N = Ri();
+        var txs = new (int t, int x)[N + 1];
+        for (int i = 0; i < N; i++)
         {
-            var row = Ria();
-            for (int j = 0; j < _W; j++) _gridA[i, j] = row[j];
-        }
-        _gridB = new int[_H, _W];
-        for (int i = 0; i < _H; i++)
-        {
-            var row = Ria();
-            for (int j = 0; j < _W; j++) _gridB[i, j] = row[j];
+            var tx = Ria();
+            txs[i] = (tx[0], tx[1]);
         }
 
-        var hPats = Enumerable.Range(0, _H).Perm().Select(x => x.ToArray()).ToArray();
-        var wPats = Enumerable.Range(0, _W).Perm().Select(x => x.ToArray()).ToArray();
-        foreach (var hPat in hPats)
+        var pToNeedCnt = new int[N + 1];
+        var cntSum = 0;
+        var cntSumMax = 0;
+        var idxToAct = new List<int>();
+        for (int i = N - 1; i >= 0; i--)
         {
-            foreach (var wPat in wPats)
+            var (t, x) = txs[i];
+            switch (t)
             {
-                var swappedA = Swap(_gridA, hPat, wPat);
-                if (!IsSame(swappedA, _gridB)) continue;
-
-                var ans = CalcTento(hPat) + CalcTento(wPat);
-                Console.WriteLine(ans);
-                return;
+                case 1:
+                    if (pToNeedCnt[x] > 0)
+                    {
+                        pToNeedCnt[x]--;
+                        cntSum--;
+                        idxToAct.Add(1);
+                    }
+                    else
+                    {
+                        idxToAct.Add(0);
+                    }
+                    break;
+                case 2:
+                    pToNeedCnt[x]++;
+                    cntSum++;
+                    cntSumMax = Math.Max(cntSumMax, cntSum);
+                    break;
             }
         }
 
-        Console.WriteLine(-1);
-    }
-
-    int[,] Swap(int[,] grid, int[] hPat, int [] wPat)
-    {
-        var swapped = new int[_H, _W];
-        // まずは行を入れ替える
-        for (int i = 0; i < _H; i++)
+        if (cntSum > 0)
         {
-            for (int j = 0; j < _W; j++)
-            {
-                swapped[i, j] = grid[hPat[i], j];
-            }
+            Console.WriteLine(-1);
         }
-
-        // 次に列を入れ替える
-        for (int i = 0; i < _H; i++)
+        else
         {
-            for (int j = 0; j < _W; j++)
-            {
-                swapped[i, j] = grid[i, wPat[j]];
-            }
+            Console.WriteLine(cntSumMax);
+            idxToAct.Reverse();
+            Console.WriteLine(string.Join(" ", idxToAct));
         }
-
-        return swapped;
-    }
-
-    int CalcTento(int[] nums)
-    {
-        var length = nums.Length;
-        var cnt = new int[length];
-        foreach (var num in nums)
-        {
-            cnt[num]++;
-        }
-        
-        var rui = new int[length + 1];
-        for (int i = 0; i < length; i++)
-        {
-            rui[i + 1] = rui[i] + cnt[i];
-        }
-
-        return nums.Max(num => rui[length] - rui[num]);
-    }
-
-    public void Solve1()
-    {
-        var HW = Ria();
-        _H = HW[0]; _W = HW[1];
-        _gridA = new int[_H, _W];
-        for (int i = 0; i < _H; i++)
-        {
-            var row = Ria();
-            for (int j = 0; j < _W; j++) _gridA[i, j] = row[j];
-        }
-        _gridB = new int[_H, _W];
-        for (int i = 0; i < _H; i++)
-        {
-            var row = Ria();
-            for (int j = 0; j < _W; j++) _gridB[i, j] = row[j];
-        }
-
-        var hPats = Enumerable.Range(0, _H).Perm().Select(x => x.ToArray()).ToArray();
-        var wPats = Enumerable.Range(0, _W).Perm().Select(x => x.ToArray()).ToArray();
-        foreach (var hPattern in hPats)
-        {
-
-        }
-    }
-
-    void DfsRow(int i, int iEnd)
-    {
-        if (iEnd < 0) return;
-
-        SwapRow(i);
-
-        var nextI = i < iEnd ? i + 1 : 0;
-        var nextIEnd = i < iEnd ? iEnd : iEnd - 1;
-        DfsRow(nextI, nextIEnd);
-    }
-
-    void SwapRow(int i)
-    {
-        for (int j = 0; j < _W; j++)
-        {
-            (_gridA[i, j], _gridA[i + 1, j]) = (_gridA[i + 1, j], _gridA[i, j]);
-        }
-    }
-
-    void SwapCol(int j)
-    {
-        for (int i = 0; i < _H; i++)
-        {
-            (_gridA[i, j], _gridA[i, j + 1]) = (_gridA[i, j + 1], _gridA[i, j]);
-        }
-    }
-
-    bool IsSame(int[,] a, int[,] b)
-    {
-        for (int i = 0; i < _H; i++)
-        {
-            for (int j = 0; j < _W; j++)
-            {
-                if (a[i, j] != b[i, j]) return false;
-            }
-        }
-        return true;
     }
 
     static string Rs(){return Console.ReadLine();}

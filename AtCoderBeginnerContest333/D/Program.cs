@@ -14,154 +14,62 @@ public static class CONST
 public static class EntryPoint {
     public static void Main() {
         var solver = new Solver();
-        solver.Solve2();
+        solver.Solve();
     }
 }
 
-public class Solver
-{
-    int _H; int _W;
-    int[,] _gridA; int[,] _gridB;
-
-    public void Solve2()
+public class Solver {
+    public void Solve()
     {
-        var HW = Ria();
-        _H = HW[0]; _W = HW[1];
-        _gridA = new int[_H, _W];
-        for (int i = 0; i < _H; i++)
+        var N = Ri();
+
+        var graph = new IntGraph(GraphType.Undirected);
+        graph.InitFromStdin(N, N - 1);
+
+        if (graph.Vertices[1].Count == 1)
         {
-            var row = Ria();
-            for (int j = 0; j < _W; j++) _gridA[i, j] = row[j];
-        }
-        _gridB = new int[_H, _W];
-        for (int i = 0; i < _H; i++)
-        {
-            var row = Ria();
-            for (int j = 0; j < _W; j++) _gridB[i, j] = row[j];
+            Console.WriteLine(1);
+            return;
         }
 
-        var hPats = Enumerable.Range(0, _H).Perm().Select(x => x.ToArray()).ToArray();
-        var wPats = Enumerable.Range(0, _W).Perm().Select(x => x.ToArray()).ToArray();
-        foreach (var hPat in hPats)
+        // 頂点1を切断する
+        var starts = new List<int>();
+        for (int i = 2; i <= N; i++)
         {
-            foreach (var wPat in wPats)
+            if (graph.Vertices[i].Contains(1))
             {
-                var swappedA = Swap(_gridA, hPat, wPat);
-                if (!IsSame(swappedA, _gridB)) continue;
-
-                var ans = CalcTento(hPat) + CalcTento(wPat);
-                Console.WriteLine(ans);
-                return;
+                starts.Add(i);
+                graph.Vertices[i].Remove(1);
+                graph.Vertices[1].Remove(i);
             }
         }
 
-        Console.WriteLine(-1);
-    }
-
-    int[,] Swap(int[,] grid, int[] hPat, int [] wPat)
-    {
-        var swapped = new int[_H, _W];
-        // まずは行を入れ替える
-        for (int i = 0; i < _H; i++)
+        var costs = new List<int>();
+        var stack = new Stack<int>();
+        var visited = new bool[N + 1];
+        foreach (var start in starts)
         {
-            for (int j = 0; j < _W; j++)
+            // 連結成分の個数を数える
+            stack.Push(start);
+            visited[start] = true;
+            int cost = 0;
+            while (stack.Any())
             {
-                swapped[i, j] = grid[hPat[i], j];
+                var v = stack.Pop();
+                cost++;
+                foreach (var nextV in graph.Vertices[v])
+                {
+                    if (visited[nextV]) continue;
+                    stack.Push(nextV);
+                    visited[nextV] = true;
+                }
             }
+            costs.Add(cost);
         }
 
-        // 次に列を入れ替える
-        for (int i = 0; i < _H; i++)
-        {
-            for (int j = 0; j < _W; j++)
-            {
-                swapped[i, j] = grid[i, wPat[j]];
-            }
-        }
-
-        return swapped;
-    }
-
-    int CalcTento(int[] nums)
-    {
-        var length = nums.Length;
-        var cnt = new int[length];
-        foreach (var num in nums)
-        {
-            cnt[num]++;
-        }
-        
-        var rui = new int[length + 1];
-        for (int i = 0; i < length; i++)
-        {
-            rui[i + 1] = rui[i] + cnt[i];
-        }
-
-        return nums.Max(num => rui[length] - rui[num]);
-    }
-
-    public void Solve1()
-    {
-        var HW = Ria();
-        _H = HW[0]; _W = HW[1];
-        _gridA = new int[_H, _W];
-        for (int i = 0; i < _H; i++)
-        {
-            var row = Ria();
-            for (int j = 0; j < _W; j++) _gridA[i, j] = row[j];
-        }
-        _gridB = new int[_H, _W];
-        for (int i = 0; i < _H; i++)
-        {
-            var row = Ria();
-            for (int j = 0; j < _W; j++) _gridB[i, j] = row[j];
-        }
-
-        var hPats = Enumerable.Range(0, _H).Perm().Select(x => x.ToArray()).ToArray();
-        var wPats = Enumerable.Range(0, _W).Perm().Select(x => x.ToArray()).ToArray();
-        foreach (var hPattern in hPats)
-        {
-
-        }
-    }
-
-    void DfsRow(int i, int iEnd)
-    {
-        if (iEnd < 0) return;
-
-        SwapRow(i);
-
-        var nextI = i < iEnd ? i + 1 : 0;
-        var nextIEnd = i < iEnd ? iEnd : iEnd - 1;
-        DfsRow(nextI, nextIEnd);
-    }
-
-    void SwapRow(int i)
-    {
-        for (int j = 0; j < _W; j++)
-        {
-            (_gridA[i, j], _gridA[i + 1, j]) = (_gridA[i + 1, j], _gridA[i, j]);
-        }
-    }
-
-    void SwapCol(int j)
-    {
-        for (int i = 0; i < _H; i++)
-        {
-            (_gridA[i, j], _gridA[i, j + 1]) = (_gridA[i, j + 1], _gridA[i, j]);
-        }
-    }
-
-    bool IsSame(int[,] a, int[,] b)
-    {
-        for (int i = 0; i < _H; i++)
-        {
-            for (int j = 0; j < _W; j++)
-            {
-                if (a[i, j] != b[i, j]) return false;
-            }
-        }
-        return true;
+        // costsから最も大きなもの以外のすべてを足したものに1を加えたものが答え
+        var ans = costs.OrderByDescending(x => x).Skip(1).Sum() + 1;
+        Console.WriteLine(ans);
     }
 
     static string Rs(){return Console.ReadLine();}
