@@ -19,43 +19,8 @@ public static class EntryPoint {
 }
 
 public class Solver {
-    public void Solve()
-    {
-        var NQ = Ria();
-        var N = NQ[0]; var Q = NQ[1];
+    public void Solve() {
 
-        var headOldPoss = new List<Vector2>();
-        for (int i = N; i >= 1; i--)
-        {
-            headOldPoss.Add(new Vector2(i, 0));
-        }
-
-        var dirToOffsets = new Dictionary<char, Vector2>
-        {
-            ['R'] = new Vector2(1, 0),
-            ['L'] = new Vector2(-1, 0),
-            ['U'] = new Vector2(0, 1),
-            ['D'] = new Vector2(0, -1)
-        };
-
-        for (int i = 0; i < Q; i++)
-        {
-            var query = Rsa();
-            switch (query[0])
-            {
-                case "1":j
-                    var headNextPos = headOldPoss.Last().Clone();
-                    var offset = dirToOffsets[query[1][0]];
-                    headNextPos += offset;
-                    headOldPoss.Add(headNextPos);
-                    break;
-                case "2":
-                    var p = int.Parse(query[1]);
-                    var headPos = headOldPoss[^p];
-                    Console.WriteLine($"{headPos.X} {headPos.Y}");
-                    break;
-            }
-        }
     }
 
     static string Rs(){return Console.ReadLine();}
@@ -356,11 +321,6 @@ public class Vector2 {
     public double DistanceTo(Vector2 other) => Math.Sqrt(Math.Pow(X - other.X, 2) + Math.Pow(Y - other.Y, 2));
 
     public double Length => Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
-
-    public Vector2 Clone()
-    {
-        return new Vector2(X, Y);
-    }
 }
 
 public enum GraphType

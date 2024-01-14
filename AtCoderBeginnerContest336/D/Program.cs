@@ -21,41 +21,56 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var NQ = Ria();
-        var N = NQ[0]; var Q = NQ[1];
+        var N = Ri();
+        var As = Ria();
+        SolveInner(N, As);
+    }
 
-        var headOldPoss = new List<Vector2>();
-        for (int i = N; i >= 1; i--)
+    public void SolveTest()
+    {
+        var N = 10;
+        for (int i = 0; i < 100; i++)
         {
-            headOldPoss.Add(new Vector2(i, 0));
-        }
-
-        var dirToOffsets = new Dictionary<char, Vector2>
-        {
-            ['R'] = new Vector2(1, 0),
-            ['L'] = new Vector2(-1, 0),
-            ['U'] = new Vector2(0, 1),
-            ['D'] = new Vector2(0, -1)
-        };
-
-        for (int i = 0; i < Q; i++)
-        {
-            var query = Rsa();
-            switch (query[0])
+            // ランダムな数列を作って試す
+            var As = new int[N];
+            var rand = new Random();
+            for (int j = 0; j < N; j++)
             {
-                case "1":j
-                    var headNextPos = headOldPoss.Last().Clone();
-                    var offset = dirToOffsets[query[1][0]];
-                    headNextPos += offset;
-                    headOldPoss.Add(headNextPos);
-                    break;
-                case "2":
-                    var p = int.Parse(query[1]);
-                    var headPos = headOldPoss[^p];
-                    Console.WriteLine($"{headPos.X} {headPos.Y}");
-                    break;
+                As[j] = rand.Next(1, 10);
             }
+            Console.WriteLine(string.Join(" ", As));
+            SolveInner(N, As);
+            // キー入力を待つ
+            Console.ReadLine();
         }
+    }
+
+    void SolveInner(int N, int[] As) {
+        var h = 0;
+        var hsFromL = new int[N];
+        for (int i = 0; i < N; i++)
+        {
+            if (As[i] > h) h++;
+            else h = Math.Min(h, As[i]);
+            hsFromL[i] = h;
+        }
+
+        var hsFromR = new int[N];
+        h = 0;
+        for (int i = N - 1; i >= 0; i--)
+        {
+            if (As[i] > h) h++;
+            else h = Math.Min(h, As[i]);
+            hsFromR[i] = h;
+        }
+
+        var maxHLimit = 0;
+        for (int i = 0; i < N; i++)
+        {
+            var hLimit = Math.Min(hsFromL[i], hsFromR[i]);
+            maxHLimit = Math.Max(maxHLimit, hLimit);
+        }
+        Console.WriteLine(maxHLimit);
     }
 
     static string Rs(){return Console.ReadLine();}
@@ -356,11 +371,6 @@ public class Vector2 {
     public double DistanceTo(Vector2 other) => Math.Sqrt(Math.Pow(X - other.X, 2) + Math.Pow(Y - other.Y, 2));
 
     public double Length => Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
-
-    public Vector2 Clone()
-    {
-        return new Vector2(X, Y);
-    }
 }
 
 public enum GraphType
