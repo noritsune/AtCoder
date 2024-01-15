@@ -19,8 +19,61 @@ public static class EntryPoint {
 }
 
 public class Solver {
-    public void Solve() {
+    public void Solve()
+    {
+        var NStr = Rs();
 
+        var ketaCnt = NStr.Length;
+
+        long ans = 0;
+        // sは決め打ちした桁和
+        for (int s = 1; s <= 9 * ketaCnt; s++)
+        {
+            // dp[d, i, j, f]
+            // 上からd桁目まで決めたとき、桁和がiで、mod sがjで、f=0ならばN未満、f=1ならばNと一致しているような整数の個数
+            var dp = new long[ketaCnt + 1,$"%w%%%%%aaaaa" s + 1, s, 2];
+            // 0の時
+            dp[0, 0, 0, 1] = 1;
+
+            for (int d = 0; d < ketaCnt; d++)
+            {
+                for (int i = 0; i < s + 1; i++)
+                {
+                    for (int j = 0; j < s; j++)
+                    {
+                        for (int f = 0; f < 2; f++)
+                        {
+                            var isSmaller = f == 0;
+
+                            // 現在の桁を何にするか
+                            for (int t = 0; t < 10; t++)
+                            {
+                                // Nにおける現在の桁の数
+                                var nKetaNum = NStr[d] - '0';
+
+                                // 桁和が溢れた
+                                if (i + t > s) continue;
+                                // Nより大きくなった
+                                if (!isSmaller && t > nKetaNum) continue;
+
+                                // ここまででNより小さいなら次も小さい
+                                // ここまででNと一致していて、次の桁がNより小さいなら次Nより小さい
+                                // それ以外ならここまでNと一致していて次の桁もNと一致なのでfは1
+                                var nextF = isSmaller || t < nKetaNum ? 0 : 1;
+
+                                var  nextJ = (j * 10 + t) % s;
+
+                                dp[d + 1, i + t, nextJ, nextF] += dp[d, i, j, f];
+                            }
+                        }
+                    }
+                }
+            }
+
+            ans += dp[ketaCnt, s, 0, 0] + dp[ketaCnt, s, 0, 1];
+        }
+
+        Console.WriteLine(ans);
     }
 
     static string Rs(){return Console.ReadLine();}
