@@ -19,73 +19,91 @@ public static class EntryPoint {
 }
 
 public class Solver {
-    public void Solve()
-    {
-        var NM = Ria();
-        var N = NM[0]; var M = NM[1];
-        var As = Ria();
-
-        var graph1 = new Graph<int>(GraphType.Undirected);
-        for (int i = 1; i <= N; i++) graph1.AddVertex(i);
-        for (int i = 0; i < M; i++)
+    public void Solve() {
+        var HWK = Ria();
+        var H = HWK[0]; var W = HWK[1]; var K = HWK[2];
+        var grid = new string[H];
+        for (int i = 0; i < H; i++)
         {
-            var UV = Ria();
-            var U = UV[0]; var V = UV[1];
-            graph1.AddEdge(U, V);
+            grid[i] = Rs();
         }
-        
-        // 隣接している頂点のうち、Aが同じものを統合する
-        var uf = new UnionFind(N + 1);
-        for (int v = 1; v <= N; v++)
+
+        var dotCntMin = int.MaxValue;
+        for (int h = 0; h < H; h++)
         {
-            foreach (var nextV in graph1.Vertices[v])
+            var circleCnt = 0;
+            var dotCnt = 0;
+            for (int w = 0; w < W; w++)
             {
-                if (As[nextV - 1] == As[v - 1])
+                if (w >= K)
                 {
-                    uf.Union(v, nextV);
+                    switch (grid[h][w - K])
+                    {
+                        case 'o':
+                            circleCnt--;
+                            break;
+                        case '.':
+                            dotCnt--;
+                            break;
+                    }
+                }
+
+                switch (grid[h][w])
+                {
+                    case 'o':
+                        circleCnt++;
+                        break;
+                    case '.':
+                        dotCnt++;
+                        break;
+                }
+
+                if (circleCnt + dotCnt == K)
+                {
+                    dotCntMin = Math.Min(dotCntMin, dotCnt);
                 }
             }
         }
 
-        var graph2 = new Graph<int>(GraphType.Directed);
-        for (int i = 1; i <= N; i++) graph2.AddVertex(i);
-        for (int v = 1; v <= N; v++)
+        // 縦
+        for (int w = 0; w < W; w++)
         {
-            foreach (var nextV in graph1.Vertices[v])
+            var circleCnt = 0;
+            var dotCnt = 0;
+            for (int h = 0; h < H; h++)
             {
-                if (uf.Same(v, nextV)) continue;
-
-                var from = uf.Find(v);
-                var to = uf.Find(nextV);
-                if (As[to - 1] < As[from - 1])
+                if (h >= K)
                 {
-                    (from, to) = (to, from);
+                    switch (grid[h - K][w])
+                    {
+                        case 'o':
+                            circleCnt--;
+                            break;
+                        case '.':
+                            dotCnt--;
+                            break;
+                    }
                 }
 
-                graph2.AddEdge(from, to);
+                switch (grid[h][w])
+                {
+                    case 'o':
+                        circleCnt++;
+                        break;
+                    case '.':
+                        dotCnt++;
+                        break;
+                }
+
+                if (circleCnt + dotCnt == K)
+                {
+                    dotCntMin = Math.Min(dotCntMin, dotCnt);
+                }
             }
         }
 
-        var maxScores = new int[N + 1];
-        var q = new Queue<(int v, int score)>();
-        q.Enqueue((1, 1));
-        while (q.Any())
-        {
-            var (v, score) = q.Dequeue();
-            foreach (var nextV in graph2.Vertices[v])
-            {
-                var nextScore = score;
-                if (As[nextV - 1] > As[v - 1]) nextScore++;
-
-                if (maxScores[nextV] < nextScore)
-                {
-                    maxScores[nextV] = nextScore;
-                    q.Enqueue((nextV, nextScore));
-                }
-            }
-        }
-
-        Console.WriteLine(maxScores[N]);
+        if (dotCntMin == int.MaxValue) dotCntMin = -1;
+        Console.WriteLine(dotCntMin);
     }
 
     static string Rs(){return Console.ReadLine();}

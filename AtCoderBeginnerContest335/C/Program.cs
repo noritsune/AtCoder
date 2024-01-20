@@ -43,7 +43,7 @@ public class Solver {
             var query = Rsa();
             switch (query[0])
             {
-                case "1":j
+                case "1":
                     var headNextPos = headOldPoss.Last().Clone();
                     var offset = dirToOffsets[query[1][0]];
                     headNextPos += offset;
