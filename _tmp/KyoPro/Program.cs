@@ -19,7 +19,8 @@ public static class EntryPoint {
 }
 
 public class Solver {
-    public void Solve() {
+    public void Solve()
+    {
 
     }
 
@@ -627,19 +628,19 @@ public class Dijkstra
 
 public class GenericDijkstra<T> where T : notnull
 {
-    private readonly Dictionary<T, List<Edge<T>>> _graph;        // グラフの辺のデータ
+    private readonly Dictionary<T, List<Edge>> _graph;        // グラフの辺のデータ
 
     /// <summary>
     /// 初期化
     /// </summary>
     public GenericDijkstra()
     {
-        _graph = new Dictionary<T, List<Edge<T>>>();
+        _graph = new Dictionary<T, List<Edge>>();
     }
 
     public void AddVertex(T vertex)
     {
-        _graph.TryAdd(vertex, new List<Edge<T>>());
+        _graph.TryAdd(vertex, new List<Edge>());
     }
 
     /// <summary>
@@ -650,7 +651,7 @@ public class GenericDijkstra<T> where T : notnull
     /// <param name="cost">コスト</param>
     public void AddEdge(T from, T to, long cost = 1)
     {
-        _graph[from].Add(new Edge<T>(to, cost));
+        _graph[from].Add(new Edge(to, cost));
     }
 
     /// <summary>
@@ -665,8 +666,8 @@ public class GenericDijkstra<T> where T : notnull
         cost[start] = 0;
 
         // 未確定の頂点を格納する優先度付きキュー(コストが小さいほど優先度が高い)
-        var q = new PriorityQueue<Vertex<T>>(Comparer<Vertex<T>>.Create((a, b) => b.CompareTo(a)));
-        q.Enqueue(new Vertex<T>(start, 0));
+        var q = new PriorityQueue<Vertex>(Comparer<Vertex>.Create((a, b) => b.CompareTo(a)));
+        q.Enqueue(new Vertex(start, 0));
 
         while (q.Count > 0)
         {
@@ -682,7 +683,7 @@ public class GenericDijkstra<T> where T : notnull
                 {
                     // 既に記録されているコストより小さければコストを更新
                     cost[e.to] = v.cost + e.cost;
-                    q.Enqueue(new Vertex<T>(e.to, cost[e.to]));
+                    q.Enqueue(new Vertex(e.to, cost[e.to]));
                 }
             }
         }
@@ -691,7 +692,7 @@ public class GenericDijkstra<T> where T : notnull
         return cost;
     }
 
-    struct Edge<T>
+    struct Edge
     {
         public readonly T to;                      // 接続先の頂点
         public readonly long cost;                   // 辺のコスト
@@ -703,7 +704,7 @@ public class GenericDijkstra<T> where T : notnull
         }
     }
 
-    public struct Vertex<T> : IComparable<Vertex<T>>
+    public readonly struct Vertex : IComparable<Vertex>
     {
         public readonly T index;                   // 頂点の番号
         public readonly long cost;                   // 記録したコスト
@@ -714,7 +715,7 @@ public class GenericDijkstra<T> where T : notnull
             this.cost = cost;
         }
 
-        public int CompareTo(Vertex<T> other)
+        public int CompareTo(Vertex other)
             => cost.CompareTo(other.cost);
     }
 }
@@ -1238,4 +1239,92 @@ public struct ModInt : IEquatable<ModInt>
         return Num == other.Num;
     }
 }
+
+/// <summary>
+/// 遅延セグメント木
+/// 以下の操作をO(long(N))で行えるデータ構造
+/// - 任意の要素、区間の値を更新する
+/// - 任意の区間上の最大値や合計値などを取得する
+/// </summary>
+public class SegTree
+{
+    /// <summary>
+    /// 二分木を配列で表現したもの
+    /// 葉の数がN個なら2N-1個のノードがある
+    /// i番目の葉の要素番号はN - 1 + i
+    /// i番目のノードの親は(i - 1) / 2
+    /// i番目のノードの子は2i + 1と2i + 2
+    /// </summary>
+    readonly long[] _nodes;
+    readonly int _leafCnt;
+    readonly long _initV;
+    readonly Func <long, long, long> _updateFunc;
+
+    public SegTree(int dataCnt, long initV, Func<long, long, long> updateFunc)
+    {
+        _initV = initV;
+        _updateFunc = updateFunc;
+
+        _leafCnt = 1;
+        while (_leafCnt < dataCnt) _leafCnt *= 2;
+        _nodes = new long[2 * _leafCnt - 1];
+    }
+
+    public static SegTree CreateMinSegTree(int n)
+    {
+        return new SegTree(n, long.MaxValue, Math.Min);
+    }
+
+    public static SegTree CreateMaxSegTree(int n)
+    {
+        return new SegTree(n, long.MinValue, Math.Max);
+    }
+
+    public static SegTree CreateSumSegTree(int n)
+    {
+        return new SegTree(n, 0, (a, b) => a + b);
+    }
+
+    /// <summary>
+    /// 左からi番目の葉要素の値をvに更新する
+    /// </summary>
+    public void Set(int leafIdx, long v)
+    {
+        leafIdx += _leafCnt - 1;
+        // まずは葉を更新
+        _nodes[leafIdx] = v;
+        // 葉から根に向かって更新していく
+        while (leafIdx > 0)
+        {
+            leafIdx = (leafIdx - 1) / 2;
+            _nodes[leafIdx] = _updateFunc(_nodes[leafIdx * 2 + 1], _nodes[leafIdx * 2 + 2]);
+        }
+    }
+
+    /// <summary>
+    /// 指定した区間[l, r)について更新関数で処理した結果を返す
+    /// </summary>
+    public long QueryRange(int l, int r)
+    {
+        return QueryRangeRec(l, r, 0, 0, _leafCnt);
+    }
+
+    /// <summary>
+    /// 全区間について更新関数で処理した結果を返す
+    /// </summary>
+    public long QueryRangeAll()
+    {
+        return QueryRangeRec(0, _nodes.Length, 0, 0, _leafCnt);
+    }
+
+    long QueryRangeRec(int a, int b, int k, int l, int r)
+    {
+        if (r <= a || b <= l) return _initV;
+        if (a <= l && r <= b) return _nodes[k];
+        var vl = QueryRangeRec(a, b, k * 2 + 1, l, (l + r) / 2);
+        var vr = QueryRangeRec(a, b, k * 2 + 2, (l + r) / 2, r);
+        return _updateFunc(vl, vr);
+    }
+}
+
 }
