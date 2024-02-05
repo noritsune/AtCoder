@@ -30,15 +30,71 @@ public class Solver {
             var row = Rs();
             grid[i] = row;
 
-            var pIdx = row.IndexOf('P');
-            if (pIdx != -1)
+            for (int j = 0; j < N; j++)
             {
-                if (p1Pos == null) p1Pos = new Vector2(pIdx, i);
-                else p2Pos = new Vector2(pIdx, i);
+                if (row[j] == 'P')
+                {
+                    if (p1Pos == null) p1Pos = new Vector2(j, i);
+                    else p2Pos = new Vector2(j, i);
+                }
             }
         }
 
+        var costs = new long[N, N, N, N];
+        for (int y1 = 0; y1 < N; y1++)
+        {
+            for (int x1 = 0; x1 < N; x1++)
+            {
+                for (int y2 = 0; y2 < N; y2++)
+                {
+                    for (int x2 = 0; x2 < N; x2++)
+                    {
+                        costs[y1, x1, y2, x2] = long.MaxValue;
+                    }
+                }
+            }
+        }
+        costs[p1Pos.Y, p1Pos.X, p2Pos.Y, p2Pos.X] = 0;
 
+        var offsets = new Vector2[] { new(0, 1), new(0, -1), new(1, 0), new(-1, 0), };
+
+        var q = new Queue<(int x1, int y1, int x2, int y2)>();
+        q.Enqueue((p1Pos.X, p1Pos.Y, p2Pos.X, p2Pos.Y));
+        long ans = -1;
+        while (q.Any())
+        {
+            var (x1, y1, x2, y2) = q.Dequeue();
+
+            if (y1 == y2 && x1 == x2)
+            {
+                ans = costs[y1, x1, y2, x2];
+                break;
+            }
+
+            foreach (var offset in offsets)
+            {
+                var (nx1, ny1) = (x1 + offset.X, y1 + offset.Y);
+                var (nx2, ny2) = (x2 + offset.X, y2 + offset.Y);
+
+                if (nx1 < 0 || nx1 >= N || ny1 < 0 || ny1 >= N || grid[ny1][nx1] == '#')
+                {
+                    nx1 = x1; ny1 = y1;
+                }
+
+                if (nx2 < 0 || nx2 >= N || ny2 < 0 || ny2 >= N || grid[ny2][nx2] == '#')
+                {
+                    nx2 = x2; ny2 = y2;
+                }
+
+                if (costs[ny1, nx1, ny2, nx2] == long.MaxValue)
+                {
+                    costs[ny1, nx1, ny2, nx2] = costs[y1, x1, y2, x2] + 1;
+                    q.Enqueue((nx1, ny1, nx2, ny2));
+                }
+            }
+        }
+
+        Console.WriteLine(ans);
     }
 
     static string Rs(){return Console.ReadLine();}
