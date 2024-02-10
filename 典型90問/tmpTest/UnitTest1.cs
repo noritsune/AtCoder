@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AtCoder;
+using KyoPro;
 
 namespace Test
 {
@@ -43,7 +43,7 @@ namespace Test
 			Console.SetOut(output);
 			Console.SetIn(input);
 
-			SolveExecuter.Main();
+			EntryPoint.Main();
 
 			string expected = File.ReadAllText(outputFileName);
 			string actual = output.ToString();
