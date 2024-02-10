@@ -21,7 +21,7 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-
+        var N = Ri();
     }
 
     static string Rs(){return Console.ReadLine();}
@@ -1243,10 +1243,16 @@ public struct ModInt : IEquatable<ModInt>
 /// <summary>
 /// 遅延セグメント木
 /// 以下の操作をO(long(N))で行えるデータ構造
-/// - 任意の要素、区間の値を更新する
+/// - 任意の区間の値を更新する
 /// - 任意の区間上の最大値や合計値などを取得する
+///
+/// 使用例:
+/// - 区間の上書きと区間の最大値を取得したい時
+///   new LazySegTree(N, Math.Max, (a, b) => a);
+/// - 区間への加算と区間の最小値を取得したい時
+///   new LazySegTree(N, Math.Min, (a, b) => a + b);
 /// </summary>
-public class SegTree
+public class LazySegTree
 {
     /// <summary>
     /// 二分木を配列で表現したもの
@@ -1255,75 +1261,119 @@ public class SegTree
     /// i番目のノードの親は(i - 1) / 2
     /// i番目のノードの子は2i + 1と2i + 2
     /// </summary>
-    readonly long[] _nodes;
+    readonly long?[] _nodes;
+    readonly long?[] _lazys;
     readonly int _leafCnt;
-    readonly long _initV;
-    readonly Func <long, long, long> _updateFunc;
+    // 子ノードを親ノードに反映させる更新する処理
+    readonly Func <long, long, long> _fx;
+    // 遅延評価を現ノードに反映する処理
+    readonly Func <long, long, long> _fa;
+    // 遅延評価を合算する処理
+    readonly Func <long, long, long> _fm;
 
-    public SegTree(int dataCnt, long initV, Func<long, long, long> updateFunc)
+    public LazySegTree(int dataCnt, Func<long, long, long> fx, Func<long, long, long> fam)
     {
-        _initV = initV;
-        _updateFunc = updateFunc;
+        _fx = fx;
+        // 現状は便宜、_faと_fmが同じのケースだけに対応している
+        // 別にしたい時は引数を増やす
+        _fa = fam;
+        _fm = fam;
 
         _leafCnt = 1;
         while (_leafCnt < dataCnt) _leafCnt *= 2;
-        _nodes = new long[2 * _leafCnt - 1];
-    }
-
-    public static SegTree CreateMinSegTree(int n)
-    {
-        return new SegTree(n, long.MaxValue, Math.Min);
-    }
-
-    public static SegTree CreateMaxSegTree(int n)
-    {
-        return new SegTree(n, long.MinValue, Math.Max);
-    }
-
-    public static SegTree CreateSumSegTree(int n)
-    {
-        return new SegTree(n, 0, (a, b) => a + b);
+        var nodeCnt = 2 * _leafCnt - 1;
+        _nodes = new long?[nodeCnt];
+        _lazys = new long?[nodeCnt];
     }
 
     /// <summary>
-    /// 左からi番目の葉要素の値をvに更新する
+    /// 区間[l, r)にfa(_nodes[k], v)を適用する
     /// </summary>
-    public void Set(int leafIdx, long v)
+    public void ApplyRange(int a, int b, long v)
     {
-        leafIdx += _leafCnt - 1;
-        // まずは葉を更新
-        _nodes[leafIdx] = v;
-        // 葉から根に向かって更新していく
-        while (leafIdx > 0)
+        ApplyRec(a, b, v, 0, 0, _leafCnt);
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="k">処理対象のノード番号</param>
+    /// <param name="l">処理対象のノードが見ている範囲の左端</param>
+    /// <param name="r">処理対象のノードが見ている範囲の右端</param>
+    void ApplyRec(int a, int b, long v, int k, int l, int r)
+    {
+        Eval(k);
+        // 区間[l, r)が区間[a, b)に完全に含まれる時
+        if (a <= l && r <= b)
         {
-            leafIdx = (leafIdx - 1) / 2;
-            _nodes[leafIdx] = _updateFunc(_nodes[leafIdx * 2 + 1], _nodes[leafIdx * 2 + 2]);
+            _lazys[k] = ExecFunc(_fm, _lazys[k], v);
+            Eval(k);
         }
-    }
-
-    /// <summary>
-    /// 指定した区間[l, r)について更新関数で処理した結果を返す
-    /// </summary>
-    public long QueryRange(int l, int r)
-    {
-        return QueryRangeRec(l, r, 0, 0, _leafCnt);
+        // 区間[l, r)が区間[a, b)と交差する時
+        else if (a < r && l < b)
+        {
+            var child1 = k * 2 + 1; var child2 = k * 2 + 2;
+            ApplyRec(a, b, v, child1, l, (l + r) / 2);
+            ApplyRec(a, b, v, child2, (l + r) / 2, r);
+            _nodes[k] = ExecFunc(_fx, _nodes[child1], _nodes[child2]);
+        }
     }
 
     /// <summary>
     /// 全区間について更新関数で処理した結果を返す
     /// </summary>
-    public long QueryRangeAll()
+    public long? QueryAll()
     {
-        return QueryRangeRec(0, _nodes.Length, 0, 0, _leafCnt);
+        return Query(0, _leafCnt);
     }
 
-    long QueryRangeRec(int a, int b, int k, int l, int r)
+    /// <summary>
+    /// 指定した区間[l, r)について更新関数で処理した結果を返す
+    /// </summary>
+    public long? Query(int a, int b)
     {
-        if (r <= a || b <= l) return _initV;
+        return QueryRec(a, b, 0, 0, _leafCnt);
+    }
+
+    long? QueryRec(int a, int b, int k, int l, int r)
+    {
+        Eval(k);
+
+        if (r <= a || b <= l) return null;
+
         if (a <= l && r <= b) return _nodes[k];
-        var vl = QueryRangeRec(a, b, k * 2 + 1, l, (l + r) / 2);
-        var vr = QueryRangeRec(a, b, k * 2 + 2, (l + r) / 2, r);
-        return _updateFunc(vl, vr);
+
+        var vl = QueryRec(a, b, k * 2 + 1, l, (l + r) / 2);
+        var vr = QueryRec(a, b, k * 2 + 2, (l + r) / 2, r);
+        return ExecFunc(_fx, vl, vr);
+    }
+
+    /// <summary>
+    /// 遅延評価を反映する
+    /// </summary>
+    void Eval(int k)
+    {
+        if (!_lazys[k].HasValue) return;
+
+        if (k < _leafCnt - 1)
+        {
+            // 葉でなければ子に伝播させる
+            _lazys[k * 2 + 1] = ExecFunc(_fm, _lazys[k * 2 + 1], _lazys[k]);
+            _lazys[k * 2 + 2] = ExecFunc(_fm, _lazys[k * 2 + 2], _lazys[k]);
+        }
+
+        // 現ノードに遅延評価を反映させる
+        _nodes[k] = ExecFunc(_fa, _nodes[k], _lazys[k]);
+        _lazys[k] = null;
+    }
+
+    // _fxなどの評価関数をnull許容型で扱うためのヘルパー
+    long? ExecFunc(Func<long, long, long> func, long? a, long? b)
+    {
+        if (a.HasValue && b.HasValue) return func(a.Value, b.Value);
+        if (a.HasValue) return a.Value;
+        if (b.HasValue) return b.Value;
+        return null;
     }
 }
 
