@@ -21,7 +21,6 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var N = Ri();
     }
 
     static string Rs(){return Console.ReadLine();}
@@ -1241,8 +1240,8 @@ public struct ModInt : IEquatable<ModInt>
 }
 
 /// <summary>
-/// 遅延セグメント木
-/// 以下の操作をO(long(N))で行えるデータ構造
+/// 遅延評価セグメント木
+/// 以下の操作をO(logN)で行えるデータ構造
 /// - 任意の区間の値を更新する
 /// - 任意の区間上の最大値や合計値などを取得する
 ///
@@ -1264,6 +1263,8 @@ public class LazySegTree
     readonly long?[] _nodes;
     readonly long?[] _lazys;
     readonly int _leafCnt;
+    // 葉の何番目までが有効なデータか。それ以外の葉は完全二分木にするための無駄要素
+    readonly int _dataCnt;
     // 子ノードを親ノードに反映させる更新する処理
     readonly Func <long, long, long> _fx;
     // 遅延評価を現ノードに反映する処理
@@ -1273,6 +1274,7 @@ public class LazySegTree
 
     public LazySegTree(int dataCnt, Func<long, long, long> fx, Func<long, long, long> fam)
     {
+        _dataCnt = dataCnt;
         _fx = fx;
         // 現状は便宜、_faと_fmが同じのケースだけに対応している
         // 別にしたい時は引数を増やす
@@ -1286,17 +1288,42 @@ public class LazySegTree
         _lazys = new long?[nodeCnt];
     }
 
+
+    /// <summary>
+    /// 現時点での葉の値を取得する
+    /// 取得される数はコンストラクタで指定したデータ数分
+    /// 計算量はO(N)
+    /// </summary>
+    public long?[] BuildLeafs()
+    {
+        // 遅延評価を全部反映する
+        for (int k = 0; k < _nodes.Length; k++)
+        {
+            Eval(k);
+        }
+        return _nodes.Skip(_leafCnt - 1).Take(_dataCnt).ToArray();
+    }
+
+    /// <summary>
+    /// i番目の葉の値を取得する
+    /// 計算量はO(longN)
+    /// O(1)で行う方法はない
+    /// 全ての葉の値をまとめて取得する場合はBuildLeafsを使う
+    /// </summary>
+    public long? GetLeaf(int i)
+    {
+        return Query(i, i + 1);
+    }
+
     /// <summary>
     /// 区間[l, r)にfa(_nodes[k], v)を適用する
+    /// 計算量はO(longN)
     /// </summary>
     public void ApplyRange(int a, int b, long v)
     {
         ApplyRec(a, b, v, 0, 0, _leafCnt);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
     /// <param name="k">処理対象のノード番号</param>
     /// <param name="l">処理対象のノードが見ている範囲の左端</param>
     /// <param name="r">処理対象のノードが見ている範囲の右端</param>
@@ -1321,14 +1348,16 @@ public class LazySegTree
 
     /// <summary>
     /// 全区間について更新関数で処理した結果を返す
+    /// 計算量はO(longN)
     /// </summary>
     public long? QueryAll()
     {
-        return Query(0, _leafCnt);
+        return Query(0, _dataCnt);
     }
 
     /// <summary>
     /// 指定した区間[l, r)について更新関数で処理した結果を返す
+    /// 計算量はO(longN)
     /// </summary>
     public long? Query(int a, int b)
     {
