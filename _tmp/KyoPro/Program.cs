@@ -80,6 +80,11 @@ public class Solver {
         }
     }
 
+    static long Lcm(long a, long b)
+    {
+        return a * b / Gcd(a, b);
+    }
+
     /// <summary>
     /// 2^nパターン分の全探索結果を返す
     /// </summary>
