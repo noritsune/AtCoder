@@ -21,6 +21,46 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
+        var NQ = Ria();
+        var N = NQ[0];
+        var Q = NQ[1];
+        var S = Rs();
+
+        var seg = new LazySegTree(N + 1, (a, b) => a + b, (a, b) => b);
+        for (int i = 0; i < N - 1; i++)
+        {
+            seg.ApplyRange(i, i + 1, S[i] == S[i + 1] ? 0 : 1);
+        }
+
+        for (int i = 0; i < Q; i++)
+        {
+            var query = Ria();
+            var L = query[1] - 1; var R = query[2] - 1;
+            switch (query[0])
+            {
+                case 1:
+                    if (L > 0)
+                    {
+                        seg.ApplyRange(L - 1, L, 1 - seg.GetLeaf(L - 1).Value);
+                    }
+                    if (R < N - 1)
+                    {
+                        seg.ApplyRange(R, R + 1, 1 - seg.GetLeaf(R).Value);
+                    }
+                    break;
+                case 2:
+                    if (L == R)
+                    {
+                        Console.WriteLine("Yes");
+                    }
+                    else
+                    {
+                        Console.WriteLine(seg.Query(L, R).Value == R - L ? "Yes" : "No");
+                    }
+
+                    break;
+            }
+        }
     }
 
     static string Rs(){return Console.ReadLine();}
