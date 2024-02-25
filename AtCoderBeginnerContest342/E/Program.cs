@@ -24,30 +24,49 @@ public class Solver {
         var NM = Ria();
         var N = NM[0]; var M = NM[1];
 
-        var graph = new Graph<int>(GraphType.Directed);
-        for (int i = 1; i <= N; i++) graph.AddVertex(i);
-
-        var AToBToLastT = new Dictionary<int, Dictionary<int, long>>();
-        var BToAAndLastTMin = new Dictionary<int, (int A, long LastTMin)>();
+        var vToFromVInfos = new List<(int from, long l, long d, long k, long c)>[N + 1];
+        for (int i = 1; i <= N; i++)
+        {
+            vToFromVInfos[i] = new();
+        }
         for (int i = 0; i < M; i++)
         {
             var ldkcAB = Rla();
             var l = ldkcAB[0]; var d = ldkcAB[1]; var k = ldkcAB[2];
             var c = ldkcAB[3]; var A = (int)ldkcAB[4]; var B = (int)ldkcAB[5];
+            vToFromVInfos[B].Add((A, l, d, k, c));
+        }
 
-            graph.AddEdge(A, B);
+        // 駅Nから駅iに到達できる時刻のうち最も遅いもの
+        var vToMaxT = new long[N + 1];
+        var descComparer = Comparer<long>.Create((a, b) => b.CompareTo(a));
+        var q = new PriorityQueue<(int v, long t), long>(descComparer);
+        // 駅Nに十分遅い時刻にいるところから遡る
+        q.Enqueue((N, long.MaxValue) , long.MaxValue);
+        while (q.Count > 0)
+        {
+            var (v, t) = q.Dequeue();
+            // もっと遅い時刻で既に到達済みならスキップ
+            if (vToMaxT[v] > t) continue;
 
-            var lastT = l + d * (k - 1) + c;
-            AToBToLastT.TryAdd(A, new Dictionary<int, long>());
-            AToBToLastT[A].Add(B, lastT);
-
-            if (!BToAAndLastTMin.TryAdd(B, (A, lastT)))
+            // 駅vに向かう電車を見ていく
+            foreach (var (from, l, d, k , c) in vToFromVInfos[v])
             {
-                if (lastT < BToAAndLastTMin[B].LastTMin)
+                // tまでに駅fromから駅vに到達する電車のうち最も早い電車の発車時刻
+                var maxT = l + Math.Min(k - 1, (t - l - c) / d) * d;
+                if (maxT > vToMaxT[from])
                 {
-                    BToAAndLastTMin[B] = (A, lastT);
+                    // 駅fromに到達できる時刻のうち、より遅い時刻が見つかったので更新する
+                    vToMaxT[from] = maxT;
+                    q.Enqueue((from, maxT), maxT);
                 }
             }
+        }
+
+        for (int v = 1; v < N; v++)
+        {
+            var maxT = vToMaxT[v];
+            Console.WriteLine(maxT > 0 ? maxT : "Unreachable");
         }
     }
 
