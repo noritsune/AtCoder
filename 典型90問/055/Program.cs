@@ -16,19 +16,36 @@ namespace AtCoder {
     public class Solver {
         public void Solve()
         {
-            var NPQ = ria();
-            var N = NPQ[0];
-            var P = NPQ[1];
-            var Q = NPQ[2];
-            var As = ria();
-            
-            var nums = Enumerable.Range(0, N);
-            int[][] indexPatterns = Combination.Enumerate(nums, 5, withRepetition:false).ToArray();
-            int ans = indexPatterns
-                .Select(indexPattern => indexPattern
-                    .Aggregate<int, BigInteger>(1, (current, index) => current * As[index])
-                )
-                .Count(multi => multi % P == Q);
+            var NPQ = rla();
+            var N = NPQ[0]; var P = NPQ[1]; var Q = NPQ[2];
+            var As = rla();
+
+            var ans = 0;
+            for (int i = 0; i < N; i++)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    for (int k = 0; k < j; k++)
+                    {
+                        for (int l = 0; l < k; l++)
+                        {
+                            for (int m = 0; m < l; m++)
+                            {
+                                long multiMod = As[i];
+                                multiMod = multiMod * As[j] % P;
+                                multiMod = multiMod * As[k] % P;
+                                multiMod = multiMod * As[l] % P;
+                                multiMod = multiMod * As[m] % P;
+                                if (multiMod == Q)
+                                {
+                                    ans++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             Console.WriteLine(ans);
         }
 
