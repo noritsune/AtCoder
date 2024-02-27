@@ -9,31 +9,15 @@ namespace AtCoder {
     public static class SolveExecuter {
         public static void Main() {
             var solver = new Solver();
-            solver.Solve2();
+            solver.Solve();
         }
     }
 
     public class Solver {
-        public void Solve2()
+        public void Solve()
         {
             var HW = ria();
-            var H = HW[0];
-            var W = HW[1];
-            var rscs = ria();
-            var start = new Vector2(rscs[1] - 1, rscs[0] - 1);
-            var rtct = ria();
-            var goal = new Vector2(rtct[1] - 1, rtct[0] - 1);
-            var maze = new List<string>();
-            for (int i = 0; i < H; i++) maze.Add(rs());
-
-            // var dijkstra = new Dijkstra();
-        }
-
-        public void Solve1()
-        {
-            var HW = ria();
-            var H = HW[0];
-            var W = HW[1];
+            var H = HW[0]; var W = HW[1];
             var rscs = ria();
             var start = new Vector2(rscs[1] - 1, rscs[0]- 1);
             var rtct = ria();
@@ -57,45 +41,38 @@ namespace AtCoder {
             {
                 eachDirCosts[start.Y, start.X][dir] = 0;
             }
-            
-            var q = new Queue<Vector3>();
-            for (int dir = 0; dir < 4; dir++)
+
+            var dirs = new List<Vector2>
             {
-                q.Enqueue(new Vector3(start.X, start.Y, dir));
+                new Vector2(  1, 0),
+                new Vector2(- 1, 0),
+                new Vector2(0,  1),
+                new Vector2(0, -1)
+            };
+
+            var q = new Queue<(int x, int y, int dirIdx)>();
+            for (int dirIdx = 0; dirIdx < 4; dirIdx++)
+            {
+                q.Enqueue((start.X, start.Y, dirIdx));
             }
             while (q.Count > 0)
             {
-                var posWithDir = q.Dequeue();
-                var pos = new Vector2((int)posWithDir.X, (int)posWithDir.Y);
-                var dir = (int)posWithDir.Z;
-                var cost = eachDirCosts[pos.Y, pos.X][dir];
-                
-                var nextPoses = new List<Vector2>
-                {
-                    new Vector2(pos.X + 1, pos.Y),
-                    new Vector2(pos.X - 1, pos.Y),
-                    new Vector2(pos.X, pos.Y + 1),
-                    new Vector2(pos.X, pos.Y - 1)
-                };
-                foreach (var nextPos in nextPoses)
-                {
-                    if(nextPos.Y < 0 || nextPos.Y >= H || nextPos.X < 0 || nextPos.X >= W) continue;
-                    if(maze[nextPos.Y][nextPos.X] == '#') continue;
-                    
-                    var nextDir = new Vector2(nextPos.X - pos.X, nextPos.Y - pos.Y);
-                    int dirIndex = 0;
-                         if(nextDir.Equals(new Vector2( 0, -1))) dirIndex = 0;
-                    else if(nextDir.Equals(new Vector2( 1,  0))) dirIndex = 1;
-                    else if(nextDir.Equals(new Vector2( 0,  1))) dirIndex = 2;
-                    else if(nextDir.Equals(new Vector2(-1,  0))) dirIndex = 3;
-                    
-                    int nextCostNew = cost;
-                    if(dirIndex != dir) nextCostNew++;
+                var (x, y, dirIdx) = q.Dequeue();
+                var cost = eachDirCosts[y, x][dirIdx];
 
-                    if (nextCostNew >= eachDirCosts[nextPos.Y, nextPos.X][dirIndex]) continue;
-                    
-                    eachDirCosts[nextPos.Y, nextPos.X][dirIndex] = nextCostNew;
-                    q.Enqueue(new Vector3(nextPos.X, nextPos.Y, dirIndex));
+                for (int nextDirIdx = 0; nextDirIdx < 4; nextDirIdx++)
+                {
+                    var nextDir = dirs[nextDirIdx];
+                    var nextX = x + nextDir.X; var nextY = y + nextDir.Y;
+                    if(nextY < 0 || nextY >= H || nextX < 0 || nextX >= W) continue;
+                    if(maze[nextY][nextX] == '#') continue;
+
+                    int nextCost = cost + (dirIdx == nextDirIdx ? 0 : 1);
+                    if (nextCost < eachDirCosts[nextY, nextX][nextDirIdx])
+                    {
+                        eachDirCosts[nextY, nextX][nextDirIdx] = nextCost;
+                        q.Enqueue((nextX, nextY, nextDirIdx));
+                    }
                 }
             }
 
