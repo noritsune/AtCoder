@@ -1276,75 +1276,64 @@ public struct ModInt : IEquatable<ModInt>
 
 public struct Node
 {
-    public int? n1;
-    public int? n2;
+    public int n1 = -1;
+    public int n2 = -2;
     public int n1Cnt;
     public int n2Cnt;
-
-    static Dictionary<int, int> _nToCnt = new ();
-    static HashSet<int> _nSet = new ();
-    static List<int> _descSortedNs = new ();
 
     public Node(int n)
     {
         n1 = n;
         n1Cnt = 1;
-        n2 = null;
+        n2 = -2;
         n2Cnt = 0;
     }
 
     public static Node Merge(Node a, Node b)
     {
-        _nToCnt.Clear();
-        _nSet.Clear();
-        _descSortedNs.Clear();
-
-        if (a.n1.HasValue)
+        var res = new Node();
+        if (a.n1 > b.n1)
         {
-            _nToCnt.TryAdd(a.n1.Value, 0);
-            _nToCnt[a.n1.Value] += a.n1Cnt;
-            if (_nSet.Add(a.n1.Value))
+            res.n1 = a.n1;
+            res.n1Cnt = a.n1Cnt;
+            res.n2 = Math.Max(a.n2, b.n1);
+            if (res.n2 == a.n2)
             {
-                _descSortedNs.Add(a.n1.Value);
+                res.n2Cnt += a.n2Cnt;
+            }
+            if (res.n2 == b.n1)
+            {
+                res.n2Cnt += b.n1Cnt;
             }
         }
-        if (a.n2.HasValue)
+        else if (b.n1 > a.n1)
         {
-            _nToCnt.TryAdd(a.n2.Value, 0);
-            _nToCnt[a.n2.Value] += a.n2Cnt;
-            if (_nSet.Add(a.n2.Value))
+            res.n1 = b.n1;
+            res.n1Cnt = b.n1Cnt;
+            res.n2 = Math.Max(b.n2, a.n1);
+            if (res.n2 == b.n2)
             {
-                _descSortedNs.Add(a.n2.Value);
+                res.n2Cnt += b.n2Cnt;
+            }
+            if (res.n2 == a.n1)
+            {
+                res.n2Cnt += a.n1Cnt;
             }
         }
-        if (b.n1.HasValue)
+        else
         {
-            _nToCnt.TryAdd(b.n1.Value, 0);
-            _nToCnt[b.n1.Value] += b.n1Cnt;
-            if (_nSet.Add(b.n1.Value))
+            res.n1 = a.n1;
+            res.n1Cnt = a.n1Cnt + b.n1Cnt;
+            res.n2 = Math.Max(a.n2, b.n2);
+            if (res.n2 == a.n2)
             {
-                _descSortedNs.Add(b.n1.Value);
+                res.n2Cnt += a.n2Cnt;
+            }
+            if (res.n2 == b.n2)
+            {
+                res.n2Cnt += b.n2Cnt;
             }
         }
-        if (b.n2.HasValue)
-        {
-            _nToCnt.TryAdd(b.n2.Value, 0);
-            _nToCnt[b.n2.Value] += b.n2Cnt;
-            if (_nSet.Add(b.n2.Value))
-            {
-                _descSortedNs.Add(b.n2.Value);
-            }
-        }
-
-        _descSortedNs.Sort((a, b) => b.CompareTo(a));
-
-        var res = new Node
-        {
-            n1 = _descSortedNs[0],
-            n2 = _descSortedNs.Count > 1 ? _descSortedNs[1] : null,
-            n1Cnt = _nToCnt[_descSortedNs[0]],
-            n2Cnt = _descSortedNs.Count > 1 ? _nToCnt[_descSortedNs[1]] : 0
-        };
 
         return res;
     }
