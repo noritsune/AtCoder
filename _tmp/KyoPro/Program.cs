@@ -1245,18 +1245,18 @@ public struct ModInt : IEquatable<ModInt>
 }
 
 /// <summary>
-/// 遅延評価セグメント木
+/// セグメント木
 /// 以下の操作をO(logN)で行えるデータ構造
-/// - 任意の区間の値を更新する
+/// - 任意の要素を上書きする
 /// - 任意の区間上の最大値や合計値などを取得する
 ///
 /// 使用例:
-/// - 区間の上書きと区間の最大値を取得したい時
-///   new LazySegTree(N, Math.Max, (a, b) => a);
-/// - 区間への加算と区間の最小値を取得したい時
-///   new LazySegTree(N, Math.Min, (a, b) => a + b);
+/// - 要素の上書きと区間の最大値を取得したい時
+///   new SegTree<T>(N, Math.Max);
+/// - 要素の上書きと区間の最小値を取得したい時
+///   new SegTree<T>(N, Math.Min);
 /// </summary>
-public class LazySegTree
+public class SegTree<T> where T : struct
 {
     /// <summary>
     /// 二分木を配列で表現したもの
@@ -1265,19 +1265,112 @@ public class LazySegTree
     /// i番目のノードの親は(i - 1) / 2
     /// i番目のノードの子は2i + 1と2i + 2
     /// </summary>
-    readonly long?[] _nodes;
-    readonly long?[] _lazys;
+    readonly T?[] _nodes;
     readonly int _leafCnt;
     // 葉の何番目までが有効なデータか。それ以外の葉は完全二分木にするための無駄要素
     readonly int _dataCnt;
     // 子ノードを親ノードに反映させる更新する処理
-    readonly Func <long, long, long> _fx;
-    // 遅延評価を現ノードに反映する処理
-    readonly Func <long, long, long> _fa;
-    // 遅延評価を合算する処理
-    readonly Func <long, long, long> _fm;
+    readonly Func <T, T, T> _fx;
 
-    public LazySegTree(int dataCnt, Func<long, long, long> fx, Func<long, long, long> fam)
+    public SegTree(int dataCnt, Func<T, T, T> fx)
+    {
+        _dataCnt = dataCnt;
+        _fx = fx;
+
+        _leafCnt = 1;
+        while (_leafCnt < dataCnt) _leafCnt *= 2;
+        var nodeCnt = 2 * _leafCnt - 1;
+        _nodes = new T?[nodeCnt];
+    }
+
+    /// <summary>
+    /// 要素iにfx(_nodes[k], v)を適用する
+    /// 計算量はO(longN)
+    /// </summary>
+    public void Set(int i, T v)
+    {
+        i += _leafCnt - 1;
+        _nodes[i] = v;
+        while (i > 0)
+        {
+            i = (i - 1) / 2;
+            _nodes[i] = ExecFunc(_fx, _nodes[i * 2 + 1], _nodes[i * 2 + 2]);
+        }
+    }
+
+    /// <summary>
+    /// 全区間について更新関数で処理した結果を返す
+    /// 計算量はO(longN)
+    /// </summary>
+    public T? QueryAll()
+    {
+        return Query(0, _dataCnt);
+    }
+
+    /// <summary>
+    /// 指定した区間[l, r)について更新関数で処理した結果を返す
+    /// 計算量はO(longN)
+    /// </summary>
+    public T? Query(int a, int b)
+    {
+        return QueryRec(a, b, 0, 0, _leafCnt);
+    }
+
+    T? QueryRec(int a, int b, int k, int l, int r)
+    {
+        if (r <= a || b <= l) return null;
+
+        if (a <= l && r <= b) return _nodes[k];
+
+        var vl = QueryRec(a, b, k * 2 + 1, l, (l + r) / 2);
+        var vr = QueryRec(a, b, k * 2 + 2, (l + r) / 2, r);
+        return ExecFunc(_fx, vl, vr);
+    }
+
+    // _fxなどの評価関数をnull許容型で扱うためのヘルパー
+    T? ExecFunc(Func<T, T, T> func, T? a, T? b)
+    {
+        if (a.HasValue && b.HasValue) return func(a.Value, b.Value);
+        if (a.HasValue) return a.Value;
+        if (b.HasValue) return b.Value;
+        return null;
+    }
+}
+
+/// <summary>
+/// 遅延評価セグメント木
+/// 以下の操作をO(logN)で行えるデータ構造
+/// - 任意の区間の値を更新する
+/// - 任意の区間上の最大値や合計値などを取得する
+///
+/// 使用例:
+/// - 区間の上書きと区間の最大値を取得したい時
+///   new LazySegTree<T>(N, Math.Max, (a, b) => a);
+/// - 区間への加算と区間の最小値を取得したい時
+///   new LazySegTree<T>(N, Math.Min, (a, b) => a + b);
+/// </summary>
+public class LazySegTree<T> where T : struct
+{
+    /// <summary>
+    /// 二分木を配列で表現したもの
+    /// 葉の数がN個なら2N-1個のノードがある
+    /// i番目の葉の要素番号はN - 1 + i
+    /// i番目のノードの親は(i - 1) / 2
+    /// i番目のノードの子は2i + 1と2i + 2
+    /// </summary>
+    readonly T?[] _nodes;
+    readonly T?[] _lazys;
+    readonly int _leafCnt;
+    // 葉の何番目までが有効なデータか。それ以外の葉は完全二分木にするための無駄要素
+    readonly int _dataCnt;
+    // 子ノードを親ノードに反映させる更新する処理
+    readonly Func <T, T, T> _fx;
+    // 遅延評価を現ノードに反映する処理
+    readonly Func <T, T, T> _fa;
+    // 遅延評価を合算する処理
+    readonly Func <T, T, T> _fm;
+
+    public LazySegTree(int dataCnt, Func<T, T, T> fx, Func<T, T, T> fam)
     {
         _dataCnt = dataCnt;
         _fx = fx;
@@ -1289,8 +1382,8 @@ public class LazySegTree
         _leafCnt = 1;
         while (_leafCnt < dataCnt) _leafCnt *= 2;
         var nodeCnt = 2 * _leafCnt - 1;
-        _nodes = new long?[nodeCnt];
-        _lazys = new long?[nodeCnt];
+        _nodes = new T?[nodeCnt];
+        _lazys = new T?[nodeCnt];
     }
 
 
@@ -1299,7 +1392,7 @@ public class LazySegTree
     /// 取得される数はコンストラクタで指定したデータ数分
     /// 計算量はO(N)
     /// </summary>
-    public long?[] BuildLeafs()
+    public T?[] BuildLeafs()
     {
         // 遅延評価を全部反映する
         for (int k = 0; k < _nodes.Length; k++)
@@ -1311,20 +1404,20 @@ public class LazySegTree
 
     /// <summary>
     /// i番目の葉の値を取得する
-    /// 計算量はO(longN)
+    /// 計算量はO(TN)
     /// O(1)で行う方法はない
     /// 全ての葉の値をまとめて取得する場合はBuildLeafsを使う
     /// </summary>
-    public long? GetLeaf(int i)
+    public T? GetLeaf(int i)
     {
         return Query(i, i + 1);
     }
 
     /// <summary>
     /// 区間[l, r)にfa(_nodes[k], v)を適用する
-    /// 計算量はO(longN)
+    /// 計算量はO(TN)
     /// </summary>
-    public void ApplyRange(int a, int b, long v)
+    public void ApplyRange(int a, int b, T v)
     {
         ApplyRec(a, b, v, 0, 0, _leafCnt);
     }
@@ -1332,7 +1425,7 @@ public class LazySegTree
     /// <param name="k">処理対象のノード番号</param>
     /// <param name="l">処理対象のノードが見ている範囲の左端</param>
     /// <param name="r">処理対象のノードが見ている範囲の右端</param>
-    void ApplyRec(int a, int b, long v, int k, int l, int r)
+    void ApplyRec(int a, int b, T v, int k, int l, int r)
     {
         Eval(k);
         // 区間[l, r)が区間[a, b)に完全に含まれる時
@@ -1353,23 +1446,23 @@ public class LazySegTree
 
     /// <summary>
     /// 全区間について更新関数で処理した結果を返す
-    /// 計算量はO(longN)
+    /// 計算量はO(TN)
     /// </summary>
-    public long? QueryAll()
+    public T? QueryAll()
     {
         return Query(0, _dataCnt);
     }
 
     /// <summary>
     /// 指定した区間[l, r)について更新関数で処理した結果を返す
-    /// 計算量はO(longN)
+    /// 計算量はO(TN)
     /// </summary>
-    public long? Query(int a, int b)
+    public T? Query(int a, int b)
     {
         return QueryRec(a, b, 0, 0, _leafCnt);
     }
 
-    long? QueryRec(int a, int b, int k, int l, int r)
+    T? QueryRec(int a, int b, int k, int l, int r)
     {
         Eval(k);
 
@@ -1402,7 +1495,7 @@ public class LazySegTree
     }
 
     // _fxなどの評価関数をnull許容型で扱うためのヘルパー
-    long? ExecFunc(Func<long, long, long> func, long? a, long? b)
+    T? ExecFunc(Func<T, T, T> func, T? a, T? b)
     {
         if (a.HasValue && b.HasValue) return func(a.Value, b.Value);
         if (a.HasValue) return a.Value;
