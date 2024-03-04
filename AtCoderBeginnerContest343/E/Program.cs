@@ -18,9 +18,93 @@ public static class EntryPoint {
     }
 }
 
+public struct Bounds
+{
+    public Vector3 Lb;
+    public Vector3 Rt;
+
+    public Bounds CalcBounds(Bounds o)
+    {
+        var ret = new Bounds
+        {
+            Lb = new Vector3(Math.Max(Lb.X, o.Lb.X), Math.Max(Lb.Y, o.Lb.Y), Math.Max(Lb.Z, o.Lb.Z)),
+            Rt = new Vector3(Math.Min(Rt.X, o.Rt.X), Math.Min(Rt.Y, o.Rt.Y), Math.Min(Rt.Z, o.Rt.Z))
+        };
+        return ret;
+    }
+
+    public int CalcVolume()
+    {
+        return (Rt.X - Lb.X) * (Rt.Y - Lb.Y) * (Rt.Z - Lb.Z);
+    }
+}
+
+public struct Vector3
+{
+    public int X; public int Y; public int Z;
+
+    public Vector3(int x, int y, int z)
+    {
+        X = x; Y = y; Z = z;
+    }
+}
+
 public class Solver {
     public void Solve()
     {
+        var V1V2V3 = Ria();
+        var V1 = V1V2V3[0]; var V2 = V1V2V3[1]; var V3 = V1V2V3[2];
+
+        var a = new Bounds
+        {
+            Lb = new Vector3(0, 0, 0),
+            Rt = new Vector3(7, 7, 7)
+        };
+        for (int bx = -7; bx <= 7; bx++)
+        {
+            for (int by = -7; by <= 7; by++)
+            {
+                for (int bz = -7; bz <= 7; bz++)
+                {
+                    var b = new Bounds
+                    {
+                        Lb = new Vector3(bx, by, bz),
+                        Rt = new Vector3(bx + 7, by + 7, bz + 7)
+                    };
+                    var ab = a.CalcBounds(b);
+
+                    for (int cx = -7; cx <= 7; cx++)
+                    {
+                        for (int cy = -7; cy <= 7; cy++)
+                        {
+                            for (int cz = -7; cz <= 7; cz++)
+                            {
+                                var c = new Bounds
+                                {
+                                    Lb = new Vector3(cx, cy, cz),
+                                    Rt = new Vector3(cx + 7, cy + 7, cz + 7)
+                                };
+
+                                var abc = ab.CalcBounds(c);
+                                var bc = b.CalcBounds(c);
+                                var ca = a.CalcBounds(c);
+
+                                var v3 = abc.CalcVolume();
+                                var v2 = ab.CalcVolume() + bc.CalcVolume() + ca.CalcVolume() - 3 * v3;
+                                var v1 = 3 * 7 * 7 * 7 - 2 * v2 - 3 * v3;
+                                if (v3 == V3 && v2 == V2 && v1 == V1)
+                                {
+                                    Console.WriteLine($"{a.Lb.X} {a.Lb.Y} {a.Lb.Z} {b.Lb.X} {b.Lb.Y} {b.Lb.Z} {c.Lb.X} {c.Lb.Y} {c.Lb.Z}");
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Console.WriteLine("No");
     }
 
     static string Rs(){return Console.ReadLine();}
