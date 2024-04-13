@@ -18,117 +18,14 @@ public static class EntryPoint {
     }
 }
 
-public class Solver
-{
-    int H; int W;
-    char[][] grid;
-    List<(int E, Vector2 pos)> eAndPoss;
-    bool[] used;
-    // eのi番目からj番目までの距離
-    int[,] dists;
-    int tIdx;
-
+public class Solver {
     public void Solve()
     {
-        var HW = Ria();
-        H = HW[0]; W = HW[1];
-        grid = new char[H][];
-        for (int i = 0; i < H; i++) grid[i] = Rs().ToCharArray();
+        var N = Ria();
+        var As = Ria();
 
-        var N = Ri();
-        eAndPoss = new List<(int E, Vector2 pos)>();
-        used = new bool[N + 1];
-        var sIdx = -1;
-        tIdx = -1;
-        for (int i = 0; i < N; i++)
-        {
-            var RCE = Ria();
-            var R = RCE[0] - 1; var C = RCE[1] - 1; var E = RCE[2];
-            eAndPoss.Add((E, new Vector2(C, R)));
-            if (grid[R][C] == 'S') sIdx = i;
-            if (grid[R][C] == 'T') tIdx = i;
-        }
-        if (sIdx == -1) {
-            Console.WriteLine("No");
-            return;
-        }
-
-        // ゴール地点をeAndPossに追加
-        if (tIdx == -1)
-        {
-            for (int y = 0; y < H; y++)
-            {
-                for (int x = 0; x < W; x++)
-                {
-                    if (grid[y][x] == 'T')
-                    {
-                        eAndPoss.Add((0, new Vector2(x, y)));
-                        tIdx = eAndPoss.Count - 1;
-                    }
-                }
-            }
-        }
-
-        // スタート地点から全マスへの距離を調べる
-        dists = new int[H, W];
-        for (int h = 0; h < H; h++)
-        {
-            for (int w = 0; w < W; w++)
-            {
-                dists[h, w] = int.MaxValue;
-            }
-        }
-        var offsetX = new [] { 1, 0, -1, 0 };
-        var offsetY = new [] { 0, 1, 0, -1 };
-        var q = new Queue<(int x, int y, int d)>();
-        var sPos = eAndPoss[sIdx].pos;
-        q.Enqueue((sPos.X, sPos.Y, 0));
-        dists[sPos.Y, sPos.X] = 0;
-        while (q.Any())
-        {
-            var (x, y, d) = q.Dequeue();
-            for (int i = 0; i < 4; i++)
-            {
-                var nx = x + offsetX[i]; var ny = y + offsetY[i];
-                if (nx < 0 || nx >= W || ny < 0 || ny >= H) continue;
-                if (grid[ny][nx] == '#') continue;
-                if (d >= dists[ny, nx]) continue;
-                dists[ny, nx] = d;
-                q.Enqueue((nx, ny, d + 1));
-            }
-        }
-
-        used[sIdx] = true;
-        var q2 = new Queue<int>();
-        q2.Enqueue(sIdx);
-        while (q2.Any())
-        {
-            var i = q2.Dequeue();
-            var (_, posI) = eAndPoss[i];
-            for (int j = 0; j < eAndPoss.Count; j++)
-            {
-                if (used[j]) continue;
-                var (_, posJ) = eAndPoss[j];
-
-                var dist = Math.Abs(dists[posI.Y, posI.X] - dists[posJ.Y, posJ.X]);
-                if (dist > eAndPoss[i].E)
-                {
-                    // 到達不可
-                    continue;
-                }
-
-                if (j == tIdx)
-                {
-                    Console.WriteLine("Yes");
-                    return;
-                }
-
-                used[j] = true;
-                q2.Enqueue(j);
-            }
-        }
-
-        Console.WriteLine("No");
+        var ans = -As.Sum();
+        Console.WriteLine(ans);
     }
 
     static string Rs(){return Console.ReadLine();}
