@@ -24,35 +24,20 @@ public class Solver {
         var LR = Rla();
         var L = LR[0]; var R = LR[1];
 
-        var sep = L;
         var intervals = new List<(long, long)>();
-        while (sep < R)
+        while (L != R)
         {
-            var primeToFactors = PrimeFactors(sep).ToArray();
-            var twoCnt = 0;
-            foreach (var primeFactor in primeToFactors)
+            var i = 0;
+            long powOfNextI = (long)Math.Pow(2, i + 1);
+            while (L % powOfNextI == 0 && L + powOfNextI <= R)
             {
-                if (primeFactor != 2) break;
-                twoCnt++;
+                i++;
+                powOfNextI = (long)Math.Pow(2, i + 1);
             }
 
-            int min = 0;
-            int max = sep > 0 ? twoCnt : 60;
-            long nextSep = 0;
-            while (min <= max) // 範囲内にある限り探し続ける
-            {
-                int mid = min + (max - min) / 2;
-                long powOf2I = (long)Math.Pow(2, mid);
-                long j = sep / powOf2I;
-                nextSep = powOf2I * (j + 1);
-                int compareResult = R.CompareTo(nextSep);
-                if(compareResult < 0) max = mid - 1;
-                else min = mid + 1;
-            }
-
-            if (nextSep > R) nextSep = R;
-            intervals.Add((sep, nextSep));
-            sep = nextSep;
+            var powOfI = (long)Math.Pow(2, i);
+            intervals.Add((L, L+powOfI));
+            L += powOfI;
         }
 
         Console.WriteLine(intervals.Count);
