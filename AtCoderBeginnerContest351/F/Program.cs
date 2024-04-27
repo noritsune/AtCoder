@@ -24,10 +24,23 @@ public class Solver {
         var N = Ri();
         var As = Rla();
 
-        foreach (var A in As)
+        var sortedAs = As
+            .Select((A, i) => (A, i))
+            .OrderBy(x => x.A)
+            .ToArray();
+        var segTree = new SegTree<(int Cnt, long Sum)>(
+            N,
+            (a, b) => (a.Cnt + b.Cnt, a.Sum + b.Sum)
+        );
+        long ans = 0;
+        foreach (var (A, i) in sortedAs)
         {
-
+            segTree.Set(i, (1, A));
+            var sum = segTree.Query(0, i);
+            if (sum.HasValue) ans += sum.Value.Cnt * A - sum.Value.Sum;
         }
+
+        Console.WriteLine(ans);
     }
 
     static string Rs(){return Console.ReadLine();}
