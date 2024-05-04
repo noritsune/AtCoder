@@ -25,25 +25,21 @@ public class Solver {
         var N = NK[0]; var K = NK[1];
         var Ps = Ria();
 
-        var pToIdx = new int[N + 1];
+        var segMin = new SegTree<int>(N + 1, Math.Min);
+        var segMax = new SegTree<int>(N + 1, Math.Max);
         for (int i = 0; i < N; i++)
         {
-            pToIdx[Ps[i]] = i;
+            segMin.Set(Ps[i], i);
+            segMax.Set(Ps[i], i);
         }
-
-        var set = new Set<int>();
 
         var ans = int.MaxValue;
-        for (int i = 0; i < K; i++)
+        for (int p = 1; p <= N - K + 1; p++)
         {
-            set.Insert(pToIdx[i]);
-        }
-
-        for (int i = K; i < N; i++)
-        {
-            set.Remove(pToIdx[i - K]);
-            set.Insert(pToIdx[i]);
-            ans = Math.Min(ans, set.Max() - set.Min());
+            var min = segMin.Query(p, p + K);
+            var max = segMax.Query(p, p + K);
+            if (!min.HasValue || !max.HasValue) throw new Exception();
+            ans = Math.Min(ans, max.Value - min.Value);
         }
 
         Console.WriteLine(ans);
