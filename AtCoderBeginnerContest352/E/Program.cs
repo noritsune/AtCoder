@@ -21,6 +21,31 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
+        var NM = Ria();
+        var N = NM[0]; var M = NM[1];
+        var groups = new List<(int K, int C, int[] As)>();
+        for (int i = 0; i < M; i++)
+        {
+            var KC = Ria();
+            var As = Ria();
+            groups.Add((KC[0], KC[1], As));
+        }
+        groups.Sort((a, b) => a.C.CompareTo(b.C));
+        var uf = new UnionFind(N + 1);
+        long ans = 0;
+        foreach (var (K, C, As) in groups)
+        {
+            foreach (var A in As)
+            {
+                if (!uf.Same(As[0], A))
+                {
+                    uf.Union(As[0], A);
+                    ans += C;
+                }
+            }
+        }
+
+        Console.WriteLine(uf.Size(1) == N ? ans : -1);
     }
 
     static string Rs(){return Console.ReadLine();}
