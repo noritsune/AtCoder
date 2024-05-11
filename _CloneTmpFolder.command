@@ -9,10 +9,10 @@ cd AtCoderBeginnerContestXXX
 dotnet new sln --name KyoPro
 
 # 問題名の定義
-problemNames=("A" "B" "C" "D" "E")
+problemNames=("A" "B" "C" "D" "E" "F")
 
 # 問題ごとに処理を繰り返す
-for i in {0..4}; do
+for i in {0..5}; do
     problemName=${problemNames[$i]}
 
     # 解答用プロジェクトを作成

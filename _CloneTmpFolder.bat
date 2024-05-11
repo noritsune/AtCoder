@@ -17,7 +17,7 @@ set problemNames[4]=E
 set problemNames[5]=F
 
 rem 問題ごとに処理を繰り返す
-for /l %%i in (0, 1, 4) do (
+for /l %%i in (0, 1, 5) do (
 	set problemName=!problemNames[%%i]!
 	
 	rem 解答用プロジェクトを作成
