@@ -19,8 +19,32 @@ public static class EntryPoint {
 }
 
 public class Solver {
+    // 左下が[0, 0], 右上が[3, 1]
+    long[,] _areaRui = new long[,]
+    {
+        {0, 0, 0, 0, 0},
+        {0, 2, 3, 3, 4},
+        {0, 3, 6, 7, 8},
+    };
+
     public void Solve()
     {
+        var ABCD = Rla();
+        var M = 1000000000;
+        var l = ABCD[0] + M; var b = ABCD[1] + M; var r = ABCD[2] + M; var u = ABCD[3] + M;
+        var ans = F(u, r) - F(u, l) - F(b, r) + F(b, l);
+        Console.WriteLine(ans);
+    }
+
+    long F(long y, long x)
+    {
+        var yCnt = y / 2; var xCnt = x / 4;
+        var yRem = y % 2; var xRem = x % 4;
+        var lb = yCnt * xCnt * _areaRui[2, 4];
+        var rb = yCnt * _areaRui[2, xRem];
+        var lu = xCnt * _areaRui[yRem, 4];
+        var ru = _areaRui[yRem, xRem];
+        return lb + rb + lu + ru;
     }
 
     static string Rs(){return Console.ReadLine();}
