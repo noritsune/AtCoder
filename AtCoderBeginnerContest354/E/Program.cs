@@ -20,51 +20,37 @@ public static class EntryPoint {
 
 public class Solver
 {
-    int _N;
-    (int A, int B)[] _ABs;
-
     public void Solve()
     {
-        _N = Ri();
-        _ABs = new (int A, int B)[_N];
-        for (int i = 0; i < _N; i++)
+        var N = Ri();
+        var ABs = new (int A, int B)[N];
+        for (int i = 0; i < N; i++)
         {
             var AB = Ria();
-            _ABs[i] = (AB[0], AB[1]);
+            ABs[i] = (AB[0], AB[1]);
         }
 
-        var isTakaNext = Dfs(false, new HashSet<int>());
-        Console.WriteLine(isTakaNext ? "Takahashi" : "Aoki");
-    }
-
-    bool Dfs(bool isTakaWin, HashSet<int> usedIdxSet)
-    {
-        var canUse = false;
-        var isTakaWin2 = false;
-        for (int i = 0; i < _N; i++)
+        // 右から見ていってiビット目のカードを選ぶ場合はビットが立っている。その状態で先手から始まるときに先手が勝てるならtrue
+        var dp = new bool[1 << N];
+        // 選ぶ枚数が少ない方から見ていく
+        for (int i = 0; i < 1 << N; i++)
         {
-            if (usedIdxSet.Contains(i)) continue;
-
-            var A1 = _ABs[i].A;
-            var B1 = _ABs[i].B;
-
-            for (int j = i + 1; j < _N; j++)
+            for (int j = 0; j < N; j++)
             {
-                if (usedIdxSet.Contains(j)) continue;
-
-                if (_ABs[j].A == A1 || _ABs[j].A == B1
-                 || _ABs[j].B == A1 || _ABs[j].B == B1)
+                for (int k = j + 1; k < N; k++)
                 {
-                    var nUsedIdxSet = new HashSet<int>(usedIdxSet);
-                    nUsedIdxSet.Add(i);
-                    nUsedIdxSet.Add(j);
-                    isTakaWin2 |= Dfs(!isTakaWin, nUsedIdxSet);
+                    // 今回選んだカードがdpの添字に一致しているか
+                    if (!((i >> j & 1) == 1 && (i >> k & 1) == 1)) continue;
+                    // 取れる条件か。表同士が一緒か裏同士が一緒
+                    if (!(ABs[j].A == ABs[k].A || ABs[j].B == ABs[k].B)) continue;
+                    // 過去にj, k番目のカードを撮っていないパターンがfalseならtrue
+                    var prevBitPattern = i ^ (1 << j) ^ (1 << k);
+                    dp[i] |= !dp[prevBitPattern];
                 }
             }
         }
 
-        if (canUse) return isTakaWin2;
-        else return isTakaWin;
+        Console.WriteLine(dp[(1 << N) - 1] ? "Takahashi" : "Aoki");
     }
 
     static string Rs(){return Console.ReadLine();}
