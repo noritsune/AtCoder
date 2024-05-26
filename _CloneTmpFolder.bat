@@ -8,37 +8,31 @@ cd AtCoderBeginnerContestXXX
 
 dotnet new sln --name KyoPro
 
-rem 問題名の定義
-set problemNames[0]=A
-set problemNames[1]=B
-set problemNames[2]=C
-set problemNames[3]=D
-set problemNames[4]=E
-set problemNames[5]=F
-
 rem 問題ごとに処理を繰り返す
-for /l %%i in (0, 1, 5) do (
-	set problemName=!problemNames[%%i]!
-	
+for %%c in (A B C D E F) do (
 	rem 解答用プロジェクトを作成
-	mkdir !problemName!
-	cd !problemName!
+	mkdir %%c
+	cd %%c
 	dotnet new console
 	copy ..\..\_tmp\KyoPro\Program.cs
 	cd ..
-	dotnet sln add !problemName!
+	dotnet sln add %%c
 
 	rem テスト用プロジェクトを作成
-	mkdir !problemName!Test
-	cd !problemName!Test
+	mkdir %%cTest
+	cd %%cTest
 	dotnet new mstest
-	dotnet add reference ../!problemName!
+	dotnet add reference ../%%c
 	copy ..\..\_tmp\Test\UnitTest1.cs
-	mkdir SampleInOut
+	mkdir test
 	cd ..
 
-	dotnet sln add !problemName!Test
+	dotnet sln add %%cTest
 )
+
+rem テストケースDL用のbatファイルをコピーしてくる
+copy ..\DownloadTestCases.bat
+
 
 @REM rem Rider起動とソリューション読み込みまで済ませる。しかしcmdを閉じるとRiderが閉じる
 @REM rider KyoPro.sln

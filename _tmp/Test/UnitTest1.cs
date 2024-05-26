@@ -1,56 +1,51 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Text.RegularExpressions;
 using KyoPro;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Test
 {
-	[TestClass]
-	public class UnitTest1
-	{
-		const string testCaseDirPath = "../../../SampleInOut/";
-		
-		[TestMethod]
-		public void Test1()
-		{
-			TestInOut(testCaseDirPath + "1In.txt", testCaseDirPath + "1Out.txt");
-		}
-		
-		[TestMethod]
-		public void Test2()
-		{
-			TestInOut(testCaseDirPath + "2In.txt", testCaseDirPath + "2Out.txt");
-		}
-		
-		[TestMethod]
-		public void Test3()
-		{
-			TestInOut(testCaseDirPath + "3In.txt", testCaseDirPath + "3Out.txt");
-		}
-		
-		// [TestMethod]
-		// public void Test4()
-		// {
-		// 	TestInOut(testCaseDirPath + "4In.txt", testCaseDirPath + "4Out.txt");
-		// }
-		
-		private static void TestInOut(string inputFileName, string outputFileName)
-		{
-			using var input = new StreamReader(inputFileName);
-			using var output = new StringWriter();
-			Console.SetOut(output);
-			Console.SetIn(input);
+    [TestClass]
+    public class TestClass
+    {
+        const string testCaseDirPath = "../../../test/";
 
-			EntryPoint.Main();
+        public static IEnumerable<object[]> TestCases
+        {
+            get
+            {
+                var inputFiles = Directory.GetFiles(testCaseDirPath, "*in.txt");
+                foreach (var inputFile in inputFiles)
+                {
+                    var caseNum = Regex.Match(inputFile, @"(\d+)[Ii]n\.txt").Groups[1].Value;
+                    yield return new object[] { caseNum };
+                }
+            }
+        }
 
-			string expected = File.ReadAllText(outputFileName);
-			string actual = output.ToString();
-			
-			// 改行コードを揃える
-			expected = expected.Replace("\r\n", "\n");
-			actual = actual.Replace("\r\n", "\n");
+        [TestMethod]
+        [DynamicData(nameof(TestCases))]
+        public void ExecTest(string caseNum)
+        {
+            var inputFileName = testCaseDirPath + caseNum + "in.txt";
+            var outputFileName = testCaseDirPath + caseNum + "out.txt";
+            using var input = new StreamReader(inputFileName);
+            using var output = new StringWriter();
+            Console.SetOut(output);
+            Console.SetIn(input);
 
-			Assert.AreEqual(expected, actual);
-		}
-	}
+            EntryPoint.Main();
+
+            string expected = File.ReadAllText(outputFileName);
+            string actual = output.ToString();
+
+            // 改行コードを揃える
+            expected = expected.Replace("\r\n", "\n");
+            actual = actual.Replace("\r\n", "\n");
+
+            Assert.AreEqual(expected, actual);
+        }
+    }
 }
