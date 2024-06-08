@@ -9,7 +9,7 @@ if "%contest%"=="" (
 
 for %%c in (A B C D E F) do (
     pushd "%%cTest"
-    oj d -f "%%i%%e.txt" "https://atcoder.jp/contests/abc%contest%/tasks/abc%contest%_%%c"
+    oj d -f "%%%%i%%%%e.txt" "https://atcoder.jp/contests/abc%contest%/tasks/abc%contest%_%%c"
     popd
 )
 
