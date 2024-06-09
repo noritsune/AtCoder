@@ -31,7 +31,7 @@ public class Solver {
 
         long ans = 0;
         var uf = new UnionFind(N + 1);
-        var heiroVCnt = new int[N + 1];
+        var heiroVSets = new List<HashSet<int>>();
         for (int i = 0; i < N; i++)
         {
             g.AddEdge(i + 1, As[i]);
@@ -40,23 +40,15 @@ public class Solver {
             // 閉路判定
             if (uf.Same(i + 1, As[i]))
             {
-                var size = uf.Size(i + 1);
-                ans += size * size;
-
                 var v = i + 1;
-                var vCnt = 0;
-                var vs = new List<int>();
+                var vs = new HashSet<int>();
                 do
                 {
-                    vCnt++;
                     vs.Add(v);
                     v = g.Vertices[v].First();
                 } while (v != i + 1);
 
-                foreach (var vv in vs)
-                {
-                    heiroVCnt[vv] = vCnt;
-                }
+                heiroVSets.Add(vs);
             }
             else
             {
@@ -64,23 +56,22 @@ public class Solver {
             }
         }
 
-        for (int sv = 1; sv <= N; sv++)
+        foreach (var heiroVSet in heiroVSets)
         {
-            if (heiroVCnt[sv] == 0) continue;
-
-            var q = new Queue<(int nv, int cnt)>();
-            q.Enqueue((sv, heiroVCnt[sv]));
+            var q = new Queue<(int nv, long cnt)>();
+            q.Enqueue((heiroVSet.First(), heiroVSet.Count));
             while (q.Any())
             {
                 var (v, cnt) = q.Dequeue();
+                ans += cnt;
 
                 foreach (var nv in invG.Vertices[v])
                 {
-                    if (heiroVCnt[nv] == 0)
-                    {
-                        ans += cnt + 1;
-                        q.Enqueue((nv, cnt + 1));
-                    }
+                    if (nv == heiroVSet.First()) continue;
+
+                    var nCnt = cnt;
+                    if (!heiroVSet.Contains(nv)) nCnt++;
+                    q.Enqueue((nv, nCnt));
                 }
             }
         }
