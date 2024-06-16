@@ -296,6 +296,41 @@ public static class Combination {
     }
 }
 
+public class CombCalculator
+{
+    readonly long[] _fact;
+    readonly long[] _factInv;
+
+    /// <summary>
+    /// 後の計算を高速化するために階乗とその逆元を求めておく
+    /// </summary>
+    /// <param name="N">Calc関数を使うときに最大でnがいくつまで入力されうるか</param>
+    public CombCalculator(int N)
+    {
+        _fact = new long[N + 1];
+        _factInv = new long[N + 1];
+
+        _fact[0] = 1;
+        for (int i = 1; i <= N; i++)
+        {
+            _fact[i] = _fact[i - 1] * i % CONST.MOD;
+        }
+
+        _factInv[N] = ModInt.Power(_fact[N], CONST.MOD - 2);
+        for (int i = N - 1; i >= 0; i--)
+        {
+            _factInv[i] = _factInv[i + 1] * (i + 1) % CONST.MOD;
+        }
+    }
+
+    public long Calc(int n, int r)
+    {
+        if (n < r) return 0;
+        if (n < 0 || r < 0) return 0;
+        return _fact[n] * _factInv[r] % CONST.MOD * _factInv[n - r] % CONST.MOD;
+    }
+}
+
 public class Vector2 {
     public int X { get; }
     public int Y { get; }
