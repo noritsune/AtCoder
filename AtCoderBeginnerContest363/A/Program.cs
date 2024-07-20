@@ -21,20 +21,10 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var RBG = Ria();
-        var R = RBG[0]; var B = RBG[1]; var G = RBG[2];
-        var C = Rs();
+        var R = Ri();
 
-        var dict = new Dictionary<string, int>
-        {
-            ["R"] = R,
-            ["B"] = B,
-            ["G"] = G
-        };
-
-        dict.Remove(C);
-
-        Console.WriteLine(dict.Values.First());
+        var ans = (R / 100 + 1) * 100 - R;
+        Console.WriteLine(ans);
     }
 
     static string Rs(){return Console.ReadLine();}

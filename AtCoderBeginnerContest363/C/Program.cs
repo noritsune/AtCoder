@@ -18,23 +18,87 @@ public static class EntryPoint {
     }
 }
 
+public class PermutationsGenerator
+{
+    public static List<char[]> GeneratePermutations(char[] chars)
+    {
+        List<char[]> permutations = new List<char[]>();
+        Generate(chars, 0, permutations);
+        return permutations;
+    }
+
+    private static void Generate(char[] chars, int currentIndex, List<char[]> permutations)
+    {
+        if (currentIndex == chars.Length - 1)
+        {
+            permutations.Add(chars.ToArray()); // Add a copy of current permutation
+        }
+        else
+        {
+            HashSet<char> used = new HashSet<char>(); // Track used characters to avoid duplicates
+            for (int i = currentIndex; i < chars.Length; i++)
+            {
+                if (!used.Contains(chars[i]))
+                {
+                    used.Add(chars[i]);
+                    Swap(ref chars[currentIndex], ref chars[i]);
+                    Generate(chars, currentIndex + 1, permutations);
+                    Swap(ref chars[currentIndex], ref chars[i]); // Backtrack
+                }
+            }
+        }
+    }
+
+    private static void Swap(ref char a, ref char b)
+    {
+        char temp = a;
+        a = b;
+        b = temp;
+    }
+}
+
 public class Solver {
     public void Solve()
     {
-        var RBG = Ria();
-        var R = RBG[0]; var B = RBG[1]; var G = RBG[2];
-        var C = Rs();
+        var NK = Ria();
+        var N = NK[0]; var K = NK[1];
+        var S = Rs();
 
-        var dict = new Dictionary<string, int>
+        List<char[]> perms = PermutationsGenerator.GeneratePermutations(S.ToCharArray());
+        var nonKaibunCnt = 0;
+        foreach (var perm in perms)
         {
-            ["R"] = R,
-            ["B"] = B,
-            ["G"] = G
-        };
+            var isKaibun = false;
+            for (int l = 0; l < N - K + 1; l++)
+            {
+                if (IsKaibun(perm, l, l + K - 1))
+                {
+                    isKaibun = true;
+                    break;
+                }
+            }
 
-        dict.Remove(C);
+            if (!isKaibun)
+            {
+                nonKaibunCnt++;
+            }
+        }
 
-        Console.WriteLine(dict.Values.First());
+        Console.WriteLine(nonKaibunCnt);
+    }
+
+    /**
+     * strのl文字目からr文字目までが回文かどうかを判定する
+     */
+    bool IsKaibun(char[] str, int l, int r)
+    {
+        while (l < r)
+        {
+            if (str[l] != str[r]) return false;
+            l++;
+            r--;
+        }
+        return true;
     }
 
     static string Rs(){return Console.ReadLine();}

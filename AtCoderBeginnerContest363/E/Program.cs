@@ -21,20 +21,6 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var RBG = Ria();
-        var R = RBG[0]; var B = RBG[1]; var G = RBG[2];
-        var C = Rs();
-
-        var dict = new Dictionary<string, int>
-        {
-            ["R"] = R,
-            ["B"] = B,
-            ["G"] = G
-        };
-
-        dict.Remove(C);
-
-        Console.WriteLine(dict.Values.First());
     }
 
     static string Rs(){return Console.ReadLine();}

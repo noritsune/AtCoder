@@ -21,20 +21,13 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var RBG = Ria();
-        var R = RBG[0]; var B = RBG[1]; var G = RBG[2];
-        var C = Rs();
+        var NTP = Ria();
+        var N = NTP[0]; var T = NTP[1]; var P = NTP[2];
+        var Ls = Ria();
 
-        var dict = new Dictionary<string, int>
-        {
-            ["R"] = R,
-            ["B"] = B,
-            ["G"] = G
-        };
-
-        dict.Remove(C);
-
-        Console.WriteLine(dict.Values.First());
+        var descSortedLs = Ls.OrderByDescending(x => x).ToArray();
+        var ans = Math.Max(0, T - descSortedLs[P - 1]);
+        Console.WriteLine(ans);
     }
 
     static string Rs(){return Console.ReadLine();}

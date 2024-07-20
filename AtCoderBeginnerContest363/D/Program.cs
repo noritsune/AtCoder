@@ -21,20 +21,17 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var RBG = Ria();
-        var R = RBG[0]; var B = RBG[1]; var G = RBG[2];
-        var C = Rs();
+        var N = Rl();
 
-        var dict = new Dictionary<string, int>
+        var n = 0;
+        var cur = "0";
+        var prev = cur;
+        while (n < N)
         {
-            ["R"] = R,
-            ["B"] = B,
-            ["G"] = G
-        };
-
-        dict.Remove(C);
-
-        Console.WriteLine(dict.Values.First());
+            prev = cur;
+            cur = "1" + cur + "1";
+            n += 20;
+        }
     }
 
     static string Rs(){return Console.ReadLine();}
