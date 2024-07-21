@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Numerics;
 
@@ -23,14 +24,31 @@ public class Solver {
     {
         var N = Rl();
 
-        var n = 0;
-        var cur = "0";
-        var prev = cur;
-        while (n < N)
+        if (N == 1)
         {
-            prev = cur;
-            cur = "1" + cur + "1";
-            n += 20;
+            Console.WriteLine(0);
+            return;
+        }
+
+        long remained = N - 2;
+        for (int d = 1; ; d++)
+        {
+            var x = (d + 1) / 2 - 1;
+            long allCnt = 9 * (long)Math.Pow(10, x);
+            if (allCnt <= remained)
+            {
+                remained -= allCnt;
+            }
+            else
+            {
+                var befHalf = ((long)Math.Pow(10, x) + remained).ToString();
+                var aftHalf = new string(befHalf.Reverse().ToArray());
+                // 桁数が奇数ならaftHalfの先頭の1文字を削除
+                if (d % 2 == 1) aftHalf = aftHalf.Substring(1);
+                var ans = befHalf + aftHalf;
+                Console.WriteLine(ans);
+                return;
+            }
         }
     }
 
