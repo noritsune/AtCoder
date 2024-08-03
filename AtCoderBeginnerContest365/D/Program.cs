@@ -21,29 +21,43 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var NQ = Rla();
-        var N = NQ[0]; var Q = NQ[1];
-        var As = Rla().OrderBy(x => x).ToArray();
+        var N = Ri();
+        var S = Rs();
 
-        for (int i = 0; i < Q; i++)
+        // i回目に手cを出して勝った合計回数の最大値
+        var dp = new int[N + 1, 3];
+
+        var RPS = "RPS";
+        for (int i = 1; i <= N; i++)
         {
-            var BK = Rla();
-            var B = BK[0]; var K = BK[1];
-
-            long min = 0;
-            long max = (long)2e8;
-            while (min <= max)
+            var aokiHand = S[i - 1];
+            for (int takaHandIdx = 0; takaHandIdx < 3; takaHandIdx++)
             {
-                var mid = min + (max - min) / 2;
-                var lb = LowerBound(As, B - mid, Comparer<long>.Default);
-                var ub = UpperBound(As, B + mid, Comparer<long>.Default);
-                var cnt = ub - lb;
-                if (cnt < K) min = mid + 1;
-                else max = mid - 1;
-            }
+                var takaHand = RPS[takaHandIdx];
+                var judge = Judge(takaHand, aokiHand);
+                for (int takaHandIdxPrev = 0; takaHandIdxPrev < 3; takaHandIdxPrev++)
+                {
+                    if (takaHandIdx == takaHandIdxPrev) continue;
+                    if (judge == -1) continue;
+                    dp[i, takaHandIdx] = Math.Max(dp[i, takaHandIdx], dp[i - 1, takaHandIdxPrev] + judge);
+                }
 
-            Console.WriteLine(min);
+            }
         }
+
+        var ans = Math.Max(dp[N, 0], Math.Max(dp[N, 1], dp[N, 2]));
+        Console.WriteLine(ans);
+    }
+
+    int Judge(char taka, char aoki)
+    {
+        if (taka == 'R' && aoki == 'S') return 1;
+        if (taka == 'P' && aoki == 'R') return 1;
+        if (taka == 'S' && aoki == 'P') return 1;
+
+        if (taka == aoki) return 0;
+
+        return -1;
     }
 
     static string Rs(){return Console.ReadLine();}

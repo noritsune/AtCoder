@@ -21,29 +21,22 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var NQ = Rla();
-        var N = NQ[0]; var Q = NQ[1];
-        var As = Rla().OrderBy(x => x).ToArray();
+        var NM = Rla();
+        var N = NM[0]; var M = NM[1];
+        var As = Rla();
 
-        for (int i = 0; i < Q; i++)
+        // 探索範囲のインデックス
+        long min = 0; long max = M;
+        while (min <= max) // 範囲内にある限り探し続ける
         {
-            var BK = Rla();
-            var B = BK[0]; var K = BK[1];
-
-            long min = 0;
-            long max = (long)2e8;
-            while (min <= max)
-            {
-                var mid = min + (max - min) / 2;
-                var lb = LowerBound(As, B - mid, Comparer<long>.Default);
-                var ub = UpperBound(As, B + mid, Comparer<long>.Default);
-                var cnt = ub - lb;
-                if (cnt < K) min = mid + 1;
-                else max = mid - 1;
-            }
-
-            Console.WriteLine(min);
+            var mid = min + (max - min) / 2;
+            var sum = As.Sum(A => Math.Min(mid, A));
+            if(sum <= M) min = mid + 1;
+            else max = mid - 1;
         }
+
+        var ans = max;
+        Console.WriteLine(ans == M ? "infinite" : ans);
     }
 
     static string Rs(){return Console.ReadLine();}

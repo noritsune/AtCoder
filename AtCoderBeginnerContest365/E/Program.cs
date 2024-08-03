@@ -14,36 +14,83 @@ public static class CONST
 public static class EntryPoint {
     public static void Main() {
         var solver = new Solver();
-        solver.Solve();
+        solver.Solve2();
     }
 }
 
 public class Solver {
-    public void Solve()
+    public void Solve2()
     {
-        var NQ = Rla();
-        var N = NQ[0]; var Q = NQ[1];
-        var As = Rla().OrderBy(x => x).ToArray();
+        var N = Ri();
+        var As = Rla();
 
-        for (int i = 0; i < Q; i++)
+        // Aのそれぞれが何度使われるか
+        var bunpu1 = new int[N];
+        var delta = N;
+        var cur = N - 1;
+        for (int i = 0; i < N / 2 + 1; i++)
         {
-            var BK = Rla();
-            var B = BK[0]; var K = BK[1];
-
-            long min = 0;
-            long max = (long)2e8;
-            while (min <= max)
-            {
-                var mid = min + (max - min) / 2;
-                var lb = LowerBound(As, B - mid, Comparer<long>.Default);
-                var ub = UpperBound(As, B + mid, Comparer<long>.Default);
-                var cnt = ub - lb;
-                if (cnt < K) min = mid + 1;
-                else max = mid - 1;
-            }
-
-            Console.WriteLine(min);
+            bunpu1[i] = cur; bunpu1[^(i + 1)] = cur;
+            delta -= 2;
+            cur += delta;
         }
+
+        // AiとA(i + 1)の組み合わせが何度使われるか
+        var bunpu2 = new int[N - 1];
+        cur = N - 1;
+        for (int i = 0; i < N / 2; i++)
+        {
+            bunpu2[i] = cur; bunpu2[^(i + 1)] = cur;
+            cur += 1;
+        }
+
+        // Console.WriteLine(string.Join(" ", bunpu1));
+        // Console.WriteLine(string.Join(" ", bunpu2));
+
+        long ans = 0;
+        for (int i = 0; i < N; i++)
+        {
+            ans += As[i] * bunpu1[i];
+        }
+
+        for (int i = 0; i < N - 1; i++)
+        {
+            var and = As[i] & As[i + 1];
+            ans -= and * bunpu2[i] * 2;
+        }
+
+        Console.WriteLine(ans);
+    }
+
+    public void Solve1()
+    {
+        var N = Ri();
+        var As = Rla();
+
+        // XOR
+        var fx = new Func<long, long, long>((a, b) => a ^ b);
+        var seg = new SegTree<long>(N, fx);
+
+        for (int i = 0; i < N; i++)
+        {
+            seg.Set(i, As[i]);
+        }
+
+        long sum = 0;
+        var cnt = new int[N];
+        for (int i = 0; i < N - 1; i++)
+        {
+            for (int j = i + 1; j < N; j++)
+            {
+                for (int idx = i; idx <= j; idx++)
+                {
+                    cnt[idx]++;
+                }
+            }
+        }
+
+        Console.WriteLine(string.Join(" ", cnt));
+        Console.WriteLine(sum);
     }
 
     static string Rs(){return Console.ReadLine();}

@@ -21,29 +21,17 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var NQ = Rla();
-        var N = NQ[0]; var Q = NQ[1];
-        var As = Rla().OrderBy(x => x).ToArray();
+        var Y = Ri();
 
-        for (int i = 0; i < Q; i++)
-        {
-            var BK = Rla();
-            var B = BK[0]; var K = BK[1];
+        Console.WriteLine(IsLeapYear(Y) ? 366 : 365);
+    }
 
-            long min = 0;
-            long max = (long)2e8;
-            while (min <= max)
-            {
-                var mid = min + (max - min) / 2;
-                var lb = LowerBound(As, B - mid, Comparer<long>.Default);
-                var ub = UpperBound(As, B + mid, Comparer<long>.Default);
-                var cnt = ub - lb;
-                if (cnt < K) min = mid + 1;
-                else max = mid - 1;
-            }
-
-            Console.WriteLine(min);
-        }
+    bool IsLeapYear(int year)
+    {
+        if (year % 400 == 0) return true;
+        if (year % 100 == 0) return false;
+        if (year % 4 == 0) return true;
+        return false;
     }
 
     static string Rs(){return Console.ReadLine();}
