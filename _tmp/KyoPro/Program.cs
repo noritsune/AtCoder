@@ -21,6 +21,7 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
+
     }
 
     static string Rs(){return Console.ReadLine();}
@@ -600,14 +601,20 @@ public class Dijkstra
             => _graph[a].Add(new Edge(b, cost));
 
     /// <summary>
-    /// 最短経路のコストを取得
+    /// 最短経路を取得
     /// </summary>
     /// <param name="start">開始頂点</param>
-    public long[] GetMinCost(int start)
+    /// <returns>(開始頂点からの最短経路のコストの配列, 前の頂点の配列)</returns>
+    public (long[], int[]) GetClosestRoot(int start)
     {
         // コストをスタート頂点以外を無限大に
         var cost = new long[N];
-        for (int i = 0; i < N; i++) cost[i] = 1000000000000000000;
+        var prev = new int[N];  // 各頂点の前の頂点を記録する配列
+        for (int i = 0; i < N; i++)
+        {
+            cost[i] = 1000000000000000000;
+            prev[i] = -1;  // 初期値は-1で未設定を意味する
+        }
         cost[start] = 0;
 
         // 未確定の頂点を格納する優先度付きキュー(コストが小さいほど優先度が高い)
@@ -628,13 +635,14 @@ public class Dijkstra
                 {
                     // 既に記録されているコストより小さければコストを更新
                     cost[e.to] = v.cost + e.cost;
+                    prev[e.to] = v.index;  // 前の頂点を更新
                     q.Enqueue(new Vertex(e.to, cost[e.to]));
                 }
             }
         }
 
-        // 確定したコストを返す
-        return cost;
+        // 確定したコストと前の頂点を返す
+        return (cost, prev);
     }
 
     struct Edge
@@ -697,12 +705,12 @@ public class GenericDijkstra<T> where T : notnull
     /// 最短経路のコストを取得
     /// </summary>
     /// <param name="start">開始頂点</param>
-    public Dictionary<T, long> GetMinCost(T start)
+    public Dictionary<T, (long cost, T prev)> GetClosestRoot(T start)
     {
         // コストをスタート頂点以外を無限大に
-        var cost = new Dictionary<T, long>();
-        foreach (var v in _graph.Keys) cost[v] = long.MaxValue;
-        cost[start] = 0;
+        var root = new Dictionary<T, (long cost, T prev)>();
+        foreach (var v in _graph.Keys) root[v] = (long.MaxValue, default(T));
+        root[start] = (0, default(T));
 
         // 未確定の頂点を格納する優先度付きキュー(コストが小さいほど優先度が高い)
         var q = new PriorityQueue<Vertex>(Comparer<Vertex>.Create((a, b) => b.CompareTo(a)));
@@ -713,22 +721,22 @@ public class GenericDijkstra<T> where T : notnull
             var v = q.Dequeue();
 
             // 記録されているコストと異なる(コストがより大きい)場合は無視
-            if (v.cost != cost[v.index]) continue;
+            if (v.cost != root[v.index].cost) continue;
 
             // 今回確定した頂点からつながる頂点に対して更新を行う
             foreach (var e in _graph[v.index])
             {
-                if (cost[e.to] > v.cost + e.cost)
+                if (root[e.to].cost > v.cost + e.cost)
                 {
                     // 既に記録されているコストより小さければコストを更新
-                    cost[e.to] = v.cost + e.cost;
-                    q.Enqueue(new Vertex(e.to, cost[e.to]));
+                    root[e.to] = (v.cost + e.cost, v.index);
+                    q.Enqueue(new Vertex(e.to, root[e.to].cost));
                 }
             }
         }
 
-        // 確定したコストを返す
-        return cost;
+        // 確定したコストと前の頂点を返す
+        return root;
     }
 
     struct Edge
