@@ -24,7 +24,74 @@ public class Solver {
         var NM = Ria();
         var N = NM[0]; var M = NM[1];
 
+        var war = new WarshallFloyd(N + 1);
 
+        var bridges = new List<(int U, int V, int T)>();
+        for (int i = 0; i < M; i++)
+        {
+            var UVT = Ria();
+            var U = UVT[0]; var V = UVT[1]; var T = UVT[2];
+            war.AddEdge(U, V, T);
+            war.AddEdge(V, U, T);
+            bridges.Add((U, V, T));
+        }
+
+        var minCosts = war.CalcMinCosts();
+
+        var Q = Ri();
+        for (int i = 0; i < Q; i++)
+        {
+            var K = Ri();
+            var Bs = Ria();
+
+            long ans = 0;
+            // まずは必須の橋を渡るコストを足していく
+            foreach (var B in Bs)
+            {
+                ans += bridges[B - 1].T;
+            }
+
+            // 渡る順番を全パターン試す
+            var bridgeIdxPerms = Bs.Perm().Select(x => x.ToArray()).ToArray();
+            var minCostSum = long.MaxValue;
+            foreach (var bridgeIdxPerm in bridgeIdxPerms)
+            {
+                // 渡る向きを全パターン試す
+                var isReversePatterns = BitFullSearch(K).ToArray();
+                foreach (var isReversePattern in isReversePatterns)
+                {
+                    var currentV = 1;
+                    long costSum = 0;
+
+                    // 橋を渡っていく
+                    for (int j = 0; j < K; j++)
+                    {
+                        var bridge = bridges[bridgeIdxPerm[j] - 1];
+                        var from = bridge.U; var to = bridge.V;
+                        if (isReversePattern[j]) (from, to) = (to, from);
+
+                        if (currentV != from)
+                        {
+                            costSum += minCosts[currentV, from];
+                        }
+
+                        currentV = to;
+                    }
+
+                    // 最後はNに向かう
+                    if (currentV != N)
+                    {
+                        costSum += minCosts[currentV, N];
+                    }
+
+                    // 結果を記録
+                    minCostSum = Math.Min(minCostSum, costSum);
+                }
+            }
+
+            ans += minCostSum;
+            Console.WriteLine(ans);
+        }
     }
 
     static string Rs(){return Console.ReadLine();}
@@ -767,6 +834,52 @@ public class GenericDijkstra<T> where T : notnull
 
         public int CompareTo(Vertex other)
             => cost.CompareTo(other.cost);
+    }
+}
+
+// ワーシャルフロイド
+class WarshallFloyd
+{
+    readonly int _n;
+    readonly long[,] _dists;
+
+    public WarshallFloyd(int N)
+    {
+        _n = N;
+        _dists = new long[N, N];
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = 0; j < N; j++)
+            {
+                _dists[i, j] = i == j ? 0 : long.MaxValue;
+            }
+        }
+    }
+
+    public void AddEdge(int from, int to, long cost)
+    {
+        _dists[from, to] = Math.Min(_dists[from, to], cost);
+    }
+
+    public long[,] CalcMinCosts()
+    {
+        var minCosts = _dists.Clone() as long[,];
+        for (int k1 = 0; k1 < _n; k1++)
+        {
+            for (int k2 = 0; k2 < _n; k2++)
+            {
+                for (int k3 = 0; k3 < _n; k3++)
+                {
+                    var currentCost = minCosts[k2, k3];
+                    var cost21 = minCosts[k2, k1];
+                    var cost13 = minCosts[k1, k3];
+                    var newCost = cost21 == long.MaxValue || cost13 == long.MaxValue ? long.MaxValue : cost21 + cost13;
+                    minCosts[k2, k3] = Math.Min(currentCost, newCost);
+                }
+            }
+        }
+
+        return minCosts;
     }
 }
 
