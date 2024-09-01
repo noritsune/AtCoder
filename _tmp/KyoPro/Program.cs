@@ -767,6 +767,52 @@ public class GenericDijkstra<T> where T : notnull
     }
 }
 
+// ワーシャルフロイド
+class WarshallFloyd
+{
+    readonly int _n;
+    readonly long[,] _dists;
+
+    public WarshallFloyd(int N)
+    {
+        _n = N;
+        _dists = new long[N, N];
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = 0; j < N; j++)
+            {
+                _dists[i, j] = i == j ? 0 : long.MaxValue;
+            }
+        }
+    }
+
+    public void AddEdge(int from, int to, long cost)
+    {
+        _dists[from, to] = Math.Min(_dists[from, to], cost);
+    }
+
+    public long[,] CalcMinCosts()
+    {
+        var minCosts = _dists.Clone() as long[,];
+        for (int k1 = 0; k1 < _n; k1++)
+        {
+            for (int k2 = 0; k2 < _n; k2++)
+            {
+                for (int k3 = 0; k3 < _n; k3++)
+                {
+                    var currentCost = minCosts[k2, k3];
+                    var cost21 = minCosts[k2, k1];
+                    var cost13 = minCosts[k1, k3];
+                    var newCost = cost21 == long.MaxValue || cost13 == long.MaxValue ? long.MaxValue : cost21 + cost13;
+                    minCosts[k2, k3] = Math.Min(currentCost, newCost);
+                }
+            }
+        }
+
+        return minCosts;
+    }
+}
+
 internal class UnionFind
 {
     // 親要素のインデックスを保持する
