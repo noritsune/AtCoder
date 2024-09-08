@@ -18,102 +18,84 @@ public static class EntryPoint {
     }
 }
 
-public class Solver {
+public class Solver
+{
+    Set<int>[] _wallsOnRows;
+    Set<int>[] _wallsOnCols;
+
     public void Solve()
     {
         var HWQ = Ria();
         var H = HWQ[0]; var W = HWQ[1]; var Q = HWQ[2];
 
-        var spanLsOfRow = new Set<int>[H];
-        for (int i = 0; i < H; i++) spanLsOfRow[i] = new Set<int>();
-        var spanRsOfRow = new Set<int>[H];
-        for (int i = 0; i < H; i++) spanRsOfRow[i] = new Set<int>();
-
-        var spanLsOfCol = new Set<int>[W];
-        for (int i = 0; i < W; i++) spanLsOfCol[i] = new Set<int>();
-        var spanRsOfCol = new Set<int>[W];
-        for (int i = 0; i < W; i++) spanRsOfCol[i] = new Set<int>();
+        _wallsOnRows = new Set<int>[H];
+        _wallsOnCols = new Set<int>[W];
+        for (int y = 0; y < H; y++)
+        {
+            _wallsOnRows[y] = new Set<int>();
+            for (int w = 0; w < W; w++)
+            {
+                _wallsOnRows[y].Insert(w);
+            }
+        }
+        for (int x = 0; x < W; x++)
+        {
+            _wallsOnCols[x] = new Set<int>();
+            for (int h = 0; h < H; h++)
+            {
+                _wallsOnCols[x].Insert(h);
+            }
+        }
 
         for (int i = 0; i < Q; i++)
         {
             var RC = Ria();
-            var R = RC[0] - 1; var C = RC[1] - 1;
+            var y = RC[0] - 1; var x = RC[1] - 1;
 
-            var spanLOfRow = spanLsOfRow[R];
-            var spanROfRow = spanRsOfRow[R];
-            var targetRowL = spanLOfRow.LowerBound(C);
-            var targetRowR = spanROfRow.LowerBound(C);
-
-            var spanLOfCol = spanLsOfCol[C];
-            var spanROfCol = spanRsOfCol[C];
-            var targetColL = spanLOfCol.LowerBound(R);
-            var targetColR = spanROfCol.LowerBound(R);
-
-            Exec(spanLOfRow, spanROfRow, C, W);
-            if (targetColL != -1)
+            if (_wallsOnRows[y].Contains(x))
             {
-                if (targetColL != 0)     Exec(spanLsOfCol[targetColL - 1], spanRsOfRow[targetColL - 1], C, W);
-                if (targetColR != H - 1) Exec(spanLsOfCol[targetColR + 1], spanRsOfRow[targetColR + 1], C, W);
+                Erase(x, y);
+                continue;
             }
 
-            Exec(spanLOfCol, spanROfCol, R, H);
-            if (targetRowL != -1)
-            {
-                if (targetRowL != 0)     Exec(spanLsOfRow[targetRowL - 1], spanRsOfCol[targetRowL - 1], R, H);
-                if (targetRowR != W - 1) Exec(spanLsOfRow[targetRowR + 1], spanRsOfCol[targetRowR + 1], R, H);
-            }
-        }
+            var wallsOnRow = _wallsOnRows[y];
+            var wallsOnCol = _wallsOnCols[x];
 
-        var ans = H * W;
-        for (int i = 0; i < H; i++)
-        {
-            var spanLs = spanLsOfRow[i];
-            var spanRs = spanRsOfRow[i];
-            for (int j = 0; j < spanLs.Count(); j++)
+            // 左
+            var leftXIdx = wallsOnRow.LowerBound(x) - 1;
+            if (leftXIdx >= 0)
             {
-                var spanL = spanLs.ElementAt(j);
-                var spanR = spanRs.ElementAt(j);
-                ans -= spanR - spanL + 1;
+                Erase(wallsOnRow[leftXIdx], y);
+            }
+            // 右
+            var rightXIdx = wallsOnRow.LowerBound(x);
+            if (rightXIdx != -1 && rightXIdx < wallsOnRow.Count())
+            {
+                Erase(wallsOnRow[rightXIdx], y);
+            }
+            // 上
+            var topYIdx = wallsOnCol.LowerBound(y) - 1;
+            if (topYIdx >= 0)
+            {
+                Erase(x, wallsOnCol[topYIdx]);
+            }
+            // 下
+            var bottomYIdx = wallsOnCol.LowerBound(y);
+            if (bottomYIdx != -1 && bottomYIdx < wallsOnCol.Count())
+            {
+                Erase(x, wallsOnCol[bottomYIdx]);
             }
         }
+
+        var ans = _wallsOnRows.Sum(r => r.Count());
 
         Console.WriteLine(ans);
     }
 
-    static void Exec(Set<int> spanLs, Set<int> spanRs, int C, int W)
+    void Erase(int x, int y)
     {
-        var targetSpanL = spanLs.LowerBound(C);
-        var targetSpanR = spanRs.LowerBound(C);
-
-        if (targetSpanL != -1)
-        {
-            // 既存の範囲内ならそれを拡張
-            spanLs.Remove(targetSpanL);
-            spanRs.Remove(targetSpanR);
-            spanLs.Insert(-Math.Max(0, targetSpanL - 1));
-            spanRs.Insert(Math.Min(W - 1, targetSpanR + 1));
-        }
-        else
-        {
-            // 範囲外なら新たに追加
-            spanLs.Insert(-C);
-            spanRs.Insert(C);
-        }
-
-        // 隣接するものが見つかれば結合する
-        var leftSpanR = spanRs.LowerBound(C - 1);
-        if (leftSpanR != -1)
-        {
-            spanRs.Remove(leftSpanR);
-            spanRs.Insert(targetSpanR);
-        }
-
-        var rightSpanL = spanLs.LowerBound(C + 1);
-        if (rightSpanL != -1)
-        {
-            spanLs.Remove(rightSpanL);
-            spanLs.Insert(targetSpanL);
-        }
+        _wallsOnRows[y].Remove(x);
+        _wallsOnCols[x].Remove(y);
     }
 
     static string Rs(){return Console.ReadLine();}
