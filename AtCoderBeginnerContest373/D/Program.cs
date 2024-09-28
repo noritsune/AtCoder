@@ -21,66 +21,50 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var NQ = Ria();
-        var N = NQ[0]; var Q = NQ[1];
-
-        var uf = new UnionFind(N);
-        var groups = new List<Set<int>>();
-        var nodeToGroupIdx = new int[N];
-        for (int i = 0; i < N; i++)
+        var NM = Ria();
+        var N = NM[0]; var M = NM[1];
+        var graph = new Graph<int>(GraphType.Directed);
+        for (int i = 0; i < N; i++) graph.AddVertex(i);
+        var ws = new Dictionary<int, Dictionary<int, long>>();
+        for (int i = 0; i < M; i++)
         {
-            groups.Add(new Set<int>());
-            groups[i].Insert(i);
-            nodeToGroupIdx[i] = i;
+            var uvw = Rla();
+            var u = (int)uvw[0] - 1; var v = (int)uvw[1] - 1; var w = uvw[2];
+            graph.AddEdge(u, v);
+            graph.AddEdge(v, u);
+
+            ws.TryAdd(u, new Dictionary<int, long>());
+            ws[u].Add(v, w);
+            ws.TryAdd(v, new Dictionary<int, long>());
+            ws[v].Add(u, -w);
         }
 
-        for (int i = 0; i < Q; i++)
+        var ans = new long[N];
+        var visited = new bool[N];
+        for (int start = 0; start < N; start++)
         {
-            var query = Ria();
-            if (query[0] == 1)
+            if (visited[start]) continue;
+            visited[start] = true;
+
+            var stack = new Stack<int>();
+            stack.Push(start);
+            while (stack.Any())
             {
-                var u = query[1] - 1; var v = query[2] - 1;
-
-                var groupUIdx = nodeToGroupIdx[u];
-                var groupVIdx = nodeToGroupIdx[v];
-
-                // マージテク
-                if (groups[groupUIdx].Count() < groups[groupVIdx].Count())
+                var u = stack.Pop();
+                foreach (var v in graph.Vertices[u])
                 {
-                    (groupUIdx, groupVIdx) = (groupVIdx, groupUIdx);
-                    (u, v) = (v, u);
-                }
+                    if (visited[v]) continue;
+                    visited[v] = true;
 
-                if (!uf.Same(u, v))
-                {
-                    uf.Union(u, v);
-                    var groupU = groups[groupUIdx];
-                    var groupV = groups[groupVIdx];
-                    // groupVをgroupUに統合
-                    for (int j = 0; j < groupV.Count(); j++)
-                    {
-                        var node = groupV[j];
-                        groupU.Insert(node);
-                    }
-                    for (int j = 0; j < groupV.Count(); j++)
-                    {
-                        var node = groupV[j];
-                        nodeToGroupIdx[node] = groupUIdx;
-                    }
-                }
-            }
-            else
-            {
-                var v = query[1] - 1; var k = query[2];
+                    ans[v] = ans[u] + ws[u][v];
 
-                // 頂点vのグループの中で頂点番号がk番目に大きいものを出力
-                var group = groups[nodeToGroupIdx[v]];
-                var cnt = group.Count();
-                Console.WriteLine(cnt < k ? -1 : group[cnt - k] + 1);
+                    stack.Push(v);
+                }
             }
         }
+
+        Console.WriteLine(string.Join(" ", ans));
     }
-
     static string Rs(){return Console.ReadLine();}
     static int Ri(){return int.Parse(Console.ReadLine() ?? string.Empty);}
     static long Rl(){return long.Parse(Console.ReadLine() ?? string.Empty);}
@@ -1650,4 +1634,59 @@ public class LazySegTree<T> where T : struct
     }
 }
 
+public static class TopologicalSort<T>
+{
+    public static IEnumerable<T> Excute(Graph<T> graph, Action OnDetectCircle = null)
+    {
+        // 入力されたノード
+        var nodes = graph.Vertices;
+
+        // 一度訪れたノード (閉路を検出するために「一時的な」印, 「恒久的な」印)
+        var seenNodes = new Dictionary<T, (bool, bool)>();
+
+        // 最終的に出力するノード
+        var sortedNodes = new Stack<T>(nodes.Count);
+        bool hasCircle = false;
+
+        foreach (var node in nodes)
+            Visit(node.Key, nodes, seenNodes, sortedNodes, ref hasCircle);
+
+        if (hasCircle)
+        {
+            // 閉路を検知
+            OnDetectCircle?.Invoke();
+            yield break;
+        }
+
+        foreach (var node in sortedNodes)
+            yield return node;
+    }
+
+    private static void Visit(T node, IReadOnlyDictionary<T, HashSet<T>> nodes, Dictionary<T, (bool, bool)> seenNodes, Stack<T> sortedNodes, ref bool hasCycle)
+    {
+        // 閉路が検出されたら、探索を強制終了する
+        if (hasCycle) return;
+
+        // 「一時的」の印がついている箇所を訪れた、つまり閉路を検出したか
+        if (seenNodes.ContainsKey(node) && seenNodes[node].Item1)
+        {
+            hasCycle = true;
+            return;
+        }
+
+        // まだ通っていない
+        if (!seenNodes.ContainsKey(node) || !seenNodes[node].Item2)
+        {
+            // 一時的な印をつける
+            seenNodes[node] = (true, false);
+
+            foreach (var to in nodes[node])
+                Visit(to, nodes, seenNodes, sortedNodes, ref hasCycle);
+
+            // 恒久的な印をつける
+            seenNodes[node] = (false, true);
+            sortedNodes.Push(node);
+        }
+    }
+}
 }

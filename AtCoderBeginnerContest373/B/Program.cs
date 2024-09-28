@@ -21,64 +21,19 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var NQ = Ria();
-        var N = NQ[0]; var Q = NQ[1];
+        var S = Rs();
 
-        var uf = new UnionFind(N);
-        var groups = new List<Set<int>>();
-        var nodeToGroupIdx = new int[N];
-        for (int i = 0; i < N; i++)
+        var az = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var ans = 0;
+        var currentIdx = S.IndexOf("A");
+        for (int i = 1; i < 26; i++)
         {
-            groups.Add(new Set<int>());
-            groups[i].Insert(i);
-            nodeToGroupIdx[i] = i;
+            var nextIdx = S.IndexOf(az[i]);
+            ans += Math.Abs(nextIdx - currentIdx);
+            currentIdx = nextIdx;
         }
 
-        for (int i = 0; i < Q; i++)
-        {
-            var query = Ria();
-            if (query[0] == 1)
-            {
-                var u = query[1] - 1; var v = query[2] - 1;
-
-                var groupUIdx = nodeToGroupIdx[u];
-                var groupVIdx = nodeToGroupIdx[v];
-
-                // マージテク
-                if (groups[groupUIdx].Count() < groups[groupVIdx].Count())
-                {
-                    (groupUIdx, groupVIdx) = (groupVIdx, groupUIdx);
-                    (u, v) = (v, u);
-                }
-
-                if (!uf.Same(u, v))
-                {
-                    uf.Union(u, v);
-                    var groupU = groups[groupUIdx];
-                    var groupV = groups[groupVIdx];
-                    // groupVをgroupUに統合
-                    for (int j = 0; j < groupV.Count(); j++)
-                    {
-                        var node = groupV[j];
-                        groupU.Insert(node);
-                    }
-                    for (int j = 0; j < groupV.Count(); j++)
-                    {
-                        var node = groupV[j];
-                        nodeToGroupIdx[node] = groupUIdx;
-                    }
-                }
-            }
-            else
-            {
-                var v = query[1] - 1; var k = query[2];
-
-                // 頂点vのグループの中で頂点番号がk番目に大きいものを出力
-                var group = groups[nodeToGroupIdx[v]];
-                var cnt = group.Count();
-                Console.WriteLine(cnt < k ? -1 : group[cnt - k] + 1);
-            }
-        }
+        Console.WriteLine(ans);
     }
 
     static string Rs(){return Console.ReadLine();}
