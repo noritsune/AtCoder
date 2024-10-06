@@ -21,7 +21,42 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
+        var NST = Rda();
+        var (N, S, T) = ((int)NST[0], NST[1], NST[2]);
+        var lines = new (Vector2 Start, Vector2 End)[N];
+        for (int i = 0; i < N; i++)
+        {
+            var ABCD = Ria();
+            var (A, B, C, D) = (ABCD[0], ABCD[1], ABCD[2], ABCD[3]);
+            lines[i] = (new Vector2(A, B), new Vector2(C, D));
+        }
 
+        double costSumMin = double.MaxValue;
+        var perms = Enumerable.Range(0, N).Perm().Select(x => x.ToArray()).ToArray();
+        var isReversesPatterns = BitFullSearch(N).Select(x => x.ToArray()).ToArray();
+        foreach (var perm in perms)
+        {
+            foreach (var isReverses in isReversesPatterns)
+            {
+                double costSum = 0;
+                var prevPos = new Vector2(0, 0);
+
+                for (int i = 0; i < N; i++)
+                {
+                    var (start, end) = isReverses[i] ? (lines[perm[i]].End, lines[perm[i]].Start) : (lines[perm[i]].Start, lines[perm[i]].End);
+                    var distToStart = prevPos.DistanceTo(start);
+                    var distToEnd = start.DistanceTo(end);
+                    var costToStart = distToStart / S;
+                    var costToEnd = distToEnd / T;
+                    costSum += costToStart + costToEnd;
+                    prevPos = end;
+                }
+
+                costSumMin = Math.Min(costSumMin, costSum);
+            }
+        }
+
+        Console.WriteLine(costSumMin);
     }
 
     static string Rs(){return Console.ReadLine();}
