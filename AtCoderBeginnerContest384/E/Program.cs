@@ -11,6 +11,24 @@ public static class CONST
     public const long MOD = 998244353;
 }
 
+public class PowerWithPos : IComparable
+{
+    public double Power { get; set; }
+    public Vector2 Pos { get; set; }
+
+
+    public int CompareTo(object? obj)
+    {
+        if (obj == null) return 1;
+        if (obj is PowerWithPos other)
+        {
+            return Power.CompareTo(other.Power);
+        }
+
+        throw new ArgumentException("object is not PowerWithPos");
+    }
+}
+
 public static class EntryPoint {
     public static void Main() {
         var solver = new Solver();
@@ -21,7 +39,58 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
+        var HWX = Rla();
+        var (H, W, X) = (HWX[0], HWX[1], HWX[2]);
+        var PQ = Ria();
+        var (P, Q) = (PQ[0] - 1, PQ[1] - 1);
+        var grid = new long[H, W];
+        for (int i = 0; i < H; i++)
+        {
+            var row = Ria();
+            for (int j = 0; j < W; j++)
+            {
+                grid[i, j] = row[j];
+            }
+        }
 
+        var offsets = new Vector2[] { new (0, 1),new (0, -1),new (1, 0),new (-1, 0) };
+
+        var isTaka = new bool[H, W];
+        isTaka[P, Q] = true;
+
+        var startPos = new Vector2(P, Q);
+        var targets = new Set<PowerWithPos>();
+        foreach (var offset in offsets)
+        {
+            var pos = startPos + offset;
+            if (pos.X < 0 || pos.X >= W || pos.Y < 0 || pos.Y >= H) continue;
+
+            targets.Insert(new PowerWithPos { Power = grid[pos.Y, pos.X], Pos = pos });
+        }
+
+        var current = new PowerWithPos { Power = grid[P, Q] / (double)X, Pos = startPos };
+        while (targets.LowerBound(current) > 0)
+        {
+            var lb = targets.LowerBound(current);
+            for (int i = 0; i < Math.Min(targets.Count(), lb); i++)
+            {
+                var target = targets[i];
+                current.Power += target.Power / X;
+                isTaka[target.Pos.Y, target.Pos.X] = true;
+                foreach (var offset in offsets)
+                {
+                    var newPos = target.Pos + offset;
+                    if (newPos.X < 0 || newPos.X >= W || newPos.Y < 0 || newPos.Y >= H) continue;
+                    if (isTaka[newPos.Y, newPos.X]) continue;
+
+                    targets.Insert(new PowerWithPos { Power = grid[newPos.Y, newPos.X], Pos = newPos });
+                }
+
+                targets.Remove(target);
+            }
+        }
+
+        Console.WriteLine(current.Power * X);
     }
 
     static string Rs(){return Console.ReadLine();}
