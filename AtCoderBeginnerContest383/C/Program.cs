@@ -21,28 +21,85 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var N = Ri();
-        var As = Ria();
-
-        var maxLength = 0;
-        var r = 0;
-        var existAs = new HashSet<int>();
-        for (int l = 0; l < As.Length; l++)
+        var HWD = Ria();
+        var (H, W, D) = (HWD[0], HWD[1], HWD[2]);
+        var grid = new string[H];
+        for (int i = 0; i < H; i++)
         {
-            r = Math.Max(r, l);
-            while (r < As.Length - 1 && As[r] == As[r + 1] && !existAs.Contains(As[r]))
-            {
-                existAs.Add(As[r]);
-                r += 2;
-            }
-
-            var length = r - l;
-            maxLength = Math.Max(maxLength, length);
-
-            existAs.Clear();
+            grid[i] = Rs();
         }
 
-        Console.WriteLine(maxLength);
+        var offsetXs = new int[] { 0, 1, 0, -1 };
+        var offsetYs = new int[] { 1, 0, -1, 0 };
+
+        var q = new Queue<(int X, int Y, int Dist)>();
+        var minDist = new int[H, W];
+        for (int y = 0; y < H; y++)
+        {
+            for (int x = 0; x < W; x++)
+            {
+                minDist[y, x] = int.MaxValue;
+            }
+        }
+
+        for (int y = 0; y < H; y++)
+        {
+            for (int x = 0; x < W; x++)
+            {
+                if (grid[y][x] == '#' || grid[y][x] == '.') continue;
+
+                q.Enqueue((x, y, 0));
+                minDist[y, x] = 0;
+                while (q.Count > 0)
+                {
+                    var (X, Y, Dist) = q.Dequeue();
+
+                    for (int i = 0; i < 4; i++)
+                    {
+                        var nextX = X + offsetXs[i];
+                        var nextY = Y + offsetYs[i];
+                        if (nextX < 0 || nextX >= W || nextY < 0 || nextY >= H) continue;
+                        if (minDist[nextY, nextX] <= Dist) continue;
+                        if (grid[nextY][nextX] == '#') continue;
+
+                        minDist[nextY, nextX] = Dist + 1;
+
+                        if (Dist + 1 < D)
+                        {
+                            q.Enqueue((nextX, nextY, Dist + 1));
+                        }
+                    }
+                }
+            }
+        }
+
+        var moistCnt = 0;
+        for (int y = 0; y < H; y++)
+        {
+            for (int x = 0; x < W; x++)
+            {
+                if (minDist[y, x] <= D) moistCnt++;
+            }
+        }
+
+        Console.WriteLine(moistCnt);
+    }
+
+    void FindDotPoss(string[] grid, int centerX, int centerY, int D, HashSet<int> dotPoss)
+    {
+        for (int y = 0; y < grid.Length; y++)
+        {
+            for (int x = 0; x < grid[y].Length; x++)
+            {
+                if (Math.Abs(centerX - x) + Math.Abs(centerY - y) <= D)
+                {
+                    if (grid[y][x] == '.')
+                    {
+                        dotPoss.Add(y * grid[y].Length + x);
+                    }
+                }
+            }
+        }
     }
 
     static string Rs(){return Console.ReadLine();}

@@ -22,27 +22,19 @@ public class Solver {
     public void Solve()
     {
         var N = Ri();
-        var As = Ria();
 
-        var maxLength = 0;
-        var r = 0;
-        var existAs = new HashSet<int>();
-        for (int l = 0; l < As.Length; l++)
+        var remained = 0;
+        var lastT = 0;
+        for (int i = 0; i < N; i++)
         {
-            r = Math.Max(r, l);
-            while (r < As.Length - 1 && As[r] == As[r + 1] && !existAs.Contains(As[r]))
-            {
-                existAs.Add(As[r]);
-                r += 2;
-            }
-
-            var length = r - l;
-            maxLength = Math.Max(maxLength, length);
-
-            existAs.Clear();
+            var TV = Ria();
+            var (T, V) = (TV[0], TV[1]);
+            remained = Math.Max(0, remained - (T - lastT));
+            remained += V;
+            lastT = T;
         }
 
-        Console.WriteLine(maxLength);
+        Console.WriteLine(remained);
     }
 
     static string Rs(){return Console.ReadLine();}

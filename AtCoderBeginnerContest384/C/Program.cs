@@ -21,28 +21,26 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var N = Ri();
-        var As = Ria();
+        var abcde = Ria();
 
-        var maxLength = 0;
-        var r = 0;
-        var existAs = new HashSet<int>();
-        for (int l = 0; l < As.Length; l++)
+        var ABCDE = "ABCDE";
+
+        var patterns = BitFullSearch(5).Skip(1);
+        var nameAndScores = new List<(string Name, int Score)>();
+        foreach (var pattern in patterns)
         {
-            r = Math.Max(r, l);
-            while (r < As.Length - 1 && As[r] == As[r + 1] && !existAs.Contains(As[r]))
-            {
-                existAs.Add(As[r]);
-                r += 2;
-            }
-
-            var length = r - l;
-            maxLength = Math.Max(maxLength, length);
-
-            existAs.Clear();
+            var name = new string(ABCDE.Select((c, i) => pattern[i] ? c : '.').Where(c => c != '.').ToArray());
+            var score = pattern.Select((p, i) => p ? abcde[i] : 0).Sum();
+            nameAndScores.Add((name, score));
         }
 
-        Console.WriteLine(maxLength);
+        nameAndScores.Sort((a, b) =>
+        {
+            if (a.Score != b.Score) return b.Score - a.Score;
+            return String.CompareOrdinal(a.Name, b.Name);
+        });
+
+        nameAndScores.ForEach(x => Console.WriteLine(x.Name));
     }
 
     static string Rs(){return Console.ReadLine();}

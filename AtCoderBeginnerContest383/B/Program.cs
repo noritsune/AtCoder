@@ -21,28 +21,55 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var N = Ri();
-        var As = Ria();
-
-        var maxLength = 0;
-        var r = 0;
-        var existAs = new HashSet<int>();
-        for (int l = 0; l < As.Length; l++)
+        var HWD = Ria();
+        var (H, W, D) = (HWD[0], HWD[1], HWD[2]);
+        var grid = new string[H];
+        for (int i = 0; i < H; i++)
         {
-            r = Math.Max(r, l);
-            while (r < As.Length - 1 && As[r] == As[r + 1] && !existAs.Contains(As[r]))
-            {
-                existAs.Add(As[r]);
-                r += 2;
-            }
-
-            var length = r - l;
-            maxLength = Math.Max(maxLength, length);
-
-            existAs.Clear();
+            grid[i] = Rs();
         }
 
-        Console.WriteLine(maxLength);
+        var maxDotCnt = 0;
+        for (int y1 = 0; y1 < H; y1++)
+        {
+            for (int x1 = 0; x1 < W; x1++)
+            {
+                if (grid[y1][x1] == '#') continue;
+
+                for (int y2 = 0; y2 < H; y2++)
+                {
+                    for (int x2 = 0; x2 < W; x2++)
+                    {
+                        if (grid[y2][x2] == '#' || y2 == y1 && x2 == x1) continue;
+
+                        var tmpGrid = grid.ToArray();
+                        var dotPoss = new HashSet<int>();
+                        FindDotPoss(tmpGrid, x1, y1, D, dotPoss);
+                        FindDotPoss(tmpGrid, x2, y2, D, dotPoss);
+                        maxDotCnt = Math.Max(maxDotCnt, dotPoss.Count);
+                    }
+                }
+            }
+        }
+
+        Console.WriteLine(maxDotCnt);
+    }
+
+    void FindDotPoss(string[] grid, int centerX, int centerY, int D, HashSet<int> dotPoss)
+    {
+        for (int y = 0; y < grid.Length; y++)
+        {
+            for (int x = 0; x < grid[y].Length; x++)
+            {
+                if (Math.Abs(centerX - x) + Math.Abs(centerY - y) <= D)
+                {
+                    if (grid[y][x] == '.')
+                    {
+                        dotPoss.Add(y * grid[y].Length + x);
+                    }
+                }
+            }
+        }
     }
 
     static string Rs(){return Console.ReadLine();}

@@ -21,28 +21,38 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var N = Ri();
-        var As = Ria();
+        var NS = Rla();
+        var (N, S) = (NS[0], NS[1]);
+        var As = Rla();
 
-        var maxLength = 0;
-        var r = 0;
-        var existAs = new HashSet<int>();
-        for (int l = 0; l < As.Length; l++)
+        var AsSum = As.Sum();
+        var targetS = S % AsSum;
+
+        var AsAs = As.Concat(As).ToArray();
+        var rui = new long[N * 2 + 1];
+        for (int i = 0; i < N * 2; i++)
         {
-            r = Math.Max(r, l);
-            while (r < As.Length - 1 && As[r] == As[r + 1] && !existAs.Contains(As[r]))
-            {
-                existAs.Add(As[r]);
-                r += 2;
-            }
-
-            var length = r - l;
-            maxLength = Math.Max(maxLength, length);
-
-            existAs.Clear();
+            rui[i + 1] = rui[i] + AsAs[i];
         }
 
-        Console.WriteLine(maxLength);
+        var r = 0;
+        for (int l = 0; l < N * 2; l++)
+        {
+            var sum = rui[r] - rui[l];
+            while (r < N * 2 && sum < targetS)
+            {
+                sum += AsAs[r];
+                r++;
+            }
+
+            if (sum == targetS)
+            {
+                Console.WriteLine("Yes");
+                return;
+            }
+        }
+
+        Console.WriteLine("No");
     }
 
     static string Rs(){return Console.ReadLine();}

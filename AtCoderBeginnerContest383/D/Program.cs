@@ -21,28 +21,70 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var N = Ri();
-        var As = Ria();
+        var N = Rl();
 
-        var maxLength = 0;
-        var r = 0;
-        var existAs = new HashSet<int>();
-        for (int l = 0; l < As.Length; l++)
+        var limit = (long)Math.Sqrt(N);
+        // エラトステネスの篩
+        var primes = GeneratePrimes(limit);
+
+        var ans = 0;
+        for (int i = 0; i < primes.Count - 1; i++)
         {
-            r = Math.Max(r, l);
-            while (r < As.Length - 1 && As[r] == As[r + 1] && !existAs.Contains(As[r]))
+            for (int j = i + 1; j < primes.Count; j++)
             {
-                existAs.Add(As[r]);
-                r += 2;
+                if (primes[i] * primes[j] > limit) break;
+                ans++;
             }
-
-            var length = r - l;
-            maxLength = Math.Max(maxLength, length);
-
-            existAs.Clear();
         }
 
-        Console.WriteLine(maxLength);
+        var primeSet = new HashSet<long>(primes);
+        for (int i = 0; i < primes.Count - 1; i++)
+        {
+            for (int j = i + 1; j < primes.Count; j++)
+            {
+                var multi = primes[i] * primes[i] * primes[i] * primes[j] * primes[j];
+                if (multi > N) break;
+
+                var mod = N % multi;
+                if (mod != primes[i] && mod != primes[j] && primeSet.Contains(mod))
+                {
+                    ans++;
+                }
+            }
+        }
+
+        Console.WriteLine(ans);
+    }
+
+    List<long> GeneratePrimes(long num)
+    {
+        var answerArray = new int[num + 1];
+        var limit = (int)Math.Sqrt(num);
+
+        for(int i = 2;i <= limit;i++)
+        {
+            if(answerArray[i] == 0)
+            {
+                for(int j = 2 * i;j <= num; j++)
+                {
+                    if(j % i == 0)
+                    {
+                        answerArray[j] = 1;
+                    }
+                }
+            }
+        }
+
+        var primes = new List<long>();
+        for(int i = 2; i <= num;i++)
+        {
+            if(answerArray[i] == 0)
+            {
+                primes.Add(i);
+            }
+        }
+
+        return primes;
     }
 
     static string Rs(){return Console.ReadLine();}
