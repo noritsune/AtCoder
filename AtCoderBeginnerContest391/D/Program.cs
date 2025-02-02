@@ -30,71 +30,43 @@ public class Solver {
             blocks.Add((xy[0] - 1, xy[1] - 1));
         }
 
-        var colToBlocks = new List<(int Idx, int InitialY)>[W];
+        var colToBlockYs = new List<(int Idx, int Y)>[W];
         for (int i = 0; i < W; i++)
         {
-            colToBlocks[i] = new List<(int, int)>();
+            colToBlockYs[i] = new List<(int Idx, int Y)>();
         }
 
         for (int i = 0; i < N; i++)
         {
             var (X, Y) = blocks[i];
-            colToBlocks[X].Add((i, Y));
-        }
-        for (int i = 0; i < W; i++)
-        {
-            colToBlocks[i] = colToBlocks[i].OrderByDescending(x => x.InitialY).ToList();
+            colToBlockYs[X].Add((i, Y));
         }
 
-        var colToOffsets = new int[W];
-        var blockToDeletedT = Enumerable.Repeat(int.MaxValue, N).ToArray();
-        var hasFell = false;
-        var bottomBlockXs = new HashSet<int>();
-        var t = 0;
-        do
+        var ds = new int[N + 1];
+        var blockToIdxInCol = new int[N];
+        for (int x = 0; x < W; x++)
         {
-            hasFell = false;
-            for (int x = 0; x < W; x++)
+            var blocksInCol = colToBlockYs[x];
+            blocksInCol.Sort((a, b) => a.Y.CompareTo(b.Y));
+            for (int c = 0; c < blocksInCol.Count; c++)
             {
-                if (!colToBlocks[x].Any()) continue;
-                var bottomBlockY = colToBlocks[x][^1].InitialY - colToOffsets[x];
-                if (bottomBlockY == 0)
-                {
-                    bottomBlockXs.Add(x);
-                    continue;
-                }
-
-                colToOffsets[x] += bottomBlockY;
-                t = colToOffsets[x];
-                bottomBlockXs.Add(x);
-                hasFell = true;
-                break;
+                ds[c] = Math.Max(ds[c], blocksInCol[c].Y);
+                blockToIdxInCol[blocksInCol[c].Idx] = c;
             }
+            ds[blocksInCol.Count] = int.MaxValue;
+        }
 
-            if (bottomBlockXs.Count == W)
-            {
-                for (int i = 0; i < W; i++)
-                {
-                    blockToDeletedT[colToBlocks[i][^1].Idx] = t + 1;
-                    colToBlocks[i].RemoveAt(colToBlocks[i].Count - 1);
-                }
-                bottomBlockXs.Clear();
-            }
-        } while (hasFell);
+        for (int c = 1; c <= N; c++)
+        {
+            ds[c] = Math.Max(ds[c], ds[c - 1] == int.MaxValue ? int.MaxValue : ds[c - 1] + 1);
+        }
 
         var Q = Ri();
         for (int i = 0; i < Q; i++)
         {
             var TA = Ria();
             var (T, A) = (TA[0], TA[1] - 1);
-            if (T < blockToDeletedT[A])
-            {
-                Console.WriteLine("Yes");
-            }
-            else
-            {
-                Console.WriteLine("No");
-            }
+            Console.WriteLine(T <= ds[blockToIdxInCol[A]] ? "Yes" : "No");
         }
     }
 
