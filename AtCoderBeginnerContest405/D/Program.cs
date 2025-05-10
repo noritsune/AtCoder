@@ -21,23 +21,101 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var NX = Ria();
-        var (N, X) = (NX[0], NX[1]);
-
-        // dp[T][x] = 現在すでにTに含まれる問題を正解しており、所持金が残りx円である場合の得点の期待値の最大値
-        var dp = new double[N + 1, X + 1];
-        for (int i = 0; i < N; i++)
+        var HW = Ria();
+        var (H, W) = (HW[0], HW[1]);
+        var grid = new string[H];
+        for (int i = 0; i < H; i++)
         {
-            var SCP = Ria();
-            var (S, C, P) = (SCP[0], SCP[1], SCP[2]);
+            grid[i] = Rs();
+        }
 
-            for (int x = 0; x <= X; x++)
+        var arrowToNearestE = new char[H, W];
+        for (int i = 0; i < H; i++)
+        {
+            for (int j = 0; j < W; j++)
             {
-                for (int s = 0; s < S; s++)
-                {
+                arrowToNearestE[i, j] = grid[i][j];
+            }
+        }
 
+        var minCost = new int[H, W];
+        for (int i = 0; i < H; i++)
+        {
+            for (int j = 0; j < W; j++)
+            {
+                minCost[i, j] = int.MaxValue;
+            }
+        }
+
+        var offsetXs = new[] { -1, 0, 1, 0 };
+        var offsetYs = new[] { 0, -1, 0, 1 };
+        var arrows = ">v<^";
+
+        var EPoss = new List<Vector2>();
+
+        for (int y = 0; y < H; y++)
+        {
+            for (int x = 0; x < W; x++)
+            {
+                if (grid[y][x] == 'E')
+                {
+                    EPoss.Add(new Vector2(x, y));
                 }
             }
+        }
+
+        var iToPrevQ = new Queue<(int X, int Y, int Cost)>[EPoss.Count];
+        for (int i = 0; i < EPoss.Count; i++)
+        {
+            var Epos = EPoss[i];
+            var q = new Queue<(int X, int Y, int Cost)>();
+            q.Enqueue((Epos.X, Epos.Y, 0));
+            iToPrevQ[i] = q;
+        }
+
+        var isExistNextQ = true;
+        var currentCost = 0;
+        while (isExistNextQ)
+        {
+            isExistNextQ = false;
+            for (int i = 0; i < EPoss.Count; i++)
+            {
+                var q = iToPrevQ[i];
+                while (q.Count > 0 && q.Peek().Cost == currentCost)
+                {
+                    var (x, y, cost) = q.Dequeue();
+                    for (int d = 0; d < 4; d++)
+                    {
+                        var nx = x + offsetXs[d];
+                        var ny = y + offsetYs[d];
+
+                        if (nx < 0 || nx >= W || ny < 0 || ny >= H) continue;
+                        if (grid[ny][nx] == '#') continue;
+                        if (minCost[ny, nx] <= cost) continue;
+
+                        minCost[ny, nx] = cost;
+                        if (grid[ny][nx] == '.')
+                        {
+                            arrowToNearestE[ny, nx] = arrows[d];
+                        }
+
+                        var nextCost = cost + 1;
+                        q.Enqueue((nx, ny, nextCost));
+                        isExistNextQ = true;
+                    }
+                }
+            }
+
+            currentCost++;
+        }
+
+        for (int i = 0; i < H; i++)
+        {
+            for (int j = 0; j < W; j++)
+            {
+                Console.Write(arrowToNearestE[i, j]);
+            }
+            Console.WriteLine();
         }
     }
 

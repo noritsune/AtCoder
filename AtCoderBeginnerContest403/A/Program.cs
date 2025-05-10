@@ -21,24 +21,7 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var NX = Ria();
-        var (N, X) = (NX[0], NX[1]);
 
-        // dp[T][x] = 現在すでにTに含まれる問題を正解しており、所持金が残りx円である場合の得点の期待値の最大値
-        var dp = new double[N + 1, X + 1];
-        for (int i = 0; i < N; i++)
-        {
-            var SCP = Ria();
-            var (S, C, P) = (SCP[0], SCP[1], SCP[2]);
-
-            for (int x = 0; x <= X; x++)
-            {
-                for (int s = 0; s < S; s++)
-                {
-
-                }
-            }
-        }
     }
 
     static string Rs(){return Console.ReadLine();}
