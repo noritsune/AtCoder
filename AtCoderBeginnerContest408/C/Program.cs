@@ -18,57 +18,28 @@ public static class EntryPoint {
     }
 }
 
-public class Solver
-{
-    int N;
-    long[] As;
-    long maxScore;
-
+public class Solver {
     public void Solve()
     {
-        var T = Ri();
+        var NM = Ria();
+        var (N, M) = (NM[0], NM[1]);
 
-        for (int t = 0; t < T; t++)
+        var imos = new long[N + 2];
+        for (int i = 0; i < M; i++)
         {
-            maxScore = 0;
-            N = Ri();
-            As = new long[2 * N];
-            for (int n = 0; n < 2 * N; n++)
-            {
-                As[n] = Rl();
-            }
-
-            Dfs(0, 0, 0, "");
-
-            Console.WriteLine(maxScore);
-        }
-    }
-
-    void Dfs(int idx, int n, long score, string str)
-    {
-
-        if (idx == 2 * N)
-        {
-            if (n == 0)
-            {
-                maxScore = Math.Max(maxScore, score);
-            }
-
-            // Console.WriteLine($"{str}: {score}");
-            return;
+            var LR = Ria();
+            var (L, R) = (LR[0], LR[1]);
+            imos[L] += 1;
+            imos[R + 1] -= 1;
         }
 
-        if (n < N)
+        var count = new long[N + 1];
+        for (int i = 1; i <= N; i++)
         {
-            // (を置くパターンに派生
-            Dfs(idx + 1, n + 1, score + As[idx], str + "(");
+            count[i] = count[i - 1] + imos[i];
         }
 
-        if (n > 0)
-        {
-            // )を置くパターンに派生
-            Dfs(idx + 1, n - 1, score, str + ")");
-        }
+        Console.WriteLine(count.Skip(1).Min());
     }
 
     static string Rs(){return Console.ReadLine();}

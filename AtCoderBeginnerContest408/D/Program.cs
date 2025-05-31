@@ -18,56 +18,110 @@ public static class EntryPoint {
     }
 }
 
-public class Solver
-{
-    int N;
-    long[] As;
-    long maxScore;
-
+public class Solver {
     public void Solve()
     {
         var T = Ri();
 
-        for (int t = 0; t < T; t++)
+        for (int i = 0; i < T; i++)
         {
-            maxScore = 0;
-            N = Ri();
-            As = new long[2 * N];
-            for (int n = 0; n < 2 * N; n++)
+            var N = Ri();
+            var S = Rs();
+
+            var runLengths = new List<(int Num, int Length, int TailNodeIdx)>();
+            int currentNum = S[0] - '0';
+            int currentLength = 1;
+            var largest1GroupIdx = 0;
+            var largest1GroupLength = 0;
+            var uf = new UnionFind(N);
+            for (int j = 1; j < N; j++)
             {
-                As[n] = Rl();
+                if (S[j] - '0' == currentNum)
+                {
+                    currentLength++;
+                    uf.Union(j - 1, j);
+                }
+                else
+                {
+                    runLengths.Add((currentNum, currentLength, j - 1));
+
+                    if (currentNum == 1 && currentLength > largest1GroupLength)
+                    {
+                        largest1GroupLength = currentLength;
+                        largest1GroupIdx = runLengths.Count - 1;
+                    }
+
+                    currentNum = S[j] - '0';
+                    currentLength = 1;
+                }
+            }
+            runLengths.Add((currentNum, currentLength, N - 1));
+            if (currentNum == 1 && currentLength > largest1GroupLength)
+            {
+                largest1GroupLength = currentLength;
+                largest1GroupIdx = runLengths.Count - 1;
             }
 
-            Dfs(0, 0, 0, "");
+            // 前後の0は無駄なので消す
+            // if (runLengths.First().Num == 0)
+            // {
+            //     runLengths.RemoveAt(0);
+            // }
+            // if (runLengths.Any() && runLengths.Last().Num == 0)
+            // {
+            //     runLengths.RemoveAt(runLengths.Count - 1);
+            // }
 
-            Console.WriteLine(maxScore);
-        }
-    }
-
-    void Dfs(int idx, int n, long score, string str)
-    {
-
-        if (idx == 2 * N)
-        {
-            if (n == 0)
+            // 左に向けて連結していく
+            var costSum = 0;
+            for (int j = largest1GroupIdx - 1; j >= 0; j--)
             {
-                maxScore = Math.Max(maxScore, score);
+                if (runLengths[j].Num == 0) continue;
+
+                var to0Cost = uf.Size(runLengths[j].TailNodeIdx);
+                var to1Cost = uf.Size(runLengths[j + 1].TailNodeIdx);
+                if (to0Cost < to1Cost)
+                {
+                    costSum += to0Cost;
+                    uf.Union(runLengths[j].TailNodeIdx, runLengths[j + 1].TailNodeIdx);
+                    if (j - 1 >= 0)
+                    {
+                        uf.Union(runLengths[j].TailNodeIdx, runLengths[j - 1].TailNodeIdx);
+                    }
+                }
+                else
+                {
+                    costSum += to1Cost;
+                    uf.Union(runLengths[j].TailNodeIdx, runLengths[j + 1].TailNodeIdx);
+                    uf.Union(runLengths[j + 1].TailNodeIdx, runLengths[j + 2].TailNodeIdx);
+                }
             }
 
-            // Console.WriteLine($"{str}: {score}");
-            return;
-        }
+            // 右に向けて連結していく
+            for (int j = largest1GroupIdx + 1; j < runLengths.Count; j++)
+            {
+                if (runLengths[j].Num == 0) continue;
 
-        if (n < N)
-        {
-            // (を置くパターンに派生
-            Dfs(idx + 1, n + 1, score + As[idx], str + "(");
-        }
+                var to0Cost = uf.Size(runLengths[j].TailNodeIdx);
+                var to1Cost = uf.Size(runLengths[j - 1].TailNodeIdx);
+                if (to0Cost < to1Cost)
+                {
+                    costSum += to0Cost;
+                    uf.Union(runLengths[j].TailNodeIdx, runLengths[j - 1].TailNodeIdx);
+                    if (j + 1 < runLengths.Count)
+                    {
+                        uf.Union(runLengths[j].TailNodeIdx, runLengths[j + 1].TailNodeIdx);
+                    }
+                }
+                else
+                {
+                    costSum += to1Cost;
+                    uf.Union(runLengths[j].TailNodeIdx, runLengths[j - 1].TailNodeIdx);
+                    uf.Union(runLengths[j - 1].TailNodeIdx, runLengths[j - 2].TailNodeIdx);
+                }
+            }
 
-        if (n > 0)
-        {
-            // )を置くパターンに派生
-            Dfs(idx + 1, n - 1, score, str + ")");
+            Console.WriteLine(costSum);
         }
     }
 

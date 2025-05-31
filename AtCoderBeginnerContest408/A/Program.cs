@@ -18,57 +18,27 @@ public static class EntryPoint {
     }
 }
 
-public class Solver
-{
-    int N;
-    long[] As;
-    long maxScore;
-
+public class Solver {
     public void Solve()
     {
-        var T = Ri();
+        var NS = Ria();
+        var (N, S) = (NS[0], NS[1]);
+        var Ts = Ria();
 
-        for (int t = 0; t < T; t++)
+        var isWaking = true;
+        var lastT = 0;
+        foreach (var T in Ts)
         {
-            maxScore = 0;
-            N = Ri();
-            As = new long[2 * N];
-            for (int n = 0; n < 2 * N; n++)
+            if (T - lastT > S)
             {
-                As[n] = Rl();
+                Console.WriteLine("No");
+                return;
             }
 
-            Dfs(0, 0, 0, "");
-
-            Console.WriteLine(maxScore);
-        }
-    }
-
-    void Dfs(int idx, int n, long score, string str)
-    {
-
-        if (idx == 2 * N)
-        {
-            if (n == 0)
-            {
-                maxScore = Math.Max(maxScore, score);
-            }
-
-            // Console.WriteLine($"{str}: {score}");
-            return;
+            lastT = T;
         }
 
-        if (n < N)
-        {
-            // (を置くパターンに派生
-            Dfs(idx + 1, n + 1, score + As[idx], str + "(");
-        }
-
-        if (n > 0)
-        {
-            // )を置くパターンに派生
-            Dfs(idx + 1, n - 1, score, str + ")");
-        }
+        Console.WriteLine("Yes");
     }
 
     static string Rs(){return Console.ReadLine();}
