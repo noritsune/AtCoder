@@ -21,28 +21,42 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var T = Ri();
+        var NL = Rla();
+        var (N, L) = (NL[0], NL[1]);
+        var ds = Rla();
 
-        for (int i = 0; i < T; i++)
+        if (L % 3 != 0)
         {
-            var N = Ri();
-            var S = Rs();
-
-            var ruiOf0 = new long[N + 1];
-            var ruiOf1 = new long[N + 1];
-            for (int j = 0; j < N; j++)
-            {
-                ruiOf0[j + 1] = ruiOf0[j] + (S[j] == '0' ? 1 : 0);
-                ruiOf1[j + 1] = ruiOf1[j] + (S[j] == '1' ? 1 : 0);
-            }
-
-            for (int l = 0; l < UPPER; l++)
-            {
-
-            }
-
-            Console.WriteLine();
+            Console.WriteLine(0);
+            return;
         }
+
+        var posToPointCnt = new long[L];
+        posToPointCnt[0]++;
+        long lastPointPos = 0;
+        foreach (var d in ds)
+        {
+            lastPointPos += d;
+            lastPointPos %= L;
+            posToPointCnt[lastPointPos]++;
+        }
+
+        long arcLength = L / 3;
+
+        long ans = 0;
+        for (int i = 0; i < arcLength; i++)
+        {
+            if (posToPointCnt[i] == 0) continue;
+
+            var aCnt  = posToPointCnt[i];
+            var bCnt  = posToPointCnt[(i + arcLength) % L];
+            var cCnt  = posToPointCnt[(i + arcLength * 2) % L];
+
+            var cnt = aCnt * bCnt * cCnt;
+            ans += cnt;
+        }
+
+        Console.WriteLine(ans);
     }
 
     static string Rs(){return Console.ReadLine();}

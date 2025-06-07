@@ -21,28 +21,20 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var T = Ri();
+        var N = Ri();
+        var Ts = Rs();
+        var As = Rs();
 
-        for (int i = 0; i < T; i++)
+        for (int i = 0; i < N; i++)
         {
-            var N = Ri();
-            var S = Rs();
-
-            var ruiOf0 = new long[N + 1];
-            var ruiOf1 = new long[N + 1];
-            for (int j = 0; j < N; j++)
+            if (Ts[i] == 'o' && As[i] == 'o')
             {
-                ruiOf0[j + 1] = ruiOf0[j] + (S[j] == '0' ? 1 : 0);
-                ruiOf1[j + 1] = ruiOf1[j] + (S[j] == '1' ? 1 : 0);
+                Console.WriteLine("Yes");
+                return;
             }
-
-            for (int l = 0; l < UPPER; l++)
-            {
-
-            }
-
-            Console.WriteLine();
         }
+
+        Console.WriteLine("No");
     }
 
     static string Rs(){return Console.ReadLine();}

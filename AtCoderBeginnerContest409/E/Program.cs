@@ -21,28 +21,32 @@ public static class EntryPoint {
 public class Solver {
     public void Solve()
     {
-        var T = Ri();
+        var N = Ri();
+        var ws = Rla();
 
-        for (int i = 0; i < T; i++)
+        long ans = 0;
+        for (int i = 0; i < N - 1; i++)
         {
-            var N = Ri();
-            var S = Rs();
+            var uvw = Rla();
+            var (u, v, w) = (uvw[0] - 1, uvw[1] - 1, uvw[2]);
 
-            var ruiOf0 = new long[N + 1];
-            var ruiOf1 = new long[N + 1];
-            for (int j = 0; j < N; j++)
+            var uw = ws[u];
+            var vw = ws[v];
+            if (Math.Abs(uw) > Math.Abs(vw))
             {
-                ruiOf0[j + 1] = ruiOf0[j] + (S[j] == '0' ? 1 : 0);
-                ruiOf1[j + 1] = ruiOf1[j] + (S[j] == '1' ? 1 : 0);
+                // uのwの方が大きいのでvをuに合わせる
+                ws[u] += vw;
+                ans += w * Math.Abs(vw);
             }
-
-            for (int l = 0; l < UPPER; l++)
+            else
             {
-
+                // vのwの方が大きいのでuをvに合わせる
+                ws[v] += uw;
+                ans += w * Math.Abs(uw);
             }
-
-            Console.WriteLine();
         }
+
+        Console.WriteLine(ans);
     }
 
     static string Rs(){return Console.ReadLine();}

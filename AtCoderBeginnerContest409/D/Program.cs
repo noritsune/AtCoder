@@ -25,23 +25,29 @@ public class Solver {
 
         for (int i = 0; i < T; i++)
         {
-            var N = Ri();
+            var N = Rl();
             var S = Rs();
 
-            var ruiOf0 = new long[N + 1];
-            var ruiOf1 = new long[N + 1];
-            for (int j = 0; j < N; j++)
+            var l = 0;
+            while (l < N - 1 && S[l] <= S[l + 1])
             {
-                ruiOf0[j + 1] = ruiOf0[j] + (S[j] == '0' ? 1 : 0);
-                ruiOf1[j + 1] = ruiOf1[j] + (S[j] == '1' ? 1 : 0);
+                l++;
             }
 
-            for (int l = 0; l < UPPER; l++)
+            if (l == N - 1)
             {
-
+                Console.WriteLine(S);
+                continue;
             }
 
-            Console.WriteLine();
+            var r = l + 1;
+            while(r < N - 1 && S[r + 1] <= S[l])
+            {
+                r++;
+            }
+
+            var ans = S[..l] + S.Substring(l + 1, r - l) + S[l] + S[(r + 1)..];
+            Console.WriteLine(ans);
         }
     }
 
