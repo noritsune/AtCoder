@@ -18,35 +18,49 @@ public static class EntryPoint {
     }
 }
 
-public class Solver {
+public class Solver
+{
+    long[] xs;
+    Graph<long> graph;
+    Dictionary<long, Dictionary<long, long>> uToVToW;
+
     public void Solve()
     {
         var N = Ri();
-        var ws = Rla();
-
-        long ans = 0;
+        xs = Rla();
+        graph = new Graph<long>(GraphType.Undirected);
+        for (int i = 0; i < N; i++)
+        {
+            graph.AddVertex(i);
+        }
+        uToVToW = new Dictionary<long, Dictionary<long, long>>();
         for (int i = 0; i < N - 1; i++)
         {
             var uvw = Rla();
             var (u, v, w) = (uvw[0] - 1, uvw[1] - 1, uvw[2]);
+            graph.AddEdge(u, v);
 
-            var uw = ws[u];
-            var vw = ws[v];
-            if (Math.Abs(uw) > Math.Abs(vw))
-            {
-                // uのwの方が大きいのでvをuに合わせる
-                ws[u] += vw;
-                ans += w * Math.Abs(vw);
-            }
-            else
-            {
-                // vのwの方が大きいのでuをvに合わせる
-                ws[v] += uw;
-                ans += w * Math.Abs(uw);
-            }
+            uToVToW.TryAdd(u, new Dictionary<long, long>());
+            uToVToW[u].TryAdd(v, w);
+            uToVToW.TryAdd(v, new Dictionary<long, long>());
+            uToVToW[v].TryAdd(u, w);
         }
 
+        long ans = SumChildrenTreeCost(0, -1);
         Console.WriteLine(ans);
+    }
+
+    long SumChildrenTreeCost(long v, long parent)
+    {
+        long sum = 0;
+        foreach (var nextV in graph.Vertices[v])
+        {
+            if (nextV == parent) continue; // 親は除外
+            sum += SumChildrenTreeCost(nextV, v);
+            sum += uToVToW[v][nextV] * Math.Abs(xs[nextV]); // 子のコストを加算
+            xs[v] += xs[nextV];
+        }
+        return sum;
     }
 
     static string Rs(){return Console.ReadLine();}
