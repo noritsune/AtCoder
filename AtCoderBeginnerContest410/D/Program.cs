@@ -22,57 +22,54 @@ public class Solver
 {
     int N;
     int M;
-    Graph<(int, int)> graph;
-    bool[,] visited;
-    int minXor = int.MaxValue;
+    Graph<int> graph;
+    Dictionary<int, List<(int To, int W)>> vToEdge;
 
     public void Solve()
     {
         var NM = Ria();
         (N, M) = (NM[0], NM[1]);
+        graph = new Graph<int>(GraphType.Directed);
+        for (int i = 0; i < N; i++) graph.AddVertex(i + 1);
 
-        graph = new Graph<(int, int)>(GraphType.Directed);
-        for (int i = 0; i < N; i++)
-        {
-            for (int j = 0; j < 1024; j++)
-            {
-                graph.AddVertex((i + 1, j));
-            }
-        }
-
+        vToEdge = new Dictionary<int, List<(int To, int W)>>();
         for (int i = 0; i < M; i++)
         {
             var ABW = Ria();
             var (A, B, W) = (ABW[0], ABW[1], ABW[2]);
-            for (int j = 0; j < 1024; j++)
+
+            graph.AddEdge(A, B);
+            vToEdge.TryAdd(A, new List<(int To, int W)>());
+            vToEdge[A].Add((B, W));
+        }
+
+        // 頂点ごとに既に確認したコストの状態を記録する
+        var visitedStates = new HashSet<int>[N + 1];
+        for (int i = 1; i <= N; i++) visitedStates[i] = new HashSet<int>();
+
+        var q = new Queue<(int V, int Cost)>();
+        q.Enqueue((1, 0)); // スタートは頂点1, コスト0
+
+        while (q.Count > 0)
+        {
+            var (v, cost) = q.Dequeue();
+
+            var edges = vToEdge.GetValueOrDefault(v, new List<(int To, int W)>());
+
+            // 接続先の頂点を確認
+            foreach (var (to, w) in edges)
             {
-                var nextXor = j ^ W;
-                graph.AddEdge((A, j), (B, nextXor));
+                var nextCost = cost ^ w;
+                if (!visitedStates[to].Contains(nextCost))
+                {
+                    visitedStates[to].Add(nextCost);
+                    q.Enqueue((to, nextCost));
+                }
             }
         }
 
-        visited = new bool[N + 1, 1024];
-        visited[1, 0] = true;
-
-        Dfs((1, 0));
-
-        Console.WriteLine(minXor == int.MaxValue ? -1 : minXor);
-    }
-
-    void Dfs((int, int) v)
-    {
-        if (v.Item1 == N)
-        {
-            minXor = Math.Min(minXor, v.Item2);
-        }
-
-        foreach (var next in graph.Vertices[v])
-        {
-            if (visited[next.Item1, next.Item2]) continue;
-            visited[next.Item1, next.Item2] = true;
-            Dfs(next);
-            visited[next.Item1, next.Item2] = false;
-        }
+        var goalStates = visitedStates[N];
+        Console.WriteLine(goalStates.Any() ? goalStates.Min() : -1);
     }
 
     static string Rs(){return Console.ReadLine();}
